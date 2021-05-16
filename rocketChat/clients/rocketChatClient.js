@@ -19,16 +19,16 @@ function RocketChatClient (protocol, host, port, userId, token, onConnected) {
 
     this.authentication = new (require("../api/authentication"))(restClientObj);
 
-    // this.miscellaneous = new (require("./api/miscellaneous"))(restClient);
-    // this.chat = new (require("./api/chat"))(restClient);
-    // this.channels = new (require("./api/channels"))(restClient);
-    // this.groups = new (require("./api/groups"))(restClient);
-    // this.settings = new (require("./api/setting"))(restClient);
-    // this.users = new (require("./api/users"))(restClient);
-    // this.integration = new (require("./api/integration"))(restClient);
-    // this.realtime = new (require("./api/realtime"))(wsClient);
-    // this.notify = new (require("./api/notify"))(wsClient);
-    // this.im = new (require("./api/im"))(restClient);
+    this.miscellaneous = new (require("../api/miscellaneous"))(restClientObj);
+    this.chat = new (require("../api/chat"))(restClientObj);
+    this.channels = new (require("../api/channels"))(restClientObj);
+    this.groups = new (require("../api/groups"))(restClientObj);
+    this.settings = new (require("../api/setting"))(restClientObj);
+    this.users = new (require("../api/users"))(restClientObj);
+    this.integration = new (require("../api/integration"))(restClientObj);
+    this.realtime = new (require("../api/realtime"))(wsClient);
+    this.notify = new (require("../api/notify"))(wsClient);
+    this.im = new (require("../api/im"))(restClientObj);
 
     this.restClient = restClientObj;
     this.wsClient = wsClient;

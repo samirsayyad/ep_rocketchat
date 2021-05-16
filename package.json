@@ -14,7 +14,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "mocha",
+    "test": " userId=xxx token=xxx host=xxx port=xxx protocol=https mocha",
     "test-and-coverage": "istanbul cover node_modules/mocha/bin/_mocha --report lcovonly -- --colors test/",
     "start": "node server.js"
   },

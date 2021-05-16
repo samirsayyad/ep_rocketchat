@@ -1,5 +1,3 @@
-module.exports = Authentication;
-
 function Authentication(client) {
     this.client = client;
 }
@@ -18,3 +16,5 @@ Authentication.prototype.logout = function (callback) {
 Authentication.prototype.me = function (callback) {
     this.client.request("GET", "me", null, callback);
 };
+
+module.exports = Authentication;

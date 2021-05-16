@@ -1,19 +1,19 @@
-const RocketChatClient = require("../server/clients/rocketChatClient").RocketChatClient;
+const RocketChatClient = require("../rocketChat/clients/rocketChatClient").RocketChatClient;
 const should = require("should");
 
 const config = {
-    protocol: "https",
-    host : "",
-    port : 443,
-    userId : "",
-    token : ""
+    protocol: process.env.protocol,
+    host :  process.env.host,
+    port : process.env.port,
+    userId :  process.env.userId,
+    token : process.env.token
 };
 
 describe("test 'me' interface to get user detail information", function () {
+    console.log(config)
     var rocketChatClientObj = null;
     beforeEach(function (done) {
-        config.onConnected = done;
-        rocketChatClientObj = new RocketChatClient("https",config.host,config.port,config.userId,config.token, config.onConnected);
+        rocketChatClientObj = new RocketChatClient("https",config.host,config.port,config.userId,config.token, done);
     });
     it("_id should equal to " + config.userId, function (done) {
         rocketChatClientObj.authentication.me(function (err, body) {
