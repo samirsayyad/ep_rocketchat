@@ -1,0 +1,40 @@
+{
+  "name": "ep_rocketchat",
+  "version": "0.0.1",
+  "description": "Integrating rocketchat with Etherpad",
+  "main": "server.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "istanbul": "^0.4.5",
+    "mocha": "^8.4.0",
+    "rocketchat": "^0.57.3-alpha",
+    "should": "^13.2.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "mocha",
+    "test-and-coverage": "istanbul cover node_modules/mocha/bin/_mocha --report lcovonly -- --colors test/",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/samirsayyad/ep_rocketchat.git"
+  },
+  "keywords": [
+    "RocketChat",
+    "Rocket",
+    "chat",
+    "Etherpad"
+  ],
+  "author": {
+    "name": "Samir Sayyad",
+    "email": "samir.saiad@gmail.com"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/samirsayyad/ep_rocketchat/issues"
+  },
+  "homepage": "https://github.com/samirsayyad/ep_rocketchat#readme"
+}
