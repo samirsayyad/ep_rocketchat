@@ -1,0 +1,16 @@
+{
+	"parts": [
+		{
+			"name": "rocketchat",
+			"pre": ["ep_etherpad-lite/webaccess", "ep_page_view/page_view"],
+			"post": ["ep_etherpad-lite/static"],
+			"client_hooks": {
+				"aceInitialized":"ep_rocketchat/etherpadClient/js/aceInitialized"
+
+			},
+			"hooks": {
+				"clientVars": "ep_rocketchat/etherpadServer/clientVars"
+			}
+		}
+	]
+}

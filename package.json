@@ -9,7 +9,6 @@
   "dependencies": {
     "istanbul": "^0.4.5",
     "mocha": "^8.4.0",
-    "rocketchat": "^0.57.3-alpha",
     "should": "^13.2.3"
   },
   "devDependencies": {},
