@@ -5,11 +5,12 @@
 			"pre": ["ep_etherpad-lite/webaccess", "ep_page_view/page_view"],
 			"post": ["ep_etherpad-lite/static"],
 			"client_hooks": {
-				"aceInitialized":"ep_rocketchat/etherpadClient/js/aceInitialized"
+				"aceInitialized":"ep_rocketchat/static/js/aceInitialized:aceInitialized"
 
 			},
 			"hooks": {
-				"clientVars": "ep_rocketchat/etherpadServer/clientVars"
+				"expressConfigure": "ep_rocketchat/server/expressServer:expressConfigure"
+
 			}
 		}
 	]

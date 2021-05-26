@@ -1,6 +1,6 @@
 var restClient = require("./restClient");
 
-function RocketChatClient (protocol, host, port, userId, token, onConnected) {
+function rocketChatClientInstance (protocol, host, port, userId, token, onConnected) {
     let basepath = "";
         
     if (arguments.length === 1) {
@@ -46,4 +46,4 @@ function RocketChatClient (protocol, host, port, userId, token, onConnected) {
         onConnected(null, null);
     }
 }
-exports.RocketChatClient = RocketChatClient;
+exports.rocketChatClientInstance = rocketChatClientInstance;
