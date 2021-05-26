@@ -33,7 +33,7 @@ exports.expressConfigure = (hookName, context) => {
             return res.status(401).send('User not logged in')
         }
     })
-    context.app.get('/static/:padId/pluginfw/ep_rocketchat/login/:username/:userId', async (req, res, next) => {
+    context.app.post('/static/:padId/pluginfw/ep_rocketchat/login/:username/:userId', async (req, res, next) => {
              const username = req.params.username;
             const etherUserId = req.params.userId;
 

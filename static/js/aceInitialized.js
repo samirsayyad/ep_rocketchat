@@ -1,4 +1,11 @@
+var padcookie = require('ep_etherpad-lite/static/js/pad_cookie').padcookie;
+
 exports.aceInitialized = function aceInitialized(){
+        $('#chaticon').hide();
+        $('#options-stickychat').prop('checked', false);
+        padcookie.setPref("chatAlwaysVisible", false);
+        $('#options-stickychat').parent().hide();
+        $('#options-chatandusers').parent().hide();
 
         window.parent.postMessage({
                 event: 'login-with-token',
