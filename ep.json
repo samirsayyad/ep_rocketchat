@@ -9,7 +9,7 @@
 
 			},
 			"hooks": {
-				"expressConfigure": "ep_rocketchat/server/expressServer:expressConfigure"
+				"expressCreateServer": "ep_rocketchat/server/expressServer:expressCreateServer"
 
 			}
 		}

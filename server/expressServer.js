@@ -8,13 +8,14 @@ const config = {
     userId :  settings.ep_rocketchat.userId,
     token : settings.ep_rocketchat.token
 };
-exports.expressConfigure = (hookName, context) => {
-    context.app.get('/static/:padId/pluginfw/ep_rocketchat/rocket_chat_auth_get', (req, res) => {
+exports.expressCreateServer = (hookName, context) => {
+    console.log("context",context)
+    context.app.get('/static/pluginfw/ep_rocketchat/rocket_chat_auth_get', (req, res) => {
         if (req.session.user && req.session.user.rocketchatAuthToken) {
-          res.send({ loginToken: ctx.session.user.rocketchatAuthToken })
+          res.send({ loginToken: req.session.user.rocketchatAuthToken })
           return;
         } else {
-          res.status(401).json({ message: 'User not logged in'});
+          res.send({ loginToken: config.token })
           return;
         }
       })
@@ -24,14 +25,18 @@ exports.expressConfigure = (hookName, context) => {
             return res.send(`<script>
                 window.parent.postMessage({
                 event: 'login-with-token',
-                loginToken: '${ req.session.user.rocketchatAuthToken }'
+                loginToken: ${req.session.user.rocketchatAuthToken}
                 }, '${ config.host }');
             </script>
             `)
-            return;
         } else {
-            return res.status(401).send('User not logged in')
-        }
+            return res.send(`<script>
+            window.parent.postMessage({
+            event: 'login-with-token',
+            loginToken: ${config.token}
+            }, '${ config.host }');
+        </script>
+        `)        }
     })
     context.app.post('/static/:padId/pluginfw/ep_rocketchat/login/:username/:userId', async (req, res, next) => {
              const username = req.params.username;

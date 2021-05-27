@@ -6,14 +6,7 @@ exports.aceInitialized = function aceInitialized(){
         padcookie.setPref("chatAlwaysVisible", false);
         $('#options-stickychat').parent().hide();
         $('#options-chatandusers').parent().hide();
-
-        window.parent.postMessage({
-                event: 'login-with-token',
-                loginToken: 'ziRLpepKoLsaxzxE0CMQIvpAgWPKBUE3EOMcdaEvI5m'
-              }, 'https://chat.docs.plus/');
-        var chatHtml= '<div><iframe id="ep_rocketchat_iframe" style="width:100%" src="https://chat.docs.plus/channel/general?layout=embedded" title="myframe"></iframe></div>'
+        var chatHtml= '<div><iframe id="ep_rocketchat_iframe" style="width:100%" src="https://chat.docs.plus/channel/general?layout=embedded"  frameborder="1" title="myframe"></iframe></div>'
         $('body').append(chatHtml);
-        console.log("ssssssssssss");
-      
         return []
 }
