@@ -11,6 +11,8 @@ const config = {
 exports.expressCreateServer = (hookName, context) => {
     console.log("context",context)
     context.app.get('/static/pluginfw/ep_rocketchat/rocket_chat_auth_get', (req, res) => {
+        res.set('Access-Control-Allow-Origin', config.host )
+
         if (req.session.user && req.session.user.rocketchatAuthToken) {
           res.send({ loginToken: req.session.user.rocketchatAuthToken })
           return;
@@ -20,6 +22,8 @@ exports.expressCreateServer = (hookName, context) => {
         }
       })
     context.app.get('/static/:padId/pluginfw/ep_rocketchat/rocket_chat_iframe', (req, res) => {
+        res.set('Access-Control-Allow-Origin', config.host )
+
         if (req.session.user && req.session.user.rocketchatAuthToken) {
             // We are sending a script tag to the front-end with the RocketChat Auth Token that will be used to authenticate the user
             return res.send(`<script>
