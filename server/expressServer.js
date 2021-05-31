@@ -22,7 +22,7 @@ exports.expressCreateServer = (hookName, context) => {
           return;
         }
       })
-    context.app.get('/static/:padId/pluginfw/ep_rocketchat/rocket_chat_iframe', (req, res) => {
+    context.app.get('/static/pluginfw/ep_rocketchat/rocket_chat_iframe', (req, res) => {
         res.set('Access-Control-Allow-Origin', `https://${config.host}` )
         res.set('Access-Control-Allow-Credentials', 'true');
 
