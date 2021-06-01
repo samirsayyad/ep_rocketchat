@@ -13,7 +13,7 @@ exports.expressCreateServer = (hookName, context) => {
     context.app.get('/static/pluginfw/ep_rocketchat/rocket_chat_auth_get', (req, res) => {
         res.set('Access-Control-Allow-Origin', `https://${config.host}` )
         res.set('Access-Control-Allow-Credentials', 'true');
-
+        console.log(req.session)
         if (req.session.user && req.session.user.rocketchatAuthToken) {
           res.send({ loginToken: req.session.user.rocketchatAuthToken })
           return;
