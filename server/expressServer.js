@@ -67,7 +67,8 @@ exports.expressCreateServer = (hookName, context) => {
                             console.log(err, result,"create")
                         })
                         db.set(`ep_rocketchat:${accessObj.authorID}`,userToAdd);
-                        var login =await rocketChatClient.users.login({user : `${author.name}-${accessObj.authorID}`, password: `${author.name}@docs.plus${config.userId}`})
+                        var login =await rocketChatClient.users.login({user : `${author.name}-${accessObj.authorID}`,
+                         password: `${author.name}-${accessObj.authorID}@docs.plus${config.userId}`})
                         console.log(newUser)
                         res.send({ loginToken: login.data.authToken })
                     }catch(e){
