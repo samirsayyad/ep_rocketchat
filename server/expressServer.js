@@ -25,21 +25,35 @@ exports.expressCreateServer = (hookName, context) => {
                 res.send({ loginToken: req.session.rocketchatAuthToken })
                 return;
             } else {
+             
                 var rocketChatClient = new rocketChatClientInstance("https",config.host,config.port,config.userId,config.token,()=>{});
+
+                rocketChatClient.authentication.me(function (err, body) {
+                    console.log(err,body,"authentication")
+                });
+
+
                 const author = await AuthorManager.getAuthor(accessObj.authorID)
                 console.log(rocketChatClient,"rocketChatClient")
 
-                const rocketChatUser = await db.get(`ep_rocketchat:${accessObj.authorID}`) || false;
+                const rocketChatUser = await db.get(`ep_rocketchat:${accessObj.authorID}`) || [];
                 console.log(rocketChatUser,"rocketChatUser")
-                if(rocketChatUser){
-                    var login =await rocketChatClient.users.login({user : rocketChatUser.username, password: rocketChatUser.password})
-                    res.send({ loginToken: login.data.authToken })
+                if(rocketChatUser.username){
+                    try{
+                        var login =await rocketChatClient.users.login({user : rocketChatUser.username, password: rocketChatUser.password})
+                        res.send({ loginToken: login.data.authToken })
+                    }catch(e){
+                        console.log(e.message,"login")
+                        res.send({ loginToken: e.message })
+
+                    }
+                    
                 }else{
                     const globalProfileInfo = await db.get(`ep_profile_modal:${accessObj.authorID}`) || {};
                     let userToAdd = {
                         "name": author.name, 
                         "email": globalProfileInfo.email ? globalProfileInfo.email : `${author.name}-${accessObj.authorID}@docs.plus`, 
-                        "password": `${author.name}@docs.plus${config.userId}`, 
+                        "password": `${author.name}-${accessObj.authorID}@docs.plus${config.userId}`, 
                         "username": `${author.name}-${accessObj.authorID}`, 
                         "sendWelcomeEmail": false, 
                         "joinDefaultChannels": false,
@@ -50,13 +64,14 @@ exports.expressCreateServer = (hookName, context) => {
                     console.log(userToAdd,"userToAdd")
                     try {
                         var newUser = rocketChatClient.users.create(userToAdd,(err, result)=>{
-                            console.log(err.message, result)
+                            console.log(err, result,"create")
                         })
                         db.set(`ep_rocketchat:${accessObj.authorID}`,userToAdd);
                         var login =await rocketChatClient.users.login({user : `${author.name}-${accessObj.authorID}`, password: `${author.name}@docs.plus${config.userId}`})
                         console.log(newUser)
                         res.send({ loginToken: login.data.authToken })
                     }catch(e){
+                        console.log(e.message,"login")
                         res.send({ loginToken: e.message })
 
                     }
