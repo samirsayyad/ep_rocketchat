@@ -1,4 +1,4 @@
-const RocketChatClient = require("../rocketChat/clients/rocketChatClient").RocketChatClient;
+const RocketChatClient = require("../rocketChat/clients/rocketChatClientInstance").rocketChatClientInstance;
 const should = require("should");
 
 const config = {
