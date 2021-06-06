@@ -13,7 +13,6 @@ const config = {
     token : settings.ep_rocketchat.token
 };
 exports.expressCreateServer = (hookName, context) => {
-    console.log("context",context)
     context.app.get('/static/pluginfw/ep_rocketchat/rocket_chat_auth_get', async(req, res) => {
         res.set('Access-Control-Allow-Origin', `https://${config.host}` )
         res.set('Access-Control-Allow-Credentials', 'true');
@@ -51,7 +50,7 @@ exports.expressCreateServer = (hookName, context) => {
                 }else{
                     const globalProfileInfo = await db.get(`ep_profile_modal:${accessObj.authorID}`) || {};
                     var username = author.name || "Anonymous"
-                    let userToAdd = {
+                    var userToAdd = {
                         "name": username, 
                         "email": globalProfileInfo.email ? globalProfileInfo.email : `${username}-${accessObj.authorID}@docs.plus`, 
                         "password": `${username}-${accessObj.authorID}@docs.plus${config.userId}`, 
@@ -60,7 +59,8 @@ exports.expressCreateServer = (hookName, context) => {
                         "joinDefaultChannels": false,
                         "verified":true,
                         "requirePasswordChange":false,
-                        "roles":["user"]
+                        "roles":["user"],
+                        "data" : null
                     };
                     console.log(userToAdd,"userToAdd")
                     try {
@@ -68,8 +68,9 @@ exports.expressCreateServer = (hookName, context) => {
                             console.log(err, result,"create")
                             var login =await rocketChatClient.users.login({user : `${username}-${accessObj.authorID}`,
                             password: `${username}-${accessObj.authorID}@docs.plus${config.userId}`})
+                            userToAdd.data = result
                             db.set(`ep_rocketchat:${accessObj.authorID}`,userToAdd);
-
+                            
                             res.send({ loginToken: login.data.authToken })
 
                         })

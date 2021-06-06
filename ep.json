@@ -5,12 +5,13 @@
 			"pre": ["ep_etherpad-lite/webaccess", "ep_page_view/page_view"],
 			"post": ["ep_etherpad-lite/static"],
 			"client_hooks": {
-				"aceInitialized":"ep_rocketchat/static/js/aceInitialized:aceInitialized"
+				"aceInitialized":"ep_rocketchat/static/js/aceInitialized:aceInitialized",
+				"handleClientMessage_CUSTOM": "ep_rocketchat/static/js/handleClientMessage:handleClientMessage_CUSTOM"
 
 			},
 			"hooks": {
-				"expressCreateServer": "ep_rocketchat/server/expressServer:expressCreateServer"
-
+				"expressCreateServer": "ep_rocketchat/server/expressServer:expressCreateServer",
+				"handleMessage": "ep_rocketchat/server/handleMessage"
 			}
 		}
 	]
