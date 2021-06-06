@@ -17,15 +17,18 @@ const config = {
 exports.generalRoomInit = async (message,socketClient)=>{
     const padId = message.padId
     const userId = message.userId ;
-    const roomData = await db.get(`ep_rocketchat_${padId}`) || null;
+    var roomData = await db.get(`ep_rocketchat_${padId}`) || null;
     const userJoined = await db.get(`ep_rocketchat_join_${padId}_${userId}`) || null;
     // create room if not exist
     if(!roomData){
       const rocketChatClient = new rocketChatClientInstance(config.protocol,config.host,config.port,config.userId,config.token,()=>{});
       var roomResult = await rocketChatClient.channels.create(`${padId}-general-room`);
       console.log(roomResult,"roomResult")
-      if(roomResult.success)
-        db.set(`ep_rocketchat_${padId}`,roomResult);
+      if(roomResult.success){
+        roomData = roomResult
+        db.set(`ep_rocketchat_${padId}`,roomData);
+
+      }
     }
     // join current user if not joined
     if(!userJoined){
