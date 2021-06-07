@@ -15,8 +15,10 @@ const config = {
  * @param {padId} message 
  */
 exports.generalRoomInit = async (message,socketClient)=>{
-    const padId = message.padId
-    const userId = message.userId ;
+  const padId = message.padId
+  const userId = message.userId ;
+  try{
+
     var roomData = await db.get(`ep_rocketchat_${padId}`) || null;
     const userJoined = await db.get(`ep_rocketchat_join_${padId}_${userId}`) || null;
     // create room if not exist
@@ -43,19 +45,22 @@ exports.generalRoomInit = async (message,socketClient)=>{
           db.get(`ep_rocketchat_join_${padId}_${userId}`,"Y");
       }
     }
-    const msg = {
-      type: 'COLLABROOM',
-      data: {
-        type: 'CUSTOM',
-        payload: {
-          padId: padId,
-          userId: message.userId,
-          action: 'clientGeneralRoomInit',
-          data: {
-            room : `${padId}-general-room`
-          },
+  }catch(e){
+    console.log(e.message)
+  }
+  const msg = {
+    type: 'COLLABROOM',
+    data: {
+      type: 'CUSTOM',
+      payload: {
+        padId: padId,
+        userId: message.userId,
+        action: 'clientGeneralRoomInit',
+        data: {
+          room : `${padId}-general-room`
         },
       },
-    };
-    sharedTransmitter.sendToUser(msg, socketClient);
+    },
+  };
+  sharedTransmitter.sendToUser(msg, socketClient);
 }
