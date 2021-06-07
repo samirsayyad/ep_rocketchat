@@ -60,7 +60,6 @@ exports.expressCreateServer = (hookName, context) => {
                         "verified":true,
                         "requirePasswordChange":false,
                         "roles":["user"],
-                        "data" : null
                     };
                     console.log(userToAdd,"userToAdd")
                     try {
@@ -68,8 +67,7 @@ exports.expressCreateServer = (hookName, context) => {
                             console.log(err, result,"create")
                             var login =await rocketChatClient.users.login({user : `${username}-${accessObj.authorID}`,
                             password: `${username}-${accessObj.authorID}@docs.plus${config.userId}`})
-                            userToAdd.data = result
-                            db.set(`ep_rocketchat:${accessObj.authorID}`,userToAdd);
+                            db.set(`ep_rocketchat:${accessObj.authorID}`,{data :result , info:userToAdd );
                             
                             res.send({ loginToken: login.data.authToken })
 
