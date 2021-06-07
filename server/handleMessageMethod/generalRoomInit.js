@@ -37,7 +37,7 @@ exports.generalRoomInit = async (message,socketClient)=>{
         const rocketChatClient = new rocketChatClientInstance(config.protocol,config.host,config.port,config.userId,config.token,()=>{});
         var roomInviteResult = await rocketChatClient.channels.invite({
           roomId : roomData.channel._id,
-          userId : rocketChatUser.data.user._id
+          userId : rocketChatUser.data.user._id 
         });
         if(roomInviteResult.success)
           db.get(`ep_rocketchat_join_${padId}_${userId}`,"Y");
