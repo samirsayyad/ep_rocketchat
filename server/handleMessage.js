@@ -1,4 +1,6 @@
-const generalRoomInit = require("./handleMessageMethod/generalRoomInit").generalRoomInit
+const generalRoomInit = require("./handleMessageMethod/generalRoomInit").generalRoomInit;
+const updateRocketChatUser = require("./handleMessageMethod/updateRocketChatUser").updateRocketChatUser
+
 exports.handleMessage = (hook_name, context, callback) => {
   let isRocketChatMessage = false;
   if (context) {
@@ -21,8 +23,8 @@ exports.handleMessage = (hook_name, context, callback) => {
 
   const message = context.message.data;
 
-  if (message.action === 'ep_rocketchat_update_user') {
-    
+  if (message.action === 'ep_rocketchat_updateRocketChatUser') {
+    updateRocketChatUser(message)
   }
   if (message.action === 'ep_rocketchat_generalRoomInit') {
     generalRoomInit(message,context.client)

@@ -46,7 +46,7 @@ exports.generalRoomInit = async (message,socketClient)=>{
       }
     }
   }catch(e){
-    console.log(e.message)
+    console.log(e.message , "channels.create or channels.invite")
   }
   const msg = {
     type: 'COLLABROOM',
