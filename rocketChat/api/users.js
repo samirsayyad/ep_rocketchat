@@ -43,9 +43,10 @@ class Users {
         }, callback);
     }
 
-    setAvatar (avatarUrl, callback) {
+    setAvatar (userId , avatarUrl, callback) {
         return this.client.request("POST", "users.setAvatar", {
-            avatarUrl
+            avatarUrl,
+            userId
         }, callback);
     }
 
