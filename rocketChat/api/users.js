@@ -48,6 +48,13 @@ class Users {
             avatarUrl
         }, callback);
     }
+
+    resetAvatar (userId, callback) {
+        return this.client.request("POST", "users.resetAvatar", {
+            userId
+        }, callback);
+    }
+
     login (data, callback) {
         return this.client.request("POST", "login",  
             data

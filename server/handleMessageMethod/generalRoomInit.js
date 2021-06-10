@@ -20,11 +20,11 @@ exports.generalRoomInit = async (message,socketClient)=>{
   try{
 
     var roomData = await db.get(`ep_rocketchat_${padId}`) || null;
-    const userJoined = await db.get(`ep_rocketchat_join_${padId}_${userId}`) || null;
+    console.log("|roomData",roomData)
     // create room if not exist
     if(!roomData){
       const rocketChatClient = new rocketChatClientInstance(config.protocol,config.host,config.port,config.userId,config.token,()=>{});
-      var roomResult = await rocketChatClient.channels.create(`${padId}-general-room`);
+      var roomResult = await rocketChatClient.channels.create(`${padId}-general-channel`);
       console.log(roomResult,"roomResult")
       if(roomResult.success){
         roomData = roomResult
@@ -32,6 +32,13 @@ exports.generalRoomInit = async (message,socketClient)=>{
 
       }
     }
+  }catch(e){
+    console.log(e.message , "channels.create")
+  }
+  try{
+
+    const userJoined = await db.get(`ep_rocketchat_join_${padId}_${userId}`) || null;
+
     // join current user if not joined
     if(!userJoined){
       const rocketChatUser = await db.get(`ep_rocketchat:${userId}`) || [];

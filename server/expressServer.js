@@ -26,17 +26,8 @@ exports.expressCreateServer = (hookName, context) => {
             } else {
              
                 var rocketChatClient = new rocketChatClientInstance("https",config.host,config.port,config.userId,config.token,()=>{});
-
-                rocketChatClient.authentication.me(function (err, body) {
-                    console.log(err,body,"authentication")
-                });
-
-
                 const author = await AuthorManager.getAuthor(accessObj.authorID)
-                console.log(rocketChatClient,"rocketChatClient")
-
                 const rocketChatUser = await db.get(`ep_rocketchat:${accessObj.authorID}`) || [];
-                console.log(rocketChatUser,"rocketChatUser")
                 if(rocketChatUser.username){
                     try{
                         var login =await rocketChatClient.users.login({user : rocketChatUser.username, password: rocketChatUser.password})
@@ -49,12 +40,12 @@ exports.expressCreateServer = (hookName, context) => {
                     
                 }else{
                     const globalProfileInfo = await db.get(`ep_profile_modal:${accessObj.authorID}`) || {};
-                    var username = author.name || "Anonymous"
+                    var username = author.name.replace(/\s/g, '') || "Anonymous"
                     var userToAdd = {
                         "name": username, 
                         "email": globalProfileInfo.email ? globalProfileInfo.email : `${username}-${accessObj.authorID}@docs.plus`, 
                         "password": `${username}-${accessObj.authorID}@docs.plus${config.userId}`, 
-                        "username": `${username}-${accessObj.authorID}`, 
+                        "username": `${username}_${accessObj.authorID}`, 
                         "sendWelcomeEmail": false, 
                         "joinDefaultChannels": false,
                         "verified":true,
@@ -63,13 +54,21 @@ exports.expressCreateServer = (hookName, context) => {
                     };
                     console.log(userToAdd,"userToAdd")
                     try {
+
                         var newUser = await rocketChatClient.users.create(userToAdd,async (err, result)=>{
                             console.log(err, result,"create")
-                            var login =await rocketChatClient.users.login({user : `${username}-${accessObj.authorID}`,
-                            password: `${username}-${accessObj.authorID}@docs.plus${config.userId}`})
-                            db.set(`ep_rocketchat:${accessObj.authorID}`,{data :result , info:userToAdd });
+                            if(result){
+                                await db.set(`ep_rocketchat:${accessObj.authorID}`,{data :result , info:userToAdd });
+
+                                var login =await rocketChatClient.users.login({user : `${username}_${accessObj.authorID}`,
+                                password: `${username}-${accessObj.authorID}@docs.plus${config.userId}`})
+                                
+                                res.send({ loginToken: login.data.authToken })
+                            }else{
+                                res.send({ loginToken: "error" })
+
+                            }
                             
-                            res.send({ loginToken: login.data.authToken })
 
                         })
                         

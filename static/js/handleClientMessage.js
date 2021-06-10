@@ -18,5 +18,21 @@ exports.handleClientMessage_CUSTOM = function handleClientMessage_CUSTOM(hook, c
             pad.collabClient.sendMessage(message);
         }
     }
+    if(context.payload.action == 'EP_PROFILE_USER_LOGOUT_UPDATE'){ // raised by ep_profile_modal
+        if (current_user_id == context.payload.userId) {
+            const message = {
+                type: 'ep_rocketchat',
+                action: 'ep_rocketchat_updateRocketChatUser',
+                userId : current_user_id,
+                padId: context.payload.padId,
+                data: {
+                    userName : "Anonymous",
+                    avatarUrlReset : true
+                },
+              };
+            pad.collabClient.sendMessage(message);
+        }
+    }
+    
     return[];
 }
