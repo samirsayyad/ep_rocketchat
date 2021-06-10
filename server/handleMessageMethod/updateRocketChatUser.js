@@ -7,7 +7,7 @@ const config = {
     port : settings.ep_rocketchat.port,
     userId :  settings.ep_rocketchat.userId,
     token : settings.ep_rocketchat.token,
-    baseUrl : settings.baseUrl
+    baseUrl : settings.ep_rocketchat.baseUrl
 };
 
 exports.updateRocketChatUser = async (message)=>{
@@ -23,7 +23,7 @@ exports.updateRocketChatUser = async (message)=>{
                 username : `${data.userName.replace(/\s/g, '')}_${userId}`
             });
             if(!data.avatarUrlReset){
-                await rocketChatClient.users.setAvatar(`${config.baseUrl}/static/getUserProfileImage/${userId}/${padId}?t=${new Date().getTime()}.png`)
+                await rocketChatClient.users.setAvatar(`${config.baseUrl}/static/getUserProfileImage/${userId}/${padId}?t=${new Date().getTime()}`)
             }else{
                 await rocketChatClient.users.resetAvatar(rocketChatUser.data.user._id)
             }
