@@ -17,5 +17,7 @@ exports.aceInitialized = function aceInitialized(){
                 data: {},
               };
         pad.collabClient.sendMessage(message);
+
+
         return []
 }

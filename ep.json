@@ -11,7 +11,8 @@
 			},
 			"hooks": {
 				"expressCreateServer": "ep_rocketchat/server/expressServer:expressCreateServer",
-				"handleMessage": "ep_rocketchat/server/handleMessage"
+				"handleMessage": "ep_rocketchat/server/handleMessage",
+				"clientReady" : "ep_rocketchat/server/clientReady"
 			}
 		}
 	]
