@@ -1,9 +1,9 @@
-var padcookie = require('ep_etherpad-lite/static/js/pad_cookie').padcookie;
+const padcookie = require('ep_etherpad-lite/static/js/pad_cookie').padcookie;
+const handleRocketChatNotifications = require('./handleRocketChatNotifications/handleRocketChatNotifications').handleRocketChatNotifications
 
 exports.aceInitialized = function aceInitialized(){
         const padId = clientVars.padId;
         const userId = pad.getUserId();
-
         $('#chaticon').hide();
         $('#options-stickychat').prop('checked', false);
         padcookie.setPref("chatAlwaysVisible", false);
@@ -14,10 +14,13 @@ exports.aceInitialized = function aceInitialized(){
                 action: 'ep_rocketchat_generalRoomInit',
                 userId,
                 padId: padId,
-                data: {},
+                data: {
+                        rocketChatBaseUrl: clientVars.ep_rocketchat.rocketChatBaseUrl    
+                },
               };
         pad.collabClient.sendMessage(message);
 
-
+        handleRocketChatNotifications();
+        
         return []
 }

@@ -9,7 +9,7 @@ const config = {
     port : settings.ep_rocketchat.port,
     userId :  settings.ep_rocketchat.userId,
     token : settings.ep_rocketchat.token,
-    baseUrl : settings.ep_rocketchat.baseUrl
+    baseUrl : settings.ep_rocketchat.baseUrl,
 };
 
 exports.handleRooms = async (message,socketClient)=>{
@@ -18,33 +18,58 @@ exports.handleRooms = async (message,socketClient)=>{
     const data = message.data;
     var title =  data.title.replace(/\s+/g, '-')
     try{
-        const rocketChatRoom = await db.get(`ep_rocketchat:rooms:${data.headerId}_${title}`) || false ;
-
-        if(!rocketChatRoom){
-            const rocketChatClient = new rocketChatClientInstance(config.protocol,config.host,config.port,config.userId,config.token,()=>{});
-            var roomResult = await rocketChatClient.channels.create(`${padId}_header_${title}`)
-            console.log("roomResult",roomResult)
-            if(roomResult.success){
-                await db.set(`ep_rocketchat:rooms:${data.headerId}_${title}`,roomResult);
-            }
-            
-        }
-
+      if (data.headerId =="GENERAL"){
         const msg = {
-            type: 'COLLABROOM',
-            data: {
-              type: 'CUSTOM',
-              payload: {
-                padId: padId,
-                userId: userId,
-                action: 'updateRocketChatIframe',
-                data: {
-                  room :`${padId}_header_${title}`
-                },
+          type: 'COLLABROOM',
+          data: {
+            type: 'CUSTOM',
+            payload: {
+              padId: padId,
+              userId: userId,
+              action: 'updateRocketChatIframe',
+              data: {
+                room :`${padId}-general-room`,
+                //room : data.headerId ,
+                rocketChatBaseUrl :  `${config.protocol}://${config.host}`
               },
             },
-          };
-          sharedTransmitter.sendToUser(msg,socketClient);
+          },
+        };
+        sharedTransmitter.sendToUser(msg,socketClient);
+        return;
+      }
+        
+
+      const rocketChatRoom = await db.get(`ep_rocketchat:rooms:${data.headerId}_${title}`) || false ;
+
+      if(!rocketChatRoom){
+          const rocketChatClient = new rocketChatClientInstance(config.protocol,config.host,config.port,config.userId,config.token,()=>{});
+          //var roomResult = await rocketChatClient.channels.create(`${padId}_header_${title}`)
+          var roomResult = await rocketChatClient.channels.create( data.headerId )
+          console.log("roomResult",roomResult)
+          if(roomResult.success){
+              await db.set(`ep_rocketchat:rooms:${data.headerId}_${title}`,roomResult);
+          }
+          
+      }
+
+      const msg = {
+          type: 'COLLABROOM',
+          data: {
+            type: 'CUSTOM',
+            payload: {
+              padId: padId,
+              userId: userId,
+              action: 'updateRocketChatIframe',
+              data: {
+                //room :`${padId}_header_${title}`,
+                room : data.headerId ,
+                rocketChatBaseUrl :  `${config.protocol}://${config.host}`
+              },
+            },
+          },
+        };
+        sharedTransmitter.sendToUser(msg,socketClient);
     }catch(e){
         console.log(e.message,"channels.create of handleRooms")
     }

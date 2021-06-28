@@ -63,7 +63,9 @@ exports.generalRoomInit = async (message,socketClient)=>{
         userId: message.userId,
         action: 'clientGeneralRoomInit',
         data: {
-          room : `${padId}-general-room`
+          room : `${padId}-general-room`,
+          rocketChatBaseUrl : `${config.protocol}://${config.host}`
+
         },
       },
     },

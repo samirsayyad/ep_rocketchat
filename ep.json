@@ -12,7 +12,9 @@
 			"hooks": {
 				"expressCreateServer": "ep_rocketchat/server/expressServer:expressCreateServer",
 				"handleMessage": "ep_rocketchat/server/handleMessage",
-				"clientReady" : "ep_rocketchat/server/clientReady"
+				"clientVars": "ep_rocketchat/server/clientVars:clientVars",
+				"eejsBlock_styles"            : "ep_rocketchat/index"
+
 			}
 		}
 	]
