@@ -34,26 +34,26 @@ exports.generalRoomInit = async (message,socketClient)=>{
   }catch(e){
     console.log(e.message , "channels.create")
   }
-  try{
+  // try{
 
-    const userJoined = await db.get(`ep_rocketchat_join_${padId}_${userId}`) || null;
+  //   const userJoined = await db.get(`ep_rocketchat_join_${padId}_${userId}`) || null;
 
-    // join current user if not joined
-    if(!userJoined){
-      const rocketChatUser = await db.get(`ep_rocketchat:${userId}`) || [];
-      if(rocketChatUser){
-        const rocketChatClient = new rocketChatClientInstance(config.protocol,config.host,config.port,config.userId,config.token,()=>{});
-        var roomInviteResult = await rocketChatClient.channels.invite({
-          roomId : roomData.channel._id,
-          userId : rocketChatUser.data.user._id 
-        });
-        if(roomInviteResult.success)
-          db.get(`ep_rocketchat_join_${padId}_${userId}`,"Y");
-      }
-    }
-  }catch(e){
-    console.log(e.message , "channels.create or channels.invite")
-  }
+  //   // join current user if not joined
+  //   if(!userJoined){
+  //     const rocketChatUser = await db.get(`ep_rocketchat:${userId}`) || [];
+  //     if(rocketChatUser){
+  //       const rocketChatClient = new rocketChatClientInstance(config.protocol,config.host,config.port,config.userId,config.token,()=>{});
+  //       var roomInviteResult = await rocketChatClient.channels.invite({
+  //         roomId : roomData.channel._id,
+  //         userId : rocketChatUser.data.user._id 
+  //       });
+  //       if(roomInviteResult.success)
+  //         db.get(`ep_rocketchat_join_${padId}_${userId}`,"Y");
+  //     }
+  //   }
+  // }catch(e){
+  //   console.log(e.message , "channels.create or channels.invite")
+  // }
   const msg = {
     type: 'COLLABROOM',
     data: {
