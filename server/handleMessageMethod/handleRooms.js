@@ -40,7 +40,7 @@ exports.handleRooms = async (message,socketClient)=>{
       }
         
 
-      const rocketChatRoom = await db.get(`ep_rocketchat:rooms:${data.headerId}_${title}`) || false ;
+      const rocketChatRoom = await db.get(`ep_rocketchat:rooms:${data.headerId}`) || false ;
 
       if(!rocketChatRoom){
           const rocketChatClient = new rocketChatClientInstance(config.protocol,config.host,config.port,config.userId,config.token,()=>{});
@@ -48,7 +48,7 @@ exports.handleRooms = async (message,socketClient)=>{
           var roomResult = await rocketChatClient.channels.create( data.headerId )
           console.log("roomResult",roomResult)
           if(roomResult.success){
-              await db.set(`ep_rocketchat:rooms:${data.headerId}_${title}`,roomResult);
+              await db.set(`ep_rocketchat:rooms:${data.headerId}`,roomResult);
           }
           
       }
