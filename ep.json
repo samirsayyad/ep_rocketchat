@@ -13,7 +13,8 @@
 				"expressCreateServer": "ep_rocketchat/server/expressServer:expressCreateServer",
 				"handleMessage": "ep_rocketchat/server/handleMessage",
 				"clientVars": "ep_rocketchat/server/clientVars:clientVars",
-				"eejsBlock_styles"            : "ep_rocketchat/index"
+				"eejsBlock_styles": "ep_rocketchat/index:eejsBlock_styles",
+				"eejsBlock_scripts":"ep_rocketchat/index:eejsBlock_scripts"
 
 			}
 		}

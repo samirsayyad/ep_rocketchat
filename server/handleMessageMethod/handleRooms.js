@@ -41,8 +41,9 @@ exports.handleRooms = async (message,socketClient)=>{
         
 
       const rocketChatRoom = await db.get(`ep_rocketchat:rooms:${data.headerId}`) || false ;
-
-      if(!rocketChatRoom){
+      console.log("rocketChatRoom",rocketChatRoom)
+      if(rocketChatRoom==false){
+        try{
           const rocketChatClient = new rocketChatClientInstance(config.protocol,config.host,config.port,config.userId,config.token,()=>{});
           //var roomResult = await rocketChatClient.channels.create(`${padId}_header_${title}`)
           var roomResult = await rocketChatClient.channels.create( data.headerId )
@@ -50,6 +51,11 @@ exports.handleRooms = async (message,socketClient)=>{
           if(roomResult.success){
               await db.set(`ep_rocketchat:rooms:${data.headerId}`,roomResult);
           }
+        }catch(e){
+          console.log(e.message,"channels.create of handleRooms")
+        }
+          
+        
           
       }
 
@@ -71,6 +77,6 @@ exports.handleRooms = async (message,socketClient)=>{
         };
         sharedTransmitter.sendToUser(msg,socketClient);
     }catch(e){
-        console.log(e.message,"channels.create of handleRooms")
+        console.log(e.message,"channels.create of handleRooms - general")
     }
 }
