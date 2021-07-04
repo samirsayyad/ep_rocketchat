@@ -11,5 +11,7 @@ exports.unreadChangedBySubscription = function unreadChangedBySubscription (data
             var mentionNotificationTemplate = $('#ep_rocketchat_mentionNotification').tmpl(data);
             $(`#${data.name}_notification`).html(mentionNotificationTemplate);
         }
+    }else{
+        $(`#${data.name}_notification`).empty()
     }
 }
