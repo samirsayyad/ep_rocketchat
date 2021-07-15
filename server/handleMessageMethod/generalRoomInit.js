@@ -20,6 +20,7 @@ exports.generalRoomInit = async (message,socketClient)=>{
   try{
 
     var roomData = await db.get(`ep_rocketchat_${padId}`) || null;
+    console.log("roomData",roomData)
     // create room if not exist
     if(!roomData){
       const rocketChatClient = new rocketChatClientInstance(config.protocol,config.host,config.port,config.userId,config.token,()=>{});
@@ -63,7 +64,7 @@ exports.generalRoomInit = async (message,socketClient)=>{
         userId: message.userId,
         action: 'clientGeneralRoomInit',
         data: {
-          room : `${padId}-general-room`,
+          room : `${padId}-general-channel`,
           rocketChatBaseUrl : `${config.protocol}://${config.host}`
 
         },

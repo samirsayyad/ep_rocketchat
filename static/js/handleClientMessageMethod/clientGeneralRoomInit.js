@@ -7,6 +7,6 @@ exports.clientGeneralRoomInit = function clientGeneralRoomInit(payLoad){
             <span class='master_header_chat_room' id='master_header_chat_room'>Header 2</span>
         </div>
     </div>
-    <iframe id="ep_rocketchat_iframe" class="ep_rocketchat_iframe" src="${payLoad.data.rocketChatBaseUrl}/channel/${payLoad.padId}-general-room?layout=embedded"  frameborder="۰" title="myframe"></iframe></div>`
+    <iframe id="ep_rocketchat_iframe" class="ep_rocketchat_iframe" src="${payLoad.data.rocketChatBaseUrl}/channel/${payLoad.padId}-general-channel?layout=embedded"  frameborder="۰" title="myframe"></iframe></div>`
     $('body').append(chatHtml);
 }

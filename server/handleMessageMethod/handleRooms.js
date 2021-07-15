@@ -28,7 +28,7 @@ exports.handleRooms = async (message,socketClient)=>{
               userId: userId,
               action: 'updateRocketChatIframe',
               data: {
-                room :`${padId}-general-room`,
+                room :`${padId}-general-channel`,
                 //room : data.headerId ,
                 rocketChatBaseUrl :  `${config.protocol}://${config.host}`
               },
