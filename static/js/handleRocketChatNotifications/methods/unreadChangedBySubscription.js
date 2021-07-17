@@ -2,26 +2,25 @@ exports.unreadChangedBySubscription = function unreadChangedBySubscription (data
     if(data.alert == true){
         const padId = clientVars.padId;
         const userId = pad.getUserId();
-        
-        if(data.unread == 0){
-            var unreadNotificationTemplate = $('#ep_rocketchat_unreadNotification').tmpl(data);
-            $(`#${data.name}_notification`).html(unreadNotificationTemplate);
-        }
-        if(data.unread > 0){
-            var mentionNotificationTemplate = $('#ep_rocketchat_mentionNotification').tmpl(data);
-            $(`#${data.name}_notification`).html(mentionNotificationTemplate);
-        }
-
-        var rowContainer=$(`#${data.name}_container`) ;
-        if(rowContainer.length){
-            var elementStatus = checkInView(rowContainer, true );
-            console.log(elementStatus,"ss")
-            if (elementStatus.topLocation == false){
-                $("#bottomNewMention").css({"display":"block"})
+        const notificationElement = $(`#${data.name}_notification`);
+        if(notificationElement.length){
+            if(data.unread == 0){
+                var unreadNotificationTemplate = $('#ep_rocketchat_unreadNotification').tmpl(data);
+                notificationElement.html(unreadNotificationTemplate);
+            }
+            if(data.unread > 0){
+                var mentionNotificationTemplate = $('#ep_rocketchat_mentionNotification').tmpl(data);
+                notificationElement.html(mentionNotificationTemplate);
+            }
+    
+            var rowContainer=$(`#${data.name}_container`) ;
+            if(rowContainer.length){
+                var elementStatus = checkInView(rowContainer, true );
+                if (elementStatus.visible == false){
+                    $("#bottomNewMention").css({"display":"block"})
+                }
             }
         }
-        
-
     }else{
         $(`#${data.name}_notification`).empty()
     }
