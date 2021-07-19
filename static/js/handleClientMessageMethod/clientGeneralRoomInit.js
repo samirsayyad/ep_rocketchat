@@ -4,31 +4,53 @@ exports.clientGeneralRoomInit = function clientGeneralRoomInit(payLoad){
 
     const params = new URLSearchParams(location.search);
     const headerId = params.get('id');
-    var parentHeader = ""
-    var childHeader = ""
+    
     var channelId= `${payLoad.padId}-general-channel`;
-
+    
+    //var parentHeader = ""
+    //var childHeader = ""
+    // if(headerId && headerId!==""){
+    //     var parentHeaderId = $(`#${headerId}`).attr("parent");
+    //     if(headerId == parentHeaderId){
+    //         parentHeader =""
+    //         childHeader =trimLeftTexts($(`#${headerId}`).attr("title"));
+    //     }else{
+    //         parentHeader =trimLeftTexts( $(`#${parentHeaderId}`).attr("title") ) + " /";
+    //         childHeader =trimLeftTexts( $(`#${headerId}`).attr("title") ) ;
+    //     }
+    //     channelId = headerId;
+    // }else{
+    //     parentHeader = "";
+    //     childHeader = $("#generalItem").attr("title");
+    // }
+    /**
+     *                 <span class='parent_header_chat_room' id='parent_header_chat_room'>${parentHeader}</span>
+                        <span class='master_header_chat_room' id='master_header_chat_room'>${childHeader}</span>
+     */
+    var parentHeaderId = $(`#${headerId}`).attr("parent");
+    var headerText="";
     if(headerId && headerId!==""){
-        var parentHeaderId = $(`#${headerId}`).attr("parent");
-        if(headerId == parentHeaderId){
-            parentHeader =""
-            childHeader =trimLeftTexts($(`#${headerId}`).attr("title"));
+        if(headerId == parentHeaderId){ // it means, it's root
+            headerText =$(`#${headerId}`).attr("title");
         }else{
-            parentHeader =trimLeftTexts( $(`#${parentHeaderId}`).attr("title") ) + " /";
-            childHeader =trimLeftTexts( $(`#${headerId}`).attr("title") ) ;
+            var paginateHeaderId= headerId ;
+            headerText = $(`#${paginateHeaderId}`).attr("title") + " / ";
+            do{
+                paginateHeaderId = parentHeaderId
+                parentHeaderId = $(`#${paginateHeaderId}`).attr("parent");
+                headerText = $(`#${paginateHeaderId}`).attr("title") + " / " + headerText;
+            }while( paginateHeaderId != parentHeaderId )
+            headerText = headerText.substring(0, headerText.length - 2); // in order to remove extra / end of text - :D
         }
-        channelId = headerId;
-    }else{
-        parentHeader = "";
-        childHeader = $("#generalItem").attr("title");
     }
+     
+
 
     var chatHtml= `<div id='ep_rocketchat_container' class="ep_rocketchat_container">
     <div class='ep_rocketchat_header'>
         <div class='header_chat_room_container'>
             <div id='header_chat_room' class='header_chat_room'>
-                <span class='parent_header_chat_room' id='parent_header_chat_room'>${parentHeader}</span>
-                <span class='master_header_chat_room' id='master_header_chat_room'>${childHeader}</span>
+                <span class='master_header_chat_room' id='master_header_chat_room'>${trimLeftTexts(headerText)}</span>
             </div>
         </div>
         <div class='header_chat_room_close_container'>
@@ -58,10 +80,10 @@ exports.clientGeneralRoomInit = function clientGeneralRoomInit(payLoad){
 }
 
 function trimLeftTexts(text){
-    if(text.length > 36){
-      var newText = "..."+text.substr((text.length - 1)-36,36);
+    const characterLimit=70
+    if(text.length > characterLimit){
+      var newText = "..."+text.substr((text.length - 1)-characterLimit,characterLimit);
       return newText;
     }
     return text;
-    
 }
