@@ -21,9 +21,7 @@
   border-top:1px solid #A8ABAE;
   height: 36px;
   width: 100%;
-  display: flex;
-    align-items: center;
-    padding-left: 10px;
+  padding-left: 10px;
 }
 .header_chat_room{
   font-family: Roboto;
@@ -31,6 +29,7 @@
   font-weight: normal;
   font-size: 15px;
   line-height: 24px;
+  float: left;
 }
 .parent_header_chat_room{
   color: #c4c4c4;
@@ -116,4 +115,58 @@
     right: 12px;
     top: calc(50% - 5.5px/2 + 9.75px);
   }
+.header_chat_room_close{
+  background-image: url(../image/close.png);
+  width: 14px;
+  height: 14px;
+  float: right;
+  cursor: pointer;
+}
+.header_chat_room_close_rec1{
+  position: absolute;
+  width: 15px;
+  height: 2px;
+  left: 16.41px;
+  top: 12.41px;
+  
+  /* grey med */
+  
+  background: #5F6368;
+  transform: rotate(45deg);
+}
+.header_chat_room_close_rec2{
+  position: absolute;
+  width: 15px;
+  height: 2px;
+  left: 27.41px;
+  top: 13.41px;
+  
+  /* grey med */
+  
+  background: #5F6368;
+  transform: rotate(135deg);
+}
 
+.header_chat_room_container{
+  display: flex;
+  align-items: center;
+  width: 40%;
+  float: left;
+  height: 100%;
+}
+
+.header_chat_room_close_container{
+  display: flex;
+  align-items: center;
+  width: 5%;
+  float: right;
+  height: 100%;
+  justify-content: center;
+}
+
+.fullHeightEditor {
+  height: 100% !important;
+}
+.chatHeightEditor {
+  height: 72% !important;
+}
