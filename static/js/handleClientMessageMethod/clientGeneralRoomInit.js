@@ -27,30 +27,40 @@ exports.clientGeneralRoomInit = function clientGeneralRoomInit(payLoad){
      *                 <span class='parent_header_chat_room' id='parent_header_chat_room'>${parentHeader}</span>
                         <span class='master_header_chat_room' id='master_header_chat_room'>${childHeader}</span>
      */
-    var parentHeaderId = $(`#${headerId}`).attr("parent");
     var headerText="";
     if(headerId && headerId!==""){
+        var parentHeaderId = $(`#${headerId}`).attr("parent");
         if(headerId == parentHeaderId){ // it means, it's root
-            headerText =$(`#${headerId}`).attr("title");
+            headerText = trimLeftTexts($(`#${headerId}`).attr("title"));
         }else{
             var paginateHeaderId= headerId ;
             headerText = $(`#${paginateHeaderId}`).attr("title") + " / ";
             do{
                 paginateHeaderId = parentHeaderId
                 parentHeaderId = $(`#${paginateHeaderId}`).attr("parent");
-                headerText = $(`#${paginateHeaderId}`).attr("title") + " / " + headerText;
+                var tempText = `${$(`#${paginateHeaderId}`).attr("title")} / `
+                headerText = tempText + headerText;
+                console.log("paginateHeaderId != parentHeaderId",)
             }while( paginateHeaderId != parentHeaderId )
             headerText = headerText.substring(0, headerText.length - 2); // in order to remove extra / end of text - :D
+
+            // parent must be gray
+            headerText = trimLeftTexts(headerText) ;
+            headerText = "<span class='parent_header_chat_room'>" + headerText ;
+            var lastBackSlashPosition = headerText.lastIndexOf("/") + 1;
+            headerText = headerText.substring(0, lastBackSlashPosition) + "</span>" + headerText.substring(lastBackSlashPosition, headerText.length);
+        
         }
+    }else{
+        headerText = trimLeftTexts($("#generalItem").attr("title")) ;
     }
      
-
 
     var chatHtml= `<div id='ep_rocketchat_container' class="ep_rocketchat_container">
     <div class='ep_rocketchat_header'>
         <div class='header_chat_room_container'>
             <div id='header_chat_room' class='header_chat_room'>
-                <span class='master_header_chat_room' id='master_header_chat_room'>${trimLeftTexts(headerText)}</span>
+                <span class='master_header_chat_room' id='master_header_chat_room'>${headerText}</span>
             </div>
         </div>
         <div class='header_chat_room_close_container'>
