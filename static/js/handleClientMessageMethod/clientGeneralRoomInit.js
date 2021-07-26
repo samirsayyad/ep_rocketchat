@@ -90,6 +90,7 @@ exports.clientGeneralRoomInit = function clientGeneralRoomInit(payLoad){
 }
 
 function trimLeftTexts(text){
+    text = text || ""
     const characterLimit=70
     if(text.length > characterLimit){
       var newText = "..."+text.substr((text.length - 1)-characterLimit,characterLimit);
