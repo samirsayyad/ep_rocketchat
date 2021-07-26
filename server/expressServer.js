@@ -26,7 +26,8 @@ exports.expressCreateServer = (hookName, context) => {
             } else {
              
                 var rocketChatClient = new rocketChatClientInstance("https",config.host,config.port,config.userId,config.token,()=>{});
-                const author = await AuthorManager.getAuthor(accessObj.authorID)
+                const author = await AuthorManager.getAuthor(accessObj.authorID);
+                console.log("author",author)
                 const rocketChatUser = await db.get(`ep_rocketchat:${accessObj.authorID}`) || [];
                 if(rocketChatUser.username){
                     try{
