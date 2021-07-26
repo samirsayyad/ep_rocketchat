@@ -40,7 +40,11 @@ exports.expressCreateServer = (hookName, context) => {
                     
                 }else{
                     const globalProfileInfo = await db.get(`ep_profile_modal:${accessObj.authorID}`) || {};
-                    var username = author.name.replace(/\s/g, '') || "Anonymous"
+                    if(author && author.name)
+                        var username = author.name.replace(/\s/g, '') || "Anonymous"
+                    else
+                        var username = "Anonymous";
+                    
                     var userToAdd = {
                         "name": username, 
                         "email": globalProfileInfo.email ? globalProfileInfo.email : `${username}-${accessObj.authorID}@docs.plus`, 
