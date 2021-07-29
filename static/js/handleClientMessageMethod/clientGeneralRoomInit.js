@@ -1,10 +1,8 @@
 exports.clientGeneralRoomInit = function clientGeneralRoomInit(payLoad){
 
-
-
     const params = new URLSearchParams(location.search);
     const headerId = params.get('id');
-    
+    const lastActiveHeader = localStorage.getItem("lastActiveHeader");
     var channelId= `${payLoad.padId}-general-channel`;
     
     //var parentHeader = ""
@@ -56,7 +54,21 @@ exports.clientGeneralRoomInit = function clientGeneralRoomInit(payLoad){
     }
      
 
-    var chatHtml= `<div id='ep_rocketchat_container' class="ep_rocketchat_container">
+    var activeClass = "ep_rocketchat_container"; 
+    if ( (!headerId || headerId==null) && (!lastActiveHeader || lastActiveHeader == null || lastActiveHeader == "null" )  ){ // if there isn't any active header and param should add as hidden
+        activeClass = "ep_rocketchat_container_hidden";
+        $("#toc").css({"border":"none"});
+        $(".headerContainer").css({"border":"none"});
+        const lastActiveHeader = localStorage.getItem("lastActiveHeader");
+        $(`#${lastActiveHeader}_container`).removeClass("highlightHeader");
+        localStorage.setItem("lastActiveHeader",null);
+
+        $("#editorcontainer iframe").removeClass('chatHeightEditor')
+        $("#editorcontainer iframe").addClass('fullHeightEditor')
+    }
+
+
+    var chatHtml= `<div id='ep_rocketchat_container' class="${activeClass}">
     <div class='ep_rocketchat_header'>
         <div class='header_chat_room_container'>
             <div id='header_chat_room' class='header_chat_room'>
@@ -78,6 +90,9 @@ exports.clientGeneralRoomInit = function clientGeneralRoomInit(payLoad){
     $( "#header_chat_room_close" ).on( "click", function() {
         //$("#ep_rocketchat_container").animate({height:41},200);
         $("#ep_rocketchat_container").hide();
+        $("#ep_rocketchat_container").removeClass("ep_rocketchat_container");
+        $("#ep_rocketchat_container").addClass("ep_rocketchat_container_hidden");
+
         $("#toc").css({"border":"none"});
         $(".headerContainer").css({"border":"none"});
         const lastActiveHeader = localStorage.getItem("lastActiveHeader");

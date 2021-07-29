@@ -10,6 +10,19 @@
     background-color: #FFFFFF;
     border-top:1px solid #A8ABAE;
 }
+.ep_rocketchat_container_hidden{
+  display: none;
+  z-index: 999;
+  width: 83%;
+  position: absolute;
+  bottom: 0px;
+  right: 0;
+  margin: auto;
+  height: 242px;
+  padding-top: 1px;
+  background-color: #FFFFFF;
+  border-top:1px solid #A8ABAE;
+}
 
 .ep_rocketchat_iframe {
   
