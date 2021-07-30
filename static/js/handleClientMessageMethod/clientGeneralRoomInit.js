@@ -55,7 +55,7 @@ exports.clientGeneralRoomInit = function clientGeneralRoomInit(payLoad){
      
 
     var activeClass = "ep_rocketchat_container"; 
-    if ( (!headerId || headerId==null) && (!lastActiveHeader || lastActiveHeader == null || lastActiveHeader == "null" )  ){ // if there isn't any active header and param should add as hidden
+    if ( (!headerId || headerId==null)  ){ // if there isn't any active header and param should add as hidden  && (!lastActiveHeader || lastActiveHeader == null || lastActiveHeader == "null" )
         activeClass = "ep_rocketchat_container_hidden";
         $("#toc").css({"border":"none"});
         $(".headerContainer").css({"border":"none"});
