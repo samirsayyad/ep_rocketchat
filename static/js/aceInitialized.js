@@ -20,12 +20,11 @@ exports.aceInitialized = function aceInitialized(){
               };
         pad.collabClient.sendMessage(message);
 
-        $("#editorcontainer iframe").addClass('chatHeightEditor')
+        $("#editorcontainer iframe").addClass('fullHeightEditor')
 
 
 
 
         handleRocketChatNotifications();
-        
         return []
 }

@@ -1,3 +1,5 @@
+const chatResizer = require('../chatResizer').chatResizer
+
 exports.clientGeneralRoomInit = function clientGeneralRoomInit(payLoad){
 
     const params = new URLSearchParams(location.search);
@@ -62,9 +64,10 @@ exports.clientGeneralRoomInit = function clientGeneralRoomInit(payLoad){
         const lastActiveHeader = localStorage.getItem("lastActiveHeader");
         $(`#${lastActiveHeader}_container`).removeClass("highlightHeader");
         localStorage.setItem("lastActiveHeader",null);
-
-        $("#editorcontainer iframe").removeClass('chatHeightEditor')
-        $("#editorcontainer iframe").addClass('fullHeightEditor')
+    }else{
+        $("#toc").css({"border-right":"1px solid #DADCE0"});
+        $(".headerContainer").css({"border-right":"1px solid #DADCE0"});
+        
     }
 
 
@@ -84,6 +87,7 @@ exports.clientGeneralRoomInit = function clientGeneralRoomInit(payLoad){
     </div>
     <iframe id="ep_rocketchat_iframe" class="ep_rocketchat_iframe" src="${payLoad.data.rocketChatBaseUrl}/channel/${channelId}?layout=embedded"  frameborder="۰" title="myframe"></iframe></div>`
     $('body').append(chatHtml);
+    chatResizer();
 
 
 
@@ -99,8 +103,6 @@ exports.clientGeneralRoomInit = function clientGeneralRoomInit(payLoad){
         $(`#${lastActiveHeader}_container`).removeClass("highlightHeader");
         localStorage.setItem("lastActiveHeader",null);
 
-        $("#editorcontainer iframe").removeClass('chatHeightEditor')
-        $("#editorcontainer iframe").addClass('fullHeightEditor')
     });
 }
 
