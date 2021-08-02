@@ -16,6 +16,7 @@ exports.expressCreateServer = (hookName, context) => {
     context.app.get('/static/pluginfw/ep_rocketchat/rocket_chat_auth_get', async(req, res) => {
         res.set('Access-Control-Allow-Origin', `https://${config.host}` )
         res.set('Access-Control-Allow-Credentials', 'true');
+        console.log(config,"config")
         const {session : {user} = {}} = req;
         const accessObj = await securityManager.checkAccess(
             "NOT_MATTER_PADID", req.cookies.sessionID, req.cookies.token, user);
