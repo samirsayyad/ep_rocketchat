@@ -46,6 +46,14 @@
 }
 .parent_header_chat_room {
   color: #c4c4c4;
+  cursor: pointer;
+}
+
+.parent_header_chat_room_backslash{
+  color: #c4c4c4;
+}
+.parent_header_chat_room:hover{
+  color : black
 }
 .master_header_chat_room{
   color: #5f6368;
