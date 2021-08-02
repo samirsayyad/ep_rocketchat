@@ -67,7 +67,7 @@ exports.clientGeneralRoomInit = function clientGeneralRoomInit(payLoad){
     }else{
         $("#toc").css({"border-right":"1px solid #DADCE0"});
         $(".headerContainer").css({"border-right":"1px solid #DADCE0"});
-        
+       
     }
 
 
@@ -87,6 +87,13 @@ exports.clientGeneralRoomInit = function clientGeneralRoomInit(payLoad){
     </div>
     <iframe id="ep_rocketchat_iframe" class="ep_rocketchat_iframe" src="${payLoad.data.rocketChatBaseUrl}/channel/${channelId}?layout=embedded"  frameborder="۰" title="myframe"></iframe></div>`
     $('body').append(chatHtml);
+
+    if ( (headerId || headerId!=null)  ){
+        $('#editorcontainer').css({
+            "padding-bottom" : $("#ep_rocketchat_container").height()
+        });
+    }
+
     chatResizer();
 
 

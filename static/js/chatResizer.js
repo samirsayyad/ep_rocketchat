@@ -34,9 +34,9 @@ exports.chatResizer = function chatResizer(){
     // $('iframe[name="ace_outer"]').css({
     //     "padding-bottom" : minHeightChatBox
     // })
-    $('#editorcontainer').css({
-        "padding-bottom" : minHeightChatBox
-    });
+    // $('#editorcontainer').css({
+    //     "padding-bottom" : minHeightChatBox
+    // });
 
     /**
      * resizer inserting
