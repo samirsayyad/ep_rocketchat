@@ -66,21 +66,28 @@ exports.expressCreateServer = (hookName, context) => {
 
                         var newUser = await rocketChatClient.users.create(userToAdd,async (err, result)=>{
                             console.log(err, result,"create")
-                            if(result){
-                                await db.set(`ep_rocketchat:${accessObj.authorID}`,{data :result , info:userToAdd });
-
-                                var login =await rocketChatClient.users.login({user : usernameUserId,
-                                password: password})
-                                
-                                res.send({ loginToken: login.data.authToken })
-                            }else{
-
-                                var login =await rocketChatClient.users.login({user : usernameUserId,
-                                password:password});
-                                await db.set(`ep_rocketchat:${accessObj.authorID}`,{data :login , info:userToAdd });
-                                res.send({ loginToken: login.data.authToken })
-
+                            try{
+                                if(result){
+                                    await db.set(`ep_rocketchat:${accessObj.authorID}`,{data :result , info:userToAdd });
+    
+                                    var login =await rocketChatClient.users.login({user : usernameUserId,
+                                    password: password})
+                                    
+                                    res.send({ loginToken: login.data.authToken })
+                                }else{
+    
+                                    var login =await rocketChatClient.users.login({user : usernameUserId,
+                                    password:password});
+                                    await db.set(`ep_rocketchat:${accessObj.authorID}`,{data :login , info:userToAdd });
+                                    res.send({ loginToken: login.data.authToken })
+    
+                                }
+                            }catch(e){
+                                console.log(e.message,"login interna")
+                                res.send({ loginToken: e.message })
+        
                             }
+                            
                             
 
                         })

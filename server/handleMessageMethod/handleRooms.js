@@ -41,7 +41,7 @@ exports.handleRooms = async (message,socketClient)=>{
         
 
       const rocketChatRoom = await db.get(`ep_rocketchat:rooms:${data.headerId}`) || false ;
-      console.log("rocketChatRoom",rocketChatRoom)
+      console.log("rocketChatRoom",rocketChatRoom,config)
       if(rocketChatRoom==false){
         try{
           const rocketChatClient = new rocketChatClientInstance(config.protocol,config.host,config.port,config.userId,config.token,()=>{});
