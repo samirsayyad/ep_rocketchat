@@ -2,7 +2,6 @@ const rocketChatClientInstance = require("../rocketChat/clients/rocketChatClient
 const settings = require('ep_etherpad-lite/node/utils/Settings');
 const securityManager = require('ep_etherpad-lite/node/db/SecurityManager');
 const AuthorManager = require('ep_etherpad-lite/node/db/AuthorManager');
-var RocketChatApi = require('rocketchat').RocketChatApi;
 const loginApi = require("../rocketChat/api/separated").login
 const db = require('ep_etherpad-lite/node/db/DB');
 
@@ -65,54 +64,23 @@ exports.expressCreateServer = (hookName, context) => {
                     };
                     console.log(userToAdd,"userToAdd")
                     try {
-
                         var newUser = await rocketChatClient.users.create(userToAdd,async (err, result)=>{
                             console.log(err, result,"create")
                             try{
+                                var login =await loginApi('https', config.host, config.port,usernameUserId,password);
+                                await db.set(`ep_rocketchat:${accessObj.authorID}`,{data :result || login , info:userToAdd });
+                                res.send({ loginToken: login.data.authToken })
 
-                                // var rocketChatApi = new RocketChatApi('https', config.host, config.port, usernameUserId, password);
-                                // rocketChatApi.login(function(err,body){
-                                //     if(err)
-                                //         console.log("err",err);
-                                //     else
-                                //         console.log(body,"body");
-                                // })
-                                if(result){
-                                    await db.set(`ep_rocketchat:${accessObj.authorID}`,{data :result , info:userToAdd });
-    
-                                    rocketChatClient
-                                    // var login =await rocketChatClient.users.login({user : usernameUserId,
-                                    // password: password})
-                                    var login =await loginApi('https', config.host, config.port,usernameUserId,password);
-
-                                    res.send({ loginToken: login.data.authToken })
-                                }else{
-    
-                                    // var login =await rocketChatClient.users.login({user : usernameUserId,
-                                    // password:password});
-                                    var login =await loginApi('https', config.host, config.port,usernameUserId,password);
-
-                                    await db.set(`ep_rocketchat:${accessObj.authorID}`,{data :login , info:userToAdd });
-                                    res.send({ loginToken: login.data.authToken })
-    
-                                }
                             }catch(e){
                                 console.log(e.message,"login interna")
                                 res.send({ loginToken: e.message })
         
                             }
-                            
-                            
-
                         })
-                        
                     }catch(e){
                         console.log(e.message,"login")
                         res.send({ loginToken: e.message })
-
                     }
-                    
-                    
                 }
                 return;
                  
