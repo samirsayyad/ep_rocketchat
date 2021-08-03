@@ -4,6 +4,8 @@ exports.clientGeneralRoomInit = function clientGeneralRoomInit(payLoad){
 
     const params = new URLSearchParams(location.search);
     const headerId = params.get('id');
+    const headerParamText = params.get('header');
+
     const lastActiveHeader = localStorage.getItem("lastActiveHeader");
     var channelId= `${payLoad.padId}-general-channel`;
     
@@ -28,7 +30,7 @@ exports.clientGeneralRoomInit = function clientGeneralRoomInit(payLoad){
                         <span class='master_header_chat_room' id='master_header_chat_room'>${childHeader}</span>
      */
     var headerText="";
-    if(headerId && headerId!==""){
+    if(headerId && headerId!=="" && (headerParamText && headerParamText!="") ){
         var parentHeaderId = $(`#${headerId}`).attr("parent");
         if(headerId == parentHeaderId){ // it means, it's root
             headerText = trimLeftTexts($(`#${headerId}`).attr("title"));
@@ -57,7 +59,7 @@ exports.clientGeneralRoomInit = function clientGeneralRoomInit(payLoad){
      
 
     var activeClass = "ep_rocketchat_container"; 
-    if ( (!headerId || headerId==null)  ){ // if there isn't any active header and param should add as hidden  && (!lastActiveHeader || lastActiveHeader == null || lastActiveHeader == "null" )
+    if ( (!headerId || headerId==null)  && (!headerParamText || headerParamText==null)  ){ // if there isn't any active header and param should add as hidden  && (!lastActiveHeader || lastActiveHeader == null || lastActiveHeader == "null" )
         activeClass = "ep_rocketchat_container_hidden";
         $("#toc").css({"border":"none"});
         $(".headerContainer").css({"border":"none"});

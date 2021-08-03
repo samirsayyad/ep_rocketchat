@@ -22,7 +22,7 @@ exports.generalRoomInit = async (message,socketClient)=>{
     var roomData = await db.get(`ep_rocketchat_${padId}`) || null;
     console.log("roomData",roomData)
     // create room if not exist
-    if(!roomData){
+    //if(!roomData){
       const rocketChatClient = new rocketChatClientInstance(config.protocol,config.host,config.port,config.userId,config.token,()=>{});
       var roomResult = await rocketChatClient.channels.create(`${padId}-general-channel`);
       console.log(roomResult,"roomResult")
@@ -31,7 +31,7 @@ exports.generalRoomInit = async (message,socketClient)=>{
         db.set(`ep_rocketchat_${padId}`,roomData);
 
       }
-    }
+    //}
   }catch(e){
     console.log(e.message , "channels.create")
   }
