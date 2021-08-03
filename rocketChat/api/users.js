@@ -56,11 +56,11 @@ class Users {
         }, callback);
     }
 
-    login (data, callback) {
-        return this.client.request("POST", "login",  
-            data
-         , callback);
-    }
+    // login (data, callback) {
+    //     return this.client.request("POST", "login",  
+    //         data
+    //      , callback);
+    // }
 }
 
 module.exports = Users;
