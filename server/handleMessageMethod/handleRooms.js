@@ -42,7 +42,7 @@ exports.handleRooms = async (message,socketClient)=>{
 
       const rocketChatRoom = await db.get(`ep_rocketchat:rooms:${data.headerId}`) || false ;
       console.log("rocketChatRoom",rocketChatRoom,config)
-      if(rocketChatRoom==false){
+      //if(rocketChatRoom==false){ because of changing too much gateway need to recreate all headers
         try{
           const rocketChatClient = new rocketChatClientInstance(config.protocol,config.host,config.port,config.userId,config.token,()=>{});
           //var roomResult = await rocketChatClient.channels.create(`${padId}_header_${title}`)
@@ -57,7 +57,7 @@ exports.handleRooms = async (message,socketClient)=>{
           
         
           
-      }
+      //}
 
       const msg = {
           type: 'COLLABROOM',
