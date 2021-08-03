@@ -68,6 +68,7 @@ exports.expressCreateServer = (hookName, context) => {
                         var newUser = await rocketChatClient.users.create(userToAdd,async (err, result)=>{
                             console.log(err, result,"create")
                             try{
+                                console.log(`https://${config.host}:${ config.port}/api/v1/login`, {username:usernameUserId,password:password})
                                 const login = await axios.post(`https://${config.host}:${ config.port}/api/v1/login`,
                                 {username:usernameUserId,password:password})
                                 console.log(login)
