@@ -4,6 +4,7 @@ const securityManager = require('ep_etherpad-lite/node/db/SecurityManager');
 const AuthorManager = require('ep_etherpad-lite/node/db/AuthorManager');
 const loginApi = require("../rocketChat/api/separated").login
 const db = require('ep_etherpad-lite/node/db/DB');
+const axios = require('axios');
 
 const config = {
     protocol: settings.ep_rocketchat.protocol,
@@ -67,9 +68,12 @@ exports.expressCreateServer = (hookName, context) => {
                         var newUser = await rocketChatClient.users.create(userToAdd,async (err, result)=>{
                             console.log(err, result,"create")
                             try{
-                                var login =await loginApi('https', config.host, config.port,usernameUserId,password);
-                                await db.set(`ep_rocketchat:${accessObj.authorID}`,{data :result || login , info:userToAdd });
-                                res.send({ loginToken: login.data.authToken })
+                                const login = await axios.post(`https://${config.host}:${ config.port}/api/v1/login`,
+                                {username:usernameUserId,password:password})
+                                console.log(login)
+                                //var login =await loginApi('https', config.host, config.port,usernameUserId,password);
+                                await db.set(`ep_rocketchat:${accessObj.authorID}`,{data :result || login.data.data , info:userToAdd });
+                                res.send({ loginToken: login.data.data.authToken })
 
                             }catch(e){
                                 console.log(e.message,"login interna")
