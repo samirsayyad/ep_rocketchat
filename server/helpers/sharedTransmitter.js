@@ -25,7 +25,6 @@ exports.sendToUser = function (msg, client) {
     setTimeout(() => { // This is bad..  We have to do it because ACE hasn't redrawn by the time the chat has arrived
       try {
         padMessageHandler.handleCustomObjectMessage(msg, sessionID, (error) => {
-           console.log(error)
           // TODO: Error handling.
         });
       } catch (error) {

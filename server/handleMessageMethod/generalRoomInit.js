@@ -20,12 +20,10 @@ exports.generalRoomInit = async (message,socketClient)=>{
   try{
 
     var roomData = await db.get(`ep_rocketchat_${padId}`) || null;
-    console.log("roomData",roomData)
     // create room if not exist
     //if(!roomData){
       const rocketChatClient = new rocketChatClientInstance(config.protocol,config.host,config.port,config.userId,config.token,()=>{});
       var roomResult = await rocketChatClient.channels.create(`${padId}-general-channel`);
-      console.log(roomResult,"roomResult")
       if(roomResult.success){
         roomData = roomResult
         db.set(`ep_rocketchat_${padId}`,roomData);

@@ -16,7 +16,6 @@ exports.expressCreateServer = (hookName, context) => {
     context.app.get('/static/pluginfw/ep_rocketchat/rocket_chat_auth_get', async(req, res) => {
         res.set('Access-Control-Allow-Origin', `https://${config.host}` )
         res.set('Access-Control-Allow-Credentials', 'true');
-        console.log(config,"config")
         const {session : {user} = {}} = req;
         const accessObj = await securityManager.checkAccess(
             "NOT_MATTER_PADID", req.cookies.sessionID, req.cookies.token, user);
@@ -28,7 +27,6 @@ exports.expressCreateServer = (hookName, context) => {
 
                 var rocketChatClient = new rocketChatClientInstance("https",config.host,config.port,config.userId,config.token,()=>{});
                 const author = await AuthorManager.getAuthor(accessObj.authorID);
-                console.log("author",author)
                 const rocketChatUser = await db.get(`ep_rocketchat:${accessObj.authorID}`) || [];
                 if(rocketChatUser.username){
                     try{
@@ -37,7 +35,6 @@ exports.expressCreateServer = (hookName, context) => {
 
                         res.send({ loginToken: login.data.authToken })
                     }catch(e){
-                        console.log(e.message,"login")
                         res.send({ loginToken: e.message })
 
                     }
@@ -64,23 +61,19 @@ exports.expressCreateServer = (hookName, context) => {
                         "requirePasswordChange":false,
                         "roles":["user"],
                     };
-                    console.log(userToAdd,"userToAdd")
                     try {
                         var newUser = await rocketChatClient.users.create(userToAdd,async (err, result)=>{
-                            console.log(err, result,"create")
                             try{
                                 var login =await loginApi('https', config.host, config.port,usernameUserId,password);
                                 await db.set(`ep_rocketchat:${accessObj.authorID}`,{data :result || login , info:userToAdd });
                                 res.send({ loginToken: login.data.authToken })
 
                             }catch(e){
-                                console.log(e.message,"login interna")
                                 res.send({ loginToken: e.message })
         
                             }
                         })
                     }catch(e){
-                        console.log(e.message,"login")
                         res.send({ loginToken: e.message })
                     }
                 }
@@ -128,7 +121,6 @@ exports.expressCreateServer = (hookName, context) => {
                 res.status(201).json(login)
             }catch(e){
                 try {
-                    console.log(e.message,"message")
                     let userToAdd = {
                         "name": username, 
                         "email": `${username}@docs.plus`, 
@@ -141,11 +133,9 @@ exports.expressCreateServer = (hookName, context) => {
                         "roles":["user"]
                     };
                     var newUser = await rocketChatClient.users.create(userToAdd)
-                    console.log(newUser)
                     res.status(201).json(newUser)
 
                 }catch(e){
-                    console.log(e.message)
                     res.status(201).json(e.message)
 
                 }

@@ -7,57 +7,8 @@ exports.clientGeneralRoomInit = function clientGeneralRoomInit(payLoad){
     const headerParamText = params.get('header');
 
     const lastActiveHeader = localStorage.getItem("lastActiveHeader");
-    var channelId= `${payLoad.padId}-general-channel`;
-    
-    //var parentHeader = ""
-    //var childHeader = ""
-    // if(headerId && headerId!==""){
-    //     var parentHeaderId = $(`#${headerId}`).attr("parent");
-    //     if(headerId == parentHeaderId){
-    //         parentHeader =""
-    //         childHeader =trimLeftTexts($(`#${headerId}`).attr("title"));
-    //     }else{
-    //         parentHeader =trimLeftTexts( $(`#${parentHeaderId}`).attr("title") ) + " /";
-    //         childHeader =trimLeftTexts( $(`#${headerId}`).attr("title") ) ;
-    //     }
-    //     channelId = headerId;
-    // }else{
-    //     parentHeader = "";
-    //     childHeader = $("#generalItem").attr("title");
-    // }
-    /**
-     *                 <span class='parent_header_chat_room' id='parent_header_chat_room'>${parentHeader}</span>
-                        <span class='master_header_chat_room' id='master_header_chat_room'>${childHeader}</span>
-     */
+    var channelId= `${payLoad.padId}-general-channel`;    
     var headerText="";
-    if(headerId && headerId!=="" && (headerParamText && headerParamText!="") ){
-        var parentHeaderId = $(`#${headerId}`).attr("parent");
-        if(headerId == parentHeaderId){ // it means, it's root
-            headerText = trimLeftTexts($(`#${headerId}`).attr("title"));
-        }else{
-            var paginateHeaderId= headerId ;
-            headerText = $(`#${paginateHeaderId}`).attr("title") + " / ";
-            do{
-                paginateHeaderId = parentHeaderId
-                parentHeaderId = $(`#${paginateHeaderId}`).attr("parent");
-                var tempText = `${$(`#${paginateHeaderId}`).attr("title")} / `
-                headerText = tempText + headerText;
-                console.log("paginateHeaderId != parentHeaderId",)
-            }while( paginateHeaderId != parentHeaderId )
-            headerText = headerText.substring(0, headerText.length - 2); // in order to remove extra / end of text - :D
-
-            // parent must be gray
-            headerText = trimLeftTexts(headerText) ;
-            headerText = "<span class='parent_header_chat_room'>" + headerText ;
-            var lastBackSlashPosition = headerText.lastIndexOf("/") + 1;
-            headerText = headerText.substring(0, lastBackSlashPosition) + "</span>" + headerText.substring(lastBackSlashPosition, headerText.length);
-        
-        }
-    }else{
-        headerText = trimLeftTexts($("#generalItem").attr("title")) ;
-    }
-     
-
     var activeClass = "ep_rocketchat_container"; 
     if ( (!headerId || headerId==null)  && (!headerParamText || headerParamText==null)  ){ // if there isn't any active header and param should add as hidden  && (!lastActiveHeader || lastActiveHeader == null || lastActiveHeader == "null" )
         activeClass = "ep_rocketchat_container_hidden";
@@ -69,9 +20,7 @@ exports.clientGeneralRoomInit = function clientGeneralRoomInit(payLoad){
     }else{
         $("#toc").css({"border-right":"1px solid #DADCE0"});
         $(".headerContainer").css({"border-right":"1px solid #DADCE0"});
-       
     }
-
 
     var chatHtml= `<div id='ep_rocketchat_container' class="${activeClass}">
     <div class='ep_rocketchat_header'>
@@ -98,10 +47,17 @@ exports.clientGeneralRoomInit = function clientGeneralRoomInit(payLoad){
 
     chatResizer();
 
+    if(headerId && headerId!=="" && (headerParamText && headerParamText!="") ){
+        localStorage.setItem("lastActiveHeader",null); // because of initialize of header need to be null temporary and scroll will fill it
+        $(`#${headerId}`).click();
+    }else{
+        let tempHeaderText = trimLeftTexts($("#generalItem").attr("title")) ;
+        $("#generalItem").text(tempHeaderText); 
+        $("#master_header_chat_room").text(tempHeaderText);
+    }
 
 
     $( "#header_chat_room_close" ).on( "click", function() {
-        //$("#ep_rocketchat_container").animate({height:41},200);
         $("#ep_rocketchat_container").hide();
         $("#ep_rocketchat_container").removeClass("ep_rocketchat_container");
         $("#ep_rocketchat_container").addClass("ep_rocketchat_container_hidden");

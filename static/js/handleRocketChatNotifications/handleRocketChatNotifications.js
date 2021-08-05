@@ -12,8 +12,5 @@ exports.handleRocketChatNotifications = function handleRocketChatNotifications (
             unreadChangedBySubscription(data)
         }
 
-        
-        console.log(e.data.eventName); // event name
-        console.log(e.data.data); // event data
     });
 }
