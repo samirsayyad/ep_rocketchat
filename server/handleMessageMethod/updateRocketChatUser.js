@@ -16,6 +16,7 @@ exports.updateRocketChatUser = async (message)=>{
     const data = message.data;
     try{
         const rocketChatUser = await db.get(`ep_rocketchat:${userId}`) || [];
+        console.log("rocketChatUser",rocketChatUser)
         if(rocketChatUser){
             const rocketChatClient = new rocketChatClientInstance(config.protocol,config.host,config.port,config.userId,config.token,()=>{});
             await rocketChatClient.users.update(rocketChatUser.data.userId ,{
