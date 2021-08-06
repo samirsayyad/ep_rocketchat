@@ -19,7 +19,7 @@ exports.updateRocketChatUser = async (message)=>{
         console.log("rocketChatUser",rocketChatUser)
         if(rocketChatUser){
             const rocketChatClient = new rocketChatClientInstance(config.protocol,config.host,config.port,config.userId,config.token,()=>{});
-            await rocketChatClient.users.update(rocketChatUser.data.userId ,{
+            await rocketChatClient.users.update(rocketChatUser.data.userId || rocketChatUser.data.data.userId  ,{
                 username : `${data.userName.replace(/\s/g, '')}_${userId}`
             });
             if(!data.avatarUrlReset){

@@ -18,7 +18,7 @@ exports.updateImageRocketChatUser = async (message)=>{
         const rocketChatUser = await db.get(`ep_rocketchat:${userId}`) || [];
         if(rocketChatUser){
             const rocketChatClient = new rocketChatClientInstance(config.protocol,config.host,config.port,config.userId,config.token,()=>{});
-            await rocketChatClient.users.setAvatar(rocketChatUser.data.userId, `${config.baseUrl}/static/getUserProfileImage/${userId}/${padId}?t=${new Date().getTime()}`)
+            await rocketChatClient.users.setAvatar(rocketChatUser.data.userId || rocketChatUser.data.data.userId , `${config.baseUrl}/static/getUserProfileImage/${userId}/${padId}?t=${new Date().getTime()}`)
         }
     }catch(e){
         console.log(e.message,"users.update")
