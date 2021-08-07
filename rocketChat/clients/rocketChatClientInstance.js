@@ -16,7 +16,7 @@ function rocketChatClientInstance (protocol, host, port, userId, token, onConnec
     onConnected = onConnected || function() {};
     var restClientObj = new restClient.RestClient(protocol, host, port, basepath + "/api/v1/");
     var wsClient = new restClient.WsClient("ws", host, port, basepath + "/websocket");
-
+    console.log(restClientObj)
     this.authentication = new (require("../api/authentication"))(restClientObj);
 
     this.miscellaneous = new (require("../api/miscellaneous"))(restClientObj);

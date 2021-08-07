@@ -9,5 +9,5 @@ module.exports = {
           } catch (error) {
             return error.response.body
           }
-    }
+    },
 }

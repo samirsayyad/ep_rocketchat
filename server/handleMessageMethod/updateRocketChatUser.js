@@ -19,10 +19,10 @@ exports.updateRocketChatUser = async (message)=>{
     const data = message.data;
     try{
         const rocketchatUserAuth = await rocketchatAuthenticator.runValidator(userId);
-
+        console.log(`${data.userName.replace(/\s/g, '')}_${userId}`,"usenmamawe")
         const rocketChatClient = new rocketChatClientInstance(config.protocol,config.host,config.port,config.userId,config.token,()=>{});
         await rocketChatClient.users.update(rocketchatUserAuth.rocketchatUserId  ,{
-            username : `${data.userName.replace(/\s/g, '')}_${userId}`
+            "username" : `${data.userName.replace(/\s/g, '')}_${userId}`
         });
         if(!data.avatarUrlReset){
             await rocketChatClient.users.setAvatar(`${config.baseUrl}/static/getUserProfileImage/${userId}/${padId}?t=${new Date().getTime()}`)

@@ -5,7 +5,7 @@ const rocketChatClientInstance = require("../../rocketChat/clients/rocketChatCli
 
 
 const runValidator = async (EtherpadUserId)=>{
-    const rocketChatUser = await db.get(`ep_rocketchat:user:${EtherpadUserId}`) || [];
+    const rocketChatUser = await db.get(`ep_rocketchat:userss:${EtherpadUserId}`) || [];
     console.log("rocketChatUser",rocketChatUser)
     var rocketchatUserId , rocketchatAuthToken;
     if(rocketChatUser.rocketchatUserId){
@@ -14,10 +14,13 @@ const runValidator = async (EtherpadUserId)=>{
     }else{
         let loginResult = await login(EtherpadUserId);
         if(loginResult){
+            console.log(loginResult,"loginResult")
+
             rocketchatUserId = loginResult.userId ;
             rocketchatAuthToken = loginResult.authToken;
         }else{
             let registerResult = await register(EtherpadUserId) || await register(EtherpadUserId,true);
+            console.log(registerResult,"registerResult")
             if(registerResult){
                 let loginResult = await login(EtherpadUserId,registerResult.info.username ,registerResult.info.password  );
                 rocketchatUserId = loginResult.userId ;
@@ -51,7 +54,7 @@ const login = async (EtherpadUserId, username , password) =>{
         let loginResult =await loginApi(config.protocol, config.host, config.port, username ,password);
         console.log("login result",loginResult)
         if(loginResult)
-            await saveCredential(EtherpadUserId ,loginResult.data.userId , loginResult.data.authToken  );
+            await saveCredential(EtherpadUserId ,loginResult.data.userId , loginResult.data.authToken ,  loginResult.data.me  );
         return { userId : loginResult.data.userId , authToken: loginResult.data.authToken } || false;
     }catch(e){
         console.log("login method : ",e.message);
@@ -61,9 +64,9 @@ const login = async (EtherpadUserId, username , password) =>{
 }
 const saveCredential = async(EtherpadUserId,rocketchatUserId , rocketchatAuthToken , info) =>{
     if(info)
-        await db.set(`ep_rocketchat:user:${EtherpadUserId}`,{rocketchatUserId : rocketchatUserId , rocketchatAuthToken:rocketchatAuthToken , info:info});
+        await db.set(`ep_rocketchat:userss:${EtherpadUserId}`,{rocketchatUserId : rocketchatUserId , rocketchatAuthToken:rocketchatAuthToken , info:info});
     else
-        await db.set(`ep_rocketchat:user:${EtherpadUserId}`,{rocketchatUserId : rocketchatUserId , rocketchatAuthToken:rocketchatAuthToken});
+        await db.set(`ep_rocketchat:userss:${EtherpadUserId}`,{rocketchatUserId : rocketchatUserId , rocketchatAuthToken:rocketchatAuthToken});
 
 }
 const register = async( EtherpadUserId,randomUsername)=>{
