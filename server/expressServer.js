@@ -39,10 +39,10 @@ exports.expressCreateServer = (hookName, context) => {
         //     res.status(200).json({ loginToken: accessObj.accessStatus})
         //     return;
         // }
-        
+
         const rocketchatUserAuth = await rocketchatAuthenticator.runValidator(accessObj.authorID);
         console.log("rocket_chat_auth_get",rocketchatUserAuth)
-        res.status(200).json({ loginToken: rocketchatUserAuth.authToken })
+        res.send({ loginToken: rocketchatUserAuth.authToken })
         return;
 
 
