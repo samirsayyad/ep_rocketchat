@@ -25,18 +25,18 @@ exports.expressCreateServer = (hookName, context) => {
 
         if (accessObj.accessStatus == "grant"){
             if (req.session.user && req.session.rocketchatAuthToken) {
-                res.send({ loginToken: req.session.rocketchatAuthToken })
+                res.status(200).json({ loginToken: req.session.rocketchatAuthToken })
                 return;
             } else {
 
                 const rocketchatUserAuth = await rocketchatAuthenticator.runValidator(accessObj.authorID);
                 console.log("rocket_chat_auth_get",rocketchatUserAuth)
-                res.send({ loginToken: rocketchatUserAuth.authToken })
+                res.status(200).json({ loginToken: rocketchatUserAuth.authToken })
                 return;
                  
             }
         }else{
-            res.send({ loginToken: accessObj.accessStatus})
+            res.status(200).json({ loginToken: accessObj.accessStatus})
             return;
         }
 
