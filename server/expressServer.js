@@ -2,7 +2,6 @@ const rocketChatClientInstance = require("../rocketChat/clients/rocketChatClient
 const settings = require('ep_etherpad-lite/node/utils/Settings');
 const securityManager = require('ep_etherpad-lite/node/db/SecurityManager');
 const AuthorManager = require('ep_etherpad-lite/node/db/AuthorManager');
-const loginApi = require("../rocketChat/api/separated").login
 const db = require('ep_etherpad-lite/node/db/DB');
 
 const config = {
@@ -12,6 +11,9 @@ const config = {
     userId :  settings.ep_rocketchat.userId,
     token : settings.ep_rocketchat.token
 };
+const rocketchatAuthenticator = require("./helpers/rocketchatAuthenticator");
+
+
 exports.expressCreateServer = (hookName, context) => {
     context.app.get('/static/pluginfw/ep_rocketchat/rocket_chat_auth_get', async(req, res) => {
         res.set('Access-Control-Allow-Origin', `https://${config.host}` )
@@ -25,59 +27,64 @@ exports.expressCreateServer = (hookName, context) => {
                 return;
             } else {
 
-                var rocketChatClient = new rocketChatClientInstance("https",config.host,config.port,config.userId,config.token,()=>{});
-                const author = await AuthorManager.getAuthor(accessObj.authorID);
-                const rocketChatUser = await db.get(`ep_rocketchat:${accessObj.authorID}`) || [];
-                if(rocketChatUser.username){
-                    try{
-                        //var login =await rocketChatClient.users.login({user : rocketChatUser.username, password: rocketChatUser.password})
-                        var login =await loginApi('https', config.host, config.port, rocketChatUser.username,rocketChatUser.password);
-
-                        res.send({ loginToken: login.data.authToken })
-                    }catch(e){
-                        res.send({ loginToken: e.message })
-
-                    }
-                    
-                }else{
-                    const globalProfileInfo = await db.get(`ep_profile_modal:${accessObj.authorID}`) || {};
-                    if(author && author.name)
-                        var username = author.name.replace(/\s/g, '') || "Anonymous"
-                    else
-                        var username = "Anonymous";
-                    
-                    var email = globalProfileInfo.email ? globalProfileInfo.email : `${username}-${accessObj.authorID}@docs.plus`;
-                    var password = `${username}-${accessObj.authorID}@docs.plus${config.userId}` ;
-                    var usernameUserId = `${username}_${accessObj.authorID}`; 
-
-                    var userToAdd = {
-                        "name": username, 
-                        "email": email, 
-                        "password": password, 
-                        "username": usernameUserId, 
-                        "sendWelcomeEmail": false, 
-                        "joinDefaultChannels": false,
-                        "verified":true,
-                        "requirePasswordChange":false,
-                        "roles":["user"],
-                    };
-                    try {
-                        var newUser = await rocketChatClient.users.create(userToAdd,async (err, result)=>{
-                            try{
-                                var login =await loginApi('https', config.host, config.port,usernameUserId,password);
-                                await db.set(`ep_rocketchat:${accessObj.authorID}`,{data :result || login , info:userToAdd });
-                                res.send({ loginToken: login.data.authToken })
-
-                            }catch(e){
-                                res.send({ loginToken: e.message })
-        
-                            }
-                        })
-                    }catch(e){
-                        res.send({ loginToken: e.message })
-                    }
-                }
+                const rocketchatUserAuth = await rocketchatAuthenticator.runValidator(accessObj.authorID);
+                res.send({ loginToken: rocketchatUserAuth.authToken })
                 return;
+
+                // var rocketChatClient = new rocketChatClientInstance(config.protocol,config.host,config.port,config.userId,config.token,()=>{});
+                // const author = await AuthorManager.getAuthor(accessObj.authorID);
+                // const rocketChatUser = await db.get(`ep_rocketchat:${accessObj.authorID}`) || [];
+                // if(rocketChatUser.username){
+                //     try{
+                //         //var login =await rocketChatClient.users.login({user : rocketChatUser.username, password: rocketChatUser.password})
+                //         var login =await loginApi('https', config.host, config.port, rocketChatUser.username,rocketChatUser.password);
+
+                //         res.send({ loginToken: login.data.authToken })
+                //     }catch(e){
+                //         res.send({ loginToken: e.message })
+
+                //     }
+                    
+                // }else{
+                //     const globalProfileInfo = await db.get(`ep_profile_modal:${accessObj.authorID}`) || {};
+                //     if(author && author.name)
+                //         var username = author.name.replace(/\s/g, '') || "Anonymous"
+                //     else
+                //         var username = "Anonymous";
+                    
+                //     var email = globalProfileInfo.email ? globalProfileInfo.email : `${username}-${accessObj.authorID}@docs.plus`;
+                //     var password = `${username}-${accessObj.authorID}@docs.plus${config.userId}` ;
+                //     var usernameUserId = `${username}_${accessObj.authorID}`; 
+
+                //     var userToAdd = {
+                //         "name": username, 
+                //         "email": email, 
+                //         "password": password, 
+                //         "username": usernameUserId, 
+                //         "sendWelcomeEmail": false, 
+                //         "joinDefaultChannels": false,
+                //         "verified":true,
+                //         "requirePasswordChange":false,
+                //         "roles":["user"],
+                //     };
+                //     try {
+                //         var newUser = await rocketChatClient.users.create(userToAdd,async (err, result)=>{
+                //             try{
+                //                 var login =await loginApi('https', config.host, config.port,usernameUserId,password);
+                //                 await db.set(`ep_rocketchat:${accessObj.authorID}`,{data :result || login , info:userToAdd });
+                //                 res.send({ loginToken: login.data.authToken })
+
+                //             }catch(e){
+                //                 res.send({ loginToken: e.message })
+        
+                //             }
+                //         })
+                //     }catch(e){
+                //         res.send({ loginToken: e.message })
+                //     }
+                // }
+                
+                
                  
             }
         }else{
