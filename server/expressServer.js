@@ -23,22 +23,28 @@ exports.expressCreateServer = (hookName, context) => {
             "NOT_MATTER_PADID", req.cookies.sessionID, req.cookies.token, user);
             console.log("rocket_chat_auth_get accessObj",accessObj)
 
-        if (accessObj.accessStatus == "grant"){
-            if (req.session.user && req.session.rocketchatAuthToken) {
-                res.status(200).json({ loginToken: req.session.rocketchatAuthToken })
-                return;
-            } else {
+        // if (accessObj.accessStatus == "grant"){
+        //     if (req.session.user && req.session.rocketchatAuthToken) {
+        //         res.status(200).json({ loginToken: req.session.rocketchatAuthToken })
+        //         return;
+        //     } else {
 
-                const rocketchatUserAuth = await rocketchatAuthenticator.runValidator(accessObj.authorID);
-                console.log("rocket_chat_auth_get",rocketchatUserAuth)
-                res.status(200).json({ loginToken: rocketchatUserAuth.authToken })
-                return;
+        //         const rocketchatUserAuth = await rocketchatAuthenticator.runValidator(accessObj.authorID);
+        //         console.log("rocket_chat_auth_get",rocketchatUserAuth)
+        //         res.status(200).json({ loginToken: rocketchatUserAuth.authToken })
+        //         return;
                  
-            }
-        }else{
-            res.status(200).json({ loginToken: accessObj.accessStatus})
-            return;
-        }
+        //     }
+        // }else{
+        //     res.status(200).json({ loginToken: accessObj.accessStatus})
+        //     return;
+        // }
+        
+        const rocketchatUserAuth = await rocketchatAuthenticator.runValidator(accessObj.authorID);
+        console.log("rocket_chat_auth_get",rocketchatUserAuth)
+        res.status(200).json({ loginToken: rocketchatUserAuth.authToken })
+        return;
+
 
       })
     context.app.get('/static/pluginfw/ep_rocketchat/rocket_chat_iframe', (req, res) => {
