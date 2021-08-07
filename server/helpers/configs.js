@@ -5,5 +5,6 @@ module.exports = {
     port : settings.ep_rocketchat.port,
     userId :  settings.ep_rocketchat.userId,
     token : settings.ep_rocketchat.token,
-    baseUrl : settings.ep_rocketchat.baseUrl
+    baseUrl : settings.ep_rocketchat.baseUrl,
+    passwordSalt : settings.ep_rocketchat.passwordSalt
 };

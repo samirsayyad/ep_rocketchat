@@ -1,88 +1,110 @@
 const config = require("../helpers/configs");
 const loginApi = require("../../rocketChat/api/separated").login
 const db = require('ep_etherpad-lite/node/db/DB');
+const rocketChatClientInstance = require("../../rocketChat/clients/rocketChatClientInstance").rocketChatClientInstance;
 
-module.exports = {
-    login : async (EtherpadUserId) =>{
-        try{
-            const globalProfileInfo = await db.get(`ep_profile_modal:${EtherpadUserId}`) || {};
-            if(globalProfileInfo)
-                var username = globalProfileInfo.username.replace(/\s/g, '') || "Anonymous"
-            else
-                var username = "Anonymous";
-        
-            let password = `${username}-${EtherpadUserId}@docs.plus${config.userId}` ;
-            let usernameUserId = `${username}_${EtherpadUserId}`; 
-            let login =await loginApi(config.protocol, config.host, config.port, usernameUserId ,password);
-            await this.saveCredential(EtherpadUserId ,login.userId , login.authToken  );
-            console.log("login",login)
-            return login || false;
-        }catch(e){
-            console.log(e.message);
-            return false;
-        }
-        
-    },
-    saveCredential : async(EtherpadUserId,rocketchatUserId , rocketchatAuthToken) =>{
-        await db.set(`ep_rocketchat:${EtherpadUserId}`,{rocketchatUserId : rocketchatUserId , rocketchatAuthToken:rocketchatAuthToken });
 
-    },
-    register : async( EtherpadUserId)=>{
-        try{
-            const globalProfileInfo = await db.get(`ep_profile_modal:${EtherpadUserId}`) || {};
-            if(globalProfileInfo)
-                var username = globalProfileInfo.username.replace(/\s/g, '') || "Anonymous"
-            else
-                var username = "Anonymous";
-            
-            let email = globalProfileInfo.email ? globalProfileInfo.email : `${username}-${EtherpadUserId}@docs.plus`;
-            let password = `${username}-${EtherpadUserId}@docs.plus${config.userId}` ;
-            let usernameUserId = `${username}_${EtherpadUserId}`; 
-    
-            var userToAdd = {
-                "name": username, 
-                "email": email, 
-                "password": password, 
-                "username": usernameUserId, 
-                "sendWelcomeEmail": false, 
-                "joinDefaultChannels": false,
-                "verified":true,
-                "requirePasswordChange":false,
-                "roles":["user"],
-            };
-    
-            var rocketChatClient = new rocketChatClientInstance(config.protocol,config.host,config.port,config.userId,config.token,()=>{});
-            var newUser = await rocketChatClient.users.create(userToAdd);
-            console.log("newUser",newUser)
-            this.saveCredential(EtherpadUserId ,newUser.data.data.userId , newUser.data.data.authToken  )
-            return { userId :newUser.data.data.userId , authToken :  newUser.data.data.authToken  };
-        }catch(e){
-            console.log(e.message);
-            return false;
-        }
-
-    },
-
-    runValidator: async (EtherpadUserId)=>{
-        const rocketChatUser = await db.get(`ep_rocketchat:${EtherpadUserId}`) || [];
-        console.log("rocketChatUser",rocketChatUser)
-        var rocketchatUserId , rocketchatAuthToken;
-        if(rocketChatUser.rocketchatUserId){
-            rocketchatUserId = rocketChatUser.rocketchatUserId ;
-            rocketchatAuthToken = rocketChatUser.rocketchatAuthToken;
+const runValidator = async (EtherpadUserId)=>{
+    const rocketChatUser = await db.get(`ep_rocketchat:user:${EtherpadUserId}`) || [];
+    console.log("rocketChatUser",rocketChatUser)
+    var rocketchatUserId , rocketchatAuthToken;
+    if(rocketChatUser.rocketchatUserId){
+        rocketchatUserId = rocketChatUser.rocketchatUserId ;
+        rocketchatAuthToken = rocketChatUser.rocketchatAuthToken;
+    }else{
+        let loginResult = await login(EtherpadUserId);
+        if(loginResult){
+            rocketchatUserId = loginResult.userId ;
+            rocketchatAuthToken = loginResult.authToken;
         }else{
-            let loginResult = await this.login(userId);
-            if(loginResult){
+            let registerResult = await register(EtherpadUserId) || await register(EtherpadUserId,true);
+            if(registerResult){
+                let loginResult = await login(EtherpadUserId,registerResult.info.username ,registerResult.info.password  );
                 rocketchatUserId = loginResult.userId ;
                 rocketchatAuthToken = loginResult.authToken;
             }else{
-                let registerResult = await this.register(userId);
-                rocketchatUserId = registerResult.userId ;
-                rocketchatAuthToken = registerResult.authToken;
+                console.error("registerResult",registerResult)
             }
-
+            
         }
 
-        return { rocketchatUserId : rocketchatUserId , rocketchatAuthToken : rocketchatAuthToken  }
     }
+
+    return { rocketchatUserId : rocketchatUserId , rocketchatAuthToken : rocketchatAuthToken  }
+}
+
+const login = async (EtherpadUserId, username , password) =>{
+    try{
+
+        if(!username || !password){
+            const globalProfileInfo = await db.get(`ep_profile_modal:${EtherpadUserId}`) || {};
+            if(globalProfileInfo.username)
+                var tempUsername = globalProfileInfo.username.replace(/\s/g, '') || "Anonymous"
+            else
+                var tempUsername = "Anonymous";
+        
+            var password = `${tempUsername}-${EtherpadUserId}@docs.plus${config.passwordSalt}` ;
+            var username = `${tempUsername}_${EtherpadUserId.replace(/\s/g, '.')}`;
+    
+        }
+
+        let loginResult =await loginApi(config.protocol, config.host, config.port, username ,password);
+        console.log("login result",loginResult)
+        if(loginResult)
+            await saveCredential(EtherpadUserId ,loginResult.data.userId , loginResult.data.authToken  );
+        return { userId : loginResult.data.userId , authToken: loginResult.data.authToken } || false;
+    }catch(e){
+        console.log("login method : ",e.message);
+        return false;
+    }
+    
+}
+const saveCredential = async(EtherpadUserId,rocketchatUserId , rocketchatAuthToken , info) =>{
+    if(info)
+        await db.set(`ep_rocketchat:user:${EtherpadUserId}`,{rocketchatUserId : rocketchatUserId , rocketchatAuthToken:rocketchatAuthToken , info:info});
+    else
+        await db.set(`ep_rocketchat:user:${EtherpadUserId}`,{rocketchatUserId : rocketchatUserId , rocketchatAuthToken:rocketchatAuthToken});
+
+}
+const register = async( EtherpadUserId,randomUsername)=>{
+    try{
+        const globalProfileInfo = await db.get(`ep_profile_modal:${EtherpadUserId}`) || {};
+        if(globalProfileInfo.username)
+            var username = globalProfileInfo.username.replace(/\s/g, '') || "Anonymous"
+        else
+            var username = "Anonymous";
+        
+        let password = `${username}-${EtherpadUserId}@docs.plus${config.userId}` ;
+        let usernameUserId = `${username}_${(!randomUsername) ? EtherpadUserId.replace(/\s/g, '.') : EtherpadUserId.replace(/\s/g, '.')+Math.floor(Math.random() * 10000)}`; // if random enabled means something bad happend for users
+        console.log("usernameUserId",usernameUserId)
+        let email = globalProfileInfo.email ? globalProfileInfo.email : `${usernameUserId}@docs.plus`;
+
+        var userToAdd = {
+            "name": username, 
+            "email": email, 
+            "password": password, 
+            "username": usernameUserId, 
+            "sendWelcomeEmail": false, 
+            "joinDefaultChannels": false,
+            "verified":true,
+            "requirePasswordChange":false,
+            "roles":["user"],
+        };
+
+        var rocketChatClient = new rocketChatClientInstance(config.protocol,config.host,config.port,config.userId,config.token,()=>{});
+        var newUser = await rocketChatClient.users.create(userToAdd);
+        console.log("newUser",newUser);
+        saveCredential(EtherpadUserId , newUser.user._id , null , userToAdd )
+        return { userId :newUser.user._id , info:userToAdd };
+    }catch(e){
+        console.log("register method : ",e.message);
+        return false;
+    }
+
+}
+
+
+
+module.exports = {
+    runValidator : runValidator
 }

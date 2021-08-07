@@ -12,6 +12,8 @@ const config = {
 const rocketchatAuthenticator = require("../helpers/rocketchatAuthenticator");
 
 exports.updateRocketChatUser = async (message)=>{
+    console.log("message",message)
+
     const padId = message.padId;
     const userId = message.userId;
     const data = message.data;
