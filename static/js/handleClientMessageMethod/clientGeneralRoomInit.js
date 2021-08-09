@@ -62,20 +62,27 @@ exports.clientGeneralRoomInit = function clientGeneralRoomInit(payLoad){
 
 
     $( "#header_chat_room_close" ).on( "click", function() {
-        $("#ep_rocketchat_container").hide();
-        $("#ep_rocketchat_container").removeClass("ep_rocketchat_container");
-        $("#ep_rocketchat_container").addClass("ep_rocketchat_container_hidden");
+
+        $("#ep_rocketchat_container").animate({bottom:'-40%'},function(){
+            $("#ep_rocketchat_container").hide();
+            $("#ep_rocketchat_container").removeClass("ep_rocketchat_container");
+            $("#ep_rocketchat_container").addClass("ep_rocketchat_container_hidden");
+            $(".tocWrapper").css({"border":"none"});
+            const lastActiveHeader = localStorage.getItem("lastActiveHeader");
+            $(`#${lastActiveHeader}_container`).removeClass("highlightHeader");
+            localStorage.setItem("lastActiveHeader",null);
+            // remove padding for chat
+            $('#editorcontainer').css({
+                "padding-bottom" : 0
+            });
+        });
 
         // $("#toc").css({"border":"none"});
         // $(".headerContainer").css({"border":"none"});
-        $(".tocWrapper").css({"border":"none"});
 
         // remove highlight
-        const lastActiveHeader = localStorage.getItem("lastActiveHeader");
-        $(`#${lastActiveHeader}_container`).removeClass("highlightHeader");
 
         // set null last active header
-        localStorage.setItem("lastActiveHeader",null);
         
         // removing url param
         const params = new URLSearchParams(location.search);
@@ -83,10 +90,7 @@ exports.clientGeneralRoomInit = function clientGeneralRoomInit(payLoad){
         params.delete('header');
         window.history.replaceState({}, '', `${location.pathname}?${params}`);
 
-        // remove padding for chat
-        $('#editorcontainer').css({
-            "padding-bottom" : 0
-        });
+       
     });
 }
 

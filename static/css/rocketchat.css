@@ -206,3 +206,14 @@
   /* background-color: rgb(204, 204, 204) ; */
   z-index: 2000;right: 0;
 }
+
+
+.ep_rocketchat_slide-up
+{
+    bottom: 0px !important;
+}
+
+.ep_rocketchat_slide-down
+{
+    bottom: -475px !important;
+}
