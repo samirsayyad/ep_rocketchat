@@ -12,14 +12,18 @@ exports.clientGeneralRoomInit = function clientGeneralRoomInit(payLoad){
     var activeClass = "ep_rocketchat_container"; 
     if ( (!headerId || headerId==null)  && (!headerParamText || headerParamText==null)  ){ // if there isn't any active header and param should add as hidden  && (!lastActiveHeader || lastActiveHeader == null || lastActiveHeader == "null" )
         activeClass = "ep_rocketchat_container_hidden";
-        $("#toc").css({"border":"none"});
-        $(".headerContainer").css({"border":"none"});
+        // $("#toc").css({"border":"none"});
+        // $(".headerContainer").css({"border":"none"});
+        $(".tocWrapper").css({"border":"none"});
+
         const lastActiveHeader = localStorage.getItem("lastActiveHeader");
         $(`#${lastActiveHeader}_container`).removeClass("highlightHeader");
         localStorage.setItem("lastActiveHeader",null);
     }else{
-        $("#toc").css({"border-right":"1px solid #DADCE0"});
-        $(".headerContainer").css({"border-right":"1px solid #DADCE0"});
+        // $("#toc").css({"border-right":"1px solid #DADCE0"});
+        // $(".headerContainer").css({"border-right":"1px solid #DADCE0"});
+        $(".tocWrapper").css({"border-right":"1px solid #DADCE0"});
+
     }
 
     var chatHtml= `<div id='ep_rocketchat_container' class="${activeClass}">
@@ -62,8 +66,9 @@ exports.clientGeneralRoomInit = function clientGeneralRoomInit(payLoad){
         $("#ep_rocketchat_container").removeClass("ep_rocketchat_container");
         $("#ep_rocketchat_container").addClass("ep_rocketchat_container_hidden");
 
-        $("#toc").css({"border":"none"});
-        $(".headerContainer").css({"border":"none"});
+        // $("#toc").css({"border":"none"});
+        // $(".headerContainer").css({"border":"none"});
+        $(".tocWrapper").css({"border":"none"});
 
         // remove highlight
         const lastActiveHeader = localStorage.getItem("lastActiveHeader");
