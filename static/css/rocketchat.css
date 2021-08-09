@@ -57,6 +57,9 @@
 }
 .master_header_chat_room{
   color: #5f6368;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .bubble_mention {

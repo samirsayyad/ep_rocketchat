@@ -64,10 +64,24 @@ exports.clientGeneralRoomInit = function clientGeneralRoomInit(payLoad){
 
         $("#toc").css({"border":"none"});
         $(".headerContainer").css({"border":"none"});
+
+        // remove highlight
         const lastActiveHeader = localStorage.getItem("lastActiveHeader");
         $(`#${lastActiveHeader}_container`).removeClass("highlightHeader");
-        localStorage.setItem("lastActiveHeader",null);
 
+        // set null last active header
+        localStorage.setItem("lastActiveHeader",null);
+        
+        // removing url param
+        const params = new URLSearchParams(location.search);
+        params.delete('id');
+        params.delete('header');
+        window.history.replaceState({}, '', `${location.pathname}?${params}`);
+
+        // remove padding for chat
+        $('#editorcontainer').css({
+            "padding-bottom" : 0
+        });
     });
 }
 
