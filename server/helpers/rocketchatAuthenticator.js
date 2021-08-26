@@ -8,7 +8,7 @@ const runValidator = async (EtherpadUserId)=>{
     const rocketChatUser = await db.get(`ep_rocketchat:ep_users_${config.host}:${EtherpadUserId}`) || [];
     console.log("rocketChatUser",rocketChatUser)
     var rocketchatUserId , rocketchatAuthToken;
-    if(rocketChatUser.rocketchatUserId){
+    if(rocketChatUser.rocketchatUserId && rocketChatUser.info.username && rocketChatUser.info.password){
         rocketchatUserId = rocketChatUser.rocketchatUserId ;
         // regenerate token
         var loginResult = await login(EtherpadUserId,rocketChatUser.info.username,rocketChatUser.info.password);
