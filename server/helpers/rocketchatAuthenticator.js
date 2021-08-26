@@ -73,9 +73,13 @@ const login = async (EtherpadUserId, username , password) =>{
 
         let loginResult =await loginApi(config.protocol, config.host, config.port, username ,password);
         console.log("login result",loginResult)
-        if(loginResult)
+        if(loginResult){
             await saveCredential(EtherpadUserId ,loginResult.data.userId , loginResult.data.authToken ,  loginResult.data.me  );
-        return { userId : loginResult.data.userId , authToken: loginResult.data.authToken } || false;
+            return { userId : loginResult.data.userId , authToken: loginResult.data.authToken } || false;
+        }else{
+            return false;
+        }
+            
     }catch(e){
         console.log("login method : ",e.message);
         return false;
@@ -97,7 +101,7 @@ const register = async( EtherpadUserId,randomUsername)=>{
         else
             var username = "Anonymous";
         
-        let password = `${username}-${EtherpadUserId}@docs.plus${config.userId}` ;
+        let password = `${username}-${EtherpadUserId}@docs.plus${config.passwordSalt}` ;
         let usernameUserId = `${username}_${(!randomUsername) ? EtherpadUserId.replace(/\s/g, '.') : EtherpadUserId.replace(/\s/g, '.')+Math.floor(Math.random() * 10000)}`; // if random enabled means something bad happend for users
         console.log("usernameUserId",usernameUserId)
         let email = globalProfileInfo.email ? globalProfileInfo.email : `${usernameUserId}@docs.plus`;
