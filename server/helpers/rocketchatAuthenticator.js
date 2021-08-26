@@ -34,14 +34,14 @@ const runValidator = async (EtherpadUserId)=>{
     // }
 
 
-    let loginResult = await login(EtherpadUserId);
+    var loginResult = await login(EtherpadUserId);
         if(loginResult){
             console.log(loginResult,"loginResult")
 
             rocketchatUserId = loginResult.userId ;
             rocketchatAuthToken = loginResult.authToken;
         }else{
-            let registerResult = await register(EtherpadUserId) || await register(EtherpadUserId,true);
+            var registerResult = await register(EtherpadUserId) || await register(EtherpadUserId,true);
             console.log(registerResult,"registerResult")
             if(registerResult){
                 let loginResult = await login(EtherpadUserId,registerResult.info.username ,registerResult.info.password  );
@@ -71,7 +71,7 @@ const login = async (EtherpadUserId, username , password) =>{
     
         }
 
-        let loginResult =await loginApi(config.protocol, config.host, config.port, username ,password);
+        var loginResult =await loginApi(config.protocol, config.host, config.port, username ,password);
         console.log("login result",loginResult)
         if(loginResult){
             await saveCredential(EtherpadUserId ,loginResult.data.userId , loginResult.data.authToken ,  loginResult.data.me  );
