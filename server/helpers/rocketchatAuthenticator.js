@@ -8,10 +8,10 @@ const runValidator = async (EtherpadUserId)=>{
     const rocketChatUser = await db.get(`ep_rocketchat:ep_users_${config.host}:${EtherpadUserId}`) || [];
     console.log("rocketChatUser",rocketChatUser)
     var rocketchatUserId , rocketchatAuthToken;
-    if(rocketChatUser.rocketchatUserId && rocketChatUser.info.username && rocketChatUser.info.password){
+    if(rocketChatUser.rocketchatUserId && rocketChatUser.username){
         rocketchatUserId = rocketChatUser.rocketchatUserId ;
         // regenerate token
-        var loginResult = await login(EtherpadUserId,rocketChatUser.info.username,rocketChatUser.info.password);
+        var loginResult = await login(EtherpadUserId,rocketChatUser.username,rocketChatUser.password);
         console.log(loginResult,"loginResult-regenerate")
         rocketchatAuthToken = loginResult.authToken;
     }else{
@@ -57,7 +57,7 @@ const login = async (EtherpadUserId, username , password) =>{
         var loginResult =await loginApi(config.protocol, config.host, config.port, username ,password);
         console.log("login result",loginResult)
         if(loginResult){
-            await saveCredential(EtherpadUserId ,loginResult.data.userId , loginResult.data.authToken ,  null );
+            //await saveCredential(EtherpadUserId ,loginResult.data.userId , loginResult.data.authToken ,  null );
             return { userId : loginResult.data.userId , authToken: loginResult.data.authToken } || false;
         }else{
             return false;
@@ -71,7 +71,7 @@ const login = async (EtherpadUserId, username , password) =>{
 }
 const saveCredential = async(EtherpadUserId,rocketchatUserId , rocketchatAuthToken , info) =>{
     if(info)
-        await db.set(`ep_rocketchat:ep_users_${config.host}:${EtherpadUserId}`,{rocketchatUserId : rocketchatUserId , rocketchatAuthToken:rocketchatAuthToken , info:info});
+        await db.set(`ep_rocketchat:ep_users_${config.host}:${EtherpadUserId}`,{rocketchatUserId : rocketchatUserId , rocketchatAuthToken:rocketchatAuthToken , ...info});
     else
         await db.set(`ep_rocketchat:ep_users_${config.host}:${EtherpadUserId}`,{rocketchatUserId : rocketchatUserId , rocketchatAuthToken:rocketchatAuthToken});
 
@@ -104,7 +104,7 @@ const register = async( EtherpadUserId,randomUsername)=>{
         var rocketChatClient = new rocketChatClientInstance(config.protocol,config.host,config.port,config.userId,config.token,()=>{});
         var newUser = await rocketChatClient.users.create(userToAdd);
         console.log("newUser",newUser);
-        saveCredential(EtherpadUserId , newUser.user._id , null , userToAdd )
+        saveCredential(EtherpadUserId , newUser.user._id , null , {username :userToAdd.username , password :userToAdd.password } )
         return { userId :newUser.user._id , info:userToAdd };
     }catch(e){
         console.log("register method : ",e.message);
