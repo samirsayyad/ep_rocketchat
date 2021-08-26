@@ -17,11 +17,11 @@ exports.updateImageRocketChatUser = async (message)=>{
     const data = message.data;
     try{
         const rocketchatUserAuth = await rocketchatAuthenticator.runValidator(userId);
-        if(rocketChatUser){
+        if(rocketchatUserAuth){
             const rocketChatClient = new rocketChatClientInstance(config.protocol,config.host,config.port,config.userId,config.token,()=>{});
             await rocketChatClient.users.setAvatar(rocketchatUserAuth.rocketchatUserId, `${config.baseUrl}/static/getUserProfileImage/${userId}/${padId}?t=${new Date().getTime()}`)
         }
     }catch(e){
-        console.log(e.message,"users.update")
+        console.log(e.message,"updateImageRocketChatUser")
     }
 }

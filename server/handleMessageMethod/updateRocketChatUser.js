@@ -19,15 +19,13 @@ exports.updateRocketChatUser = async (message)=>{
     const data = message.data;
     try{
         const rocketchatUserAuth = await rocketchatAuthenticator.runValidator(userId);
-        console.log( data ,"console.log data updateRocketChatUser")
-        console.log(`${ data.userName.replace(/\s/g, '')}_${userId}`,"usenmamawe updateRocketChatUser")
         const rocketChatClient = new rocketChatClientInstance(config.protocol,config.host,config.port,config.userId,config.token,()=>{});
         await rocketChatClient.users.update(rocketchatUserAuth.rocketchatUserId  ,{
             "username" : `${userId}`,
             "name":data.userName
         });
         if(!data.avatarUrlReset){
-            await rocketChatClient.users.setAvatar(`${config.baseUrl}/static/getUserProfileImage/${userId}/${padId}?t=${new Date().getTime()}`)
+            await rocketChatClient.users.setAvatar(rocketchatUserAuth.rocketchatUserId, `${config.baseUrl}/static/getUserProfileImage/${userId}/${padId}?t=${new Date().getTime()}`)
         }else{
             await rocketChatClient.users.resetAvatar(rocketchatUserAuth.rocketchatUserId)
         }
@@ -35,6 +33,6 @@ exports.updateRocketChatUser = async (message)=>{
         
 
     }catch(e){
-        console.log(e.message,"users.update")
+        console.log(e.message,"updateRocketChatUser")
     }
 }

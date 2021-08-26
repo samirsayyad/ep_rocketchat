@@ -5,25 +5,21 @@ const rocketChatClientInstance = require("../../rocketChat/clients/rocketChatCli
 
 
 const runValidator = async (EtherpadUserId)=>{
-    const rocketChatUser = await db.get(`ep_rocketchat:ep_users_${config.host}:${EtherpadUserId}`) || [];
-    console.log("rocketChatUser",rocketChatUser)
+    const rocketChatUser = await db.get(`ep_rocketchat_users_${config.host}:${EtherpadUserId}`) || [];
     var rocketchatUserId , rocketchatAuthToken;
     if(rocketChatUser.rocketchatUserId && rocketChatUser.username){
         rocketchatUserId = rocketChatUser.rocketchatUserId ;
         // regenerate token
         var loginResult = await login(EtherpadUserId,rocketChatUser.username,rocketChatUser.password);
-        console.log(loginResult,"loginResult-regenerate")
         rocketchatAuthToken = loginResult.authToken;
     }else{
         var loginResult = await login(EtherpadUserId);
         if(loginResult){
-            console.log(loginResult,"loginResult")
 
             rocketchatUserId = loginResult.userId ;
             rocketchatAuthToken = loginResult.authToken;
         }else{
             var registerResult = await register(EtherpadUserId) || await register(EtherpadUserId,true);
-            console.log(registerResult,"registerResult")
             if(registerResult){
                 var loginResult = await login(EtherpadUserId,registerResult.info.username ,registerResult.info.password  );
                 rocketchatUserId = loginResult.userId ;
@@ -50,12 +46,12 @@ const login = async (EtherpadUserId, username , password) =>{
                 var tempUsername = "Anonymous";
         
             var password = `${tempUsername}-${EtherpadUserId}@docs.plus${config.passwordSalt}` ;
-            var username = `${tempUsername}_${EtherpadUserId.replace(/\s/g, '.')}`;
+            //var username = `${tempUsername}_${EtherpadUserId.replace(/\s/g, '.')}`;
+            var username = EtherpadUserId;
     
         }
 
         var loginResult =await loginApi(config.protocol, config.host, config.port, username ,password);
-        console.log("login result",loginResult)
         if(loginResult){
             //await saveCredential(EtherpadUserId ,loginResult.data.userId , loginResult.data.authToken ,  null );
             return { userId : loginResult.data.userId , authToken: loginResult.data.authToken } || false;
@@ -71,26 +67,25 @@ const login = async (EtherpadUserId, username , password) =>{
 }
 const saveCredential = async(EtherpadUserId,rocketchatUserId , rocketchatAuthToken , info) =>{
     if(info)
-        await db.set(`ep_rocketchat:ep_users_${config.host}:${EtherpadUserId}`,{rocketchatUserId : rocketchatUserId , rocketchatAuthToken:rocketchatAuthToken , ...info});
+        await db.set(`ep_rocketchat_users_${config.host}:${EtherpadUserId}`,{rocketchatUserId : rocketchatUserId , rocketchatAuthToken:rocketchatAuthToken , ...info});
     else
-        await db.set(`ep_rocketchat:ep_users_${config.host}:${EtherpadUserId}`,{rocketchatUserId : rocketchatUserId , rocketchatAuthToken:rocketchatAuthToken});
+        await db.set(`ep_rocketchat_users_${config.host}:${EtherpadUserId}`,{rocketchatUserId : rocketchatUserId , rocketchatAuthToken:rocketchatAuthToken});
 
 }
 const register = async( EtherpadUserId,randomUsername)=>{
     try{
         const globalProfileInfo = await db.get(`ep_profile_modal:${EtherpadUserId}`) || {};
         if(globalProfileInfo.username)
-            var username = globalProfileInfo.username.replace(/\s/g, '') || "Anonymous"
+            var name = globalProfileInfo.username.replace(/\s/g, '') || "Anonymous"
         else
-            var username = "Anonymous";
+            var name = "Anonymous";
         
-        let password = `${username}-${EtherpadUserId}@docs.plus${config.passwordSalt}` ;
-        let usernameUserId = `${username}_${(!randomUsername) ? EtherpadUserId.replace(/\s/g, '.') : EtherpadUserId.replace(/\s/g, '.')+Math.floor(Math.random() * 10000)}`; // if random enabled means something bad happend for users
-        console.log("usernameUserId",usernameUserId)
+        let password = `${name}-${EtherpadUserId}@docs.plus${config.passwordSalt}` ;
+        let usernameUserId = `${(!randomUsername) ? EtherpadUserId : EtherpadUserId + Math.floor(Math.random() * 10000)}`; // if random enabled means something bad happend for users
         let email = globalProfileInfo.email ? globalProfileInfo.email : `${usernameUserId}@docs.plus`;
 
         var userToAdd = {
-            "name": username, 
+            "name": name, 
             "email": email, 
             "password": password, 
             "username": usernameUserId, 
