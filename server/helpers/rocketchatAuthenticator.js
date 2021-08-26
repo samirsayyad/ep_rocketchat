@@ -5,36 +5,17 @@ const rocketChatClientInstance = require("../../rocketChat/clients/rocketChatCli
 
 
 const runValidator = async (EtherpadUserId)=>{
-    // const rocketChatUser = await db.get(`ep_rocketchat:users_${config.host}:${EtherpadUserId}`) || [];
-    // console.log("rocketChatUser",rocketChatUser)
-    // var rocketchatUserId , rocketchatAuthToken;
-    // if(rocketChatUser.rocketchatUserId){
-    //     rocketchatUserId = rocketChatUser.rocketchatUserId ;
-    //     rocketchatAuthToken = rocketChatUser.rocketchatAuthToken;
-    // }else{
-    //     let loginResult = await login(EtherpadUserId);
-    //     if(loginResult){
-    //         console.log(loginResult,"loginResult")
-
-    //         rocketchatUserId = loginResult.userId ;
-    //         rocketchatAuthToken = loginResult.authToken;
-    //     }else{
-    //         let registerResult = await register(EtherpadUserId) || await register(EtherpadUserId,true);
-    //         console.log(registerResult,"registerResult")
-    //         if(registerResult){
-    //             let loginResult = await login(EtherpadUserId,registerResult.info.username ,registerResult.info.password  );
-    //             rocketchatUserId = loginResult.userId ;
-    //             rocketchatAuthToken = loginResult.authToken;
-    //         }else{
-    //             console.error("registerResult",registerResult)
-    //         }
-            
-    //     }
-
-    // }
-
-
-    var loginResult = await login(EtherpadUserId);
+    const rocketChatUser = await db.get(`ep_rocketchat:users_${config.host}:${EtherpadUserId}`) || [];
+    console.log("rocketChatUser",rocketChatUser)
+    var rocketchatUserId , rocketchatAuthToken;
+    if(rocketChatUser.rocketchatUserId){
+        rocketchatUserId = rocketChatUser.rocketchatUserId ;
+        // regenerate token
+        var loginResult = await login(EtherpadUserId,rocketChatUser.info.username,rocketChatUser.info.password);
+        console.log(loginResult,"loginResult-regenerate")
+        rocketchatAuthToken = loginResult.authToken;
+    }else{
+        var loginResult = await login(EtherpadUserId);
         if(loginResult){
             console.log(loginResult,"loginResult")
 
@@ -44,7 +25,7 @@ const runValidator = async (EtherpadUserId)=>{
             var registerResult = await register(EtherpadUserId) || await register(EtherpadUserId,true);
             console.log(registerResult,"registerResult")
             if(registerResult){
-                let loginResult = await login(EtherpadUserId,registerResult.info.username ,registerResult.info.password  );
+                var loginResult = await login(EtherpadUserId,registerResult.info.username ,registerResult.info.password  );
                 rocketchatUserId = loginResult.userId ;
                 rocketchatAuthToken = loginResult.authToken;
             }else{
@@ -52,6 +33,8 @@ const runValidator = async (EtherpadUserId)=>{
             }
             
         }
+
+    }
 
     return { rocketchatUserId : rocketchatUserId , rocketchatAuthToken : rocketchatAuthToken  }
 }
@@ -74,7 +57,7 @@ const login = async (EtherpadUserId, username , password) =>{
         var loginResult =await loginApi(config.protocol, config.host, config.port, username ,password);
         console.log("login result",loginResult)
         if(loginResult){
-            await saveCredential(EtherpadUserId ,loginResult.data.userId , loginResult.data.authToken ,  loginResult.data.me  );
+            await saveCredential(EtherpadUserId ,loginResult.data.userId , loginResult.data.authToken ,  null );
             return { userId : loginResult.data.userId , authToken: loginResult.data.authToken } || false;
         }else{
             return false;
