@@ -33,7 +33,8 @@ exports.handleClientMessage_CUSTOM = function handleClientMessage_CUSTOM(hook, c
                 padId: context.payload.padId,
                 data: {
                     userName : "Anonymous",
-                    avatarUrlReset : true
+                    avatarUrlReset : true , 
+                    messageChatText : context.payload.messageChatText
                 },
               };
             pad.collabClient.sendMessage(message);
@@ -50,8 +51,6 @@ exports.handleClientMessage_CUSTOM = function handleClientMessage_CUSTOM(hook, c
             pad.collabClient.sendMessage(message);
         }
     }
-    
-
     
     
     return[];

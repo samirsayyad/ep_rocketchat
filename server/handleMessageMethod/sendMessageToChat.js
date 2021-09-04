@@ -18,14 +18,15 @@ exports.sendMessageToChat = async (message)=>{
     const data = message.data;
      
     try{
+        console.log(message)
+
         const rocketChatClient = new rocketChatClientInstance(config.protocol,config.host,config.port,config.userId,config.token,()=>{});
         await rocketChatClient.chat.postMessage({
             "alias" : `System`,
             "channel":`${padId}-general-channel`,
-            "text": "Sample message",
+            "text": data.messageChatText,
 
         });
-        console.log(message)
     }catch(e){
         console.log(e.message,"sendMessageToChat - general")
     }

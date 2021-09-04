@@ -10,7 +10,8 @@ const config = {
     baseUrl : settings.ep_rocketchat.baseUrl
 };
 const rocketchatAuthenticator = require("../helpers/rocketchatAuthenticator");
-
+const sendMessageToChat = require("./sendMessageToChat").sendMessageToChat;
+ 
 exports.updateRocketChatUser = async (message)=>{
     console.log("message",message)
 
@@ -29,7 +30,11 @@ exports.updateRocketChatUser = async (message)=>{
         if(!data.avatarUrlReset){
             await rocketChatClient.users.setAvatar(rocketchatUserAuth.rocketchatUserId, `${config.baseUrl}/static/getUserProfileImage/${userId}/${padId}?t=${new Date().getTime()}`)
         }else{
-            await rocketChatClient.users.resetAvatar(rocketchatUserAuth.rocketchatUserId)
+            await rocketChatClient.users.resetAvatar(rocketchatUserAuth.rocketchatUserId);
+
+            if(data.messageChatText){
+                sendMessageToChat(message)
+            }
         }
 
         

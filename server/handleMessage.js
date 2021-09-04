@@ -41,9 +41,6 @@ exports.handleMessage = (hook_name, context, callback) => {
     sendMessageToChat(message)
   }
 
-  EP_PROFILE_MODAL_SEND_MESSAGE_TO_CHAT
-
-
-  
+   
   
 };
