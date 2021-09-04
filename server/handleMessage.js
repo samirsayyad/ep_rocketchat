@@ -2,6 +2,7 @@ const generalRoomInit = require("./handleMessageMethod/generalRoomInit").general
 const updateRocketChatUser = require("./handleMessageMethod/updateRocketChatUser").updateRocketChatUser;
 const updateImageRocketChatUser = require("./handleMessageMethod/updateImageRocketChatUser").updateImageRocketChatUser;
 const handleRooms = require("./handleMessageMethod/handleRooms").handleRooms;
+const sendMessageToChat = require("./handleMessageMethod/sendMessageToChat").sendMessageToChat;
 exports.handleMessage = (hook_name, context, callback) => {
   let isRocketChatMessage = false;
   if (context) {
@@ -36,6 +37,11 @@ exports.handleMessage = (hook_name, context, callback) => {
   if (message.action === 'ep_rocketchat_handleRooms') {
     handleRooms(message,context.client)
   }
+  if (message.action === 'ep_rocketchat_sendMessageToChat') {
+    sendMessageToChat(message)
+  }
+
+  EP_PROFILE_MODAL_SEND_MESSAGE_TO_CHAT
 
 
   
