@@ -18,7 +18,6 @@ exports.sendMessageToChat = async (message)=>{
     const data = message.data;
      
     try{
-        console.log(message)
 
         const rocketChatClient = new rocketChatClientInstance(config.protocol,config.host,config.port,config.userId,config.token,()=>{});
         await rocketChatClient.chat.postMessage({

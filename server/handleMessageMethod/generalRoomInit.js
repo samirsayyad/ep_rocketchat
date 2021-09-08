@@ -9,33 +9,60 @@ const config = {
     userId :  settings.ep_rocketchat.userId,
     token : settings.ep_rocketchat.token
 };
+const getOnlineUsersApi = require("../../rocketChat/api/separated").getChannelOnlineUsers
 
 /**
  * 
  * @param {padId} message 
  */
-exports.generalRoomInit = async (message,socketClient)=>{
+exports.generalRoomInit = async (message,socketClient,initialize)=>{
   const padId = message.padId
   const userId = message.userId ;
+
   try{
+    const rocketChatClient = new rocketChatClientInstance(config.protocol,config.host,config.port,config.userId,config.token,()=>{});
 
-    var roomData = await db.get(`ep_rocketchat_${padId}`) || null;
+    var rocketChatRoom = await db.get(`${config.host}:ep_rocketchat:rooms:${padId}`) || false ;
+
     // create room if not exist
-    //if(!roomData){
-      const rocketChatClient = new rocketChatClientInstance(config.protocol,config.host,config.port,config.userId,config.token,()=>{});
-      var roomResult = await rocketChatClient.channels.create(`${padId}-general-channel`);
-      if(roomResult.success){
-        roomData = roomResult
-        db.set(`ep_rocketchat_${padId}`,roomData);
+    if(!rocketChatRoom){
+      try{
+        var roomResult = await rocketChatClient.channels.create(`${padId}-general-channel`);
+        if(roomResult.success){
+          db.set(`${config.host}:ep_rocketchat:rooms:${padId}`,roomResult);
+        }
 
+        rocketChatRoom = roomResult
+
+      }catch(e){
+        console.log(e.message , "channels.create")
+
+        const rocketChatClient = new rocketChatClientInstance(config.protocol,config.host,config.port,config.userId,config.token,()=>{});
+        var roomInfoResult = await rocketChatClient.channels.info(`${padId}-general-channel`);
+        db.set(`${config.host}:ep_rocketchat:rooms:${padId}`,roomInfoResult);
+        rocketChatRoom = roomInfoResult
       }
-    //}
+
+    }else{
+      var roomInfoResult = await rocketChatClient.channels.info(`${padId}-general-channel`);
+      db.set(`${config.host}:ep_rocketchat:rooms:${padId}`,roomInfoResult);
+      rocketChatRoom = roomInfoResult
+    }
+
+    var onlineUsers = await getOnlineUsersApi(config, rocketChatRoom.channel._id );
+
+    // join all users
+    var addAllResult = await rocketChatClient.channels.addAll( rocketChatRoom.channel._id );
+    // join all users
+      
   }catch(e){
-    console.log(e.message , "channels.create")
+    console.log(e.message , "generalRoomInit")
   }
+
+  // join 
   // try{
 
-  //   const userJoined = await db.get(`ep_rocketchat_join_${padId}_${userId}`) || null;
+  //   const userJoined = await db.get(`${config.host}:ep_rocketchat_join_${padId}_${userId}`) || null;
 
   //   // join current user if not joined
   //   if(!userJoined){
@@ -53,6 +80,9 @@ exports.generalRoomInit = async (message,socketClient)=>{
   // }catch(e){
   //   console.log(e.message , "channels.create or channels.invite")
   // }
+  // join 
+
+
   const msg = {
     type: 'COLLABROOM',
     data: {
@@ -60,11 +90,11 @@ exports.generalRoomInit = async (message,socketClient)=>{
       payload: {
         padId: padId,
         userId: message.userId,
-        action: 'clientGeneralRoomInit',
+        action: (initialize) ? 'clientGeneralRoomInit' : 'updateRocketChatIframe',
         data: {
           room : `${padId}-general-channel`,
-          rocketChatBaseUrl : `${config.protocol}://${config.host}`
-
+          rocketChatBaseUrl : `${config.protocol}://${config.host}`,
+          onlineUsers : onlineUsers
         },
       },
     },

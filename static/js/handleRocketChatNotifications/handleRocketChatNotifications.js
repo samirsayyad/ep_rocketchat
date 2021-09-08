@@ -8,7 +8,6 @@ exports.handleRocketChatNotifications = function handleRocketChatNotifications (
         // if(eventName == "notification"){
         //     notificationsMethod(data)
         // }
-        console.log(e.data)
         if(eventName=="unread-changed-by-subscription"){
             unreadChangedBySubscription(data)
         }

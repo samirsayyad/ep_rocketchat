@@ -57,8 +57,8 @@ class Channels {
         return this.client.request("GET", "channels.history", hisOptions, callback);
     }
 
-    info (roomId, callback) {
-        return this.client.request("GET", "channels.info", {roomId}, callback);
+    info (roomName, callback) {
+        return this.client.request("GET", "channels.info", {roomName}, callback);
     }
 
     kick (roomId, userId, callback) {

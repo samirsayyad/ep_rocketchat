@@ -29,7 +29,7 @@ exports.handleMessage = (hook_name, context, callback) => {
     updateRocketChatUser(message)
   }
   if (message.action === 'ep_rocketchat_generalRoomInit') {
-    generalRoomInit(message,context.client)
+    generalRoomInit(message,context.client,true)
   }
   if (message.action === 'ep_rocketchat_updateImageRocketChatUser') {
     updateImageRocketChatUser(message)

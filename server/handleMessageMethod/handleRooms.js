@@ -2,6 +2,8 @@ const rocketChatClientInstance = require("../../rocketChat/clients/rocketChatCli
 const settings = require('ep_etherpad-lite/node/utils/Settings');
 const db = require('ep_etherpad-lite/node/db/DB');
 const sharedTransmitter = require("../helpers/sharedTransmitter")
+const getOnlineUsersApi = require("../../rocketChat/api/separated").getChannelOnlineUsers
+const generalRoomInit = require("./generalRoomInit").generalRoomInit
 
 const config = {
     protocol: settings.ep_rocketchat.protocol,
@@ -19,43 +21,63 @@ exports.handleRooms = async (message,socketClient)=>{
     var title =  data.title.replace(/\s+/g, '-')
     try{
       if (data.headerId =="GENERAL"){
-        const msg = {
-          type: 'COLLABROOM',
-          data: {
-            type: 'CUSTOM',
-            payload: {
-              padId: padId,
-              userId: userId,
-              action: 'updateRocketChatIframe',
-              data: {
-                room :`${padId}-general-channel`,
-                //room : data.headerId ,
-                rocketChatBaseUrl :  `${config.protocol}://${config.host}`
-              },
-            },
-          },
-        };
-        sharedTransmitter.sendToUser(msg,socketClient);
+        await generalRoomInit(message,socketClient);
         return;
+        // const msg = {
+        //   type: 'COLLABROOM',
+        //   data: {
+        //     type: 'CUSTOM',
+        //     payload: {
+        //       padId: padId,
+        //       userId: userId,
+        //       action: 'updateRocketChatIframe',
+        //       data: {
+        //         room :`${padId}-general-channel`,
+        //         //room : data.headerId ,
+        //         rocketChatBaseUrl :  `${config.protocol}://${config.host}`
+        //       },
+        //     },
+        //   },
+        // };
+        // sharedTransmitter.sendToUser(msg,socketClient);
+        // return;
       }
-        
+      const rocketChatClient = new rocketChatClientInstance(config.protocol,config.host,config.port,config.userId,config.token,()=>{});
+      var rocketChatRoom = await db.get(`${config.host}:ep_rocketchat:rooms:${data.headerId}`) || false ;
+      if(rocketChatRoom==false){
 
-      const rocketChatRoom = await db.get(`ep_rocketchat:rooms:${data.headerId}`) || false ;
-      //if(rocketChatRoom==false){ because of changing too much gateway need to recreate all headers
+
         try{
-          const rocketChatClient = new rocketChatClientInstance(config.protocol,config.host,config.port,config.userId,config.token,()=>{});
-          //var roomResult = await rocketChatClient.channels.create(`${padId}_header_${title}`)
           var roomResult = await rocketChatClient.channels.create( data.headerId )
           if(roomResult.success){
-              await db.set(`ep_rocketchat:rooms:${data.headerId}`,roomResult);
+              await db.set(`${config.host}:ep_rocketchat:rooms:${data.headerId}`,roomResult);
           }
+          rocketChatRoom = roomResult
+
         }catch(e){
-          console.log(e.message,"channels.create of handleRooms")
+          console.log(e.message , "channels.create")
+          const rocketChatClient = new rocketChatClientInstance(config.protocol,config.host,config.port,config.userId,config.token,()=>{});
+          var roomInfoResult = await rocketChatClient.channels.info(data.headerId );
+          db.set(`${config.host}:ep_rocketchat:rooms:${padId}`,roomInfoResult);
+          rocketChatRoom = roomInfoResult
         }
           
         
           
-      //}
+      }else{
+        var roomInfoResult = await rocketChatClient.channels.info(data.headerId );
+        db.set(`${config.host}:ep_rocketchat:rooms:${padId}`,roomInfoResult);
+        rocketChatRoom = roomInfoResult
+      }
+
+
+
+      var onlineUsers = await getOnlineUsersApi(config, rocketChatRoom.channel._id );
+
+      // join all users
+      var addAllResult = await rocketChatClient.channels.addAll( rocketChatRoom.channel._id );
+      // join all users
+
 
       const msg = {
           type: 'COLLABROOM',
@@ -68,7 +90,8 @@ exports.handleRooms = async (message,socketClient)=>{
               data: {
                 //room :`${padId}_header_${title}`,
                 room : data.headerId ,
-                rocketChatBaseUrl :  `${config.protocol}://${config.host}`
+                rocketChatBaseUrl :  `${config.protocol}://${config.host}`,
+                onlineUsers : onlineUsers
               },
             },
           },

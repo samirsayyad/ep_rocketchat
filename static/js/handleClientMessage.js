@@ -1,16 +1,20 @@
 const clientGeneralRoomInit = require("./handleClientMessageMethod/clientGeneralRoomInit").clientGeneralRoomInit;
 const updateRocketChatIframe = require("./handleClientMessageMethod/updateRocketChatIframe").updateRocketChatIframe;
+const updateRocketChatIframeOnlineUsers = require("./handleClientMessageMethod/updateRocketChatIframeOnlineUsers").updateRocketChatIframeOnlineUsers;
+
 exports.handleClientMessage_CUSTOM = function handleClientMessage_CUSTOM(hook, context, cb){
     const current_user_id = pad.getUserId();
 
     if (context.payload.action == 'clientGeneralRoomInit') {
         if(current_user_id == context.payload.userId )
             clientGeneralRoomInit(context.payload)
+        updateRocketChatIframeOnlineUsers(context.payload)
     }
 
     if (context.payload.action == 'updateRocketChatIframe') {
         if(current_user_id == context.payload.userId )
             updateRocketChatIframe(context.payload)
+        updateRocketChatIframeOnlineUsers(context.payload)
     }
     if(context.payload.action == 'EP_PROFILE_USER_LOGIN_UPDATE'){ // raised by ep_profile_modal
         if (current_user_id == context.payload.userId) {

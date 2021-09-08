@@ -7,22 +7,14 @@ const rocketChatClientInstance = require("../../rocketChat/clients/rocketChatCli
 const runValidator = async (EtherpadUserId)=>{
     const rocketChatUser = await db.get(`ep_rocketchat_users_${config.host}:${EtherpadUserId}`) || [];
     var rocketchatUserId , rocketchatAuthToken;
-    console.log(rocketChatUser,"rocketChatUser")
     if(rocketChatUser.rocketchatUserId && rocketChatUser.username){
-        console.log(rocketChatUser.rocketchatUserId && rocketChatUser.username,"rocketChatUser.rocketchatUserId && rocketChatUser.username")
-
         rocketchatUserId = rocketChatUser.rocketchatUserId ;
         // regenerate token
         var loginResult = await login(EtherpadUserId,rocketChatUser.username,rocketChatUser.password);
         rocketchatAuthToken = loginResult.authToken;
     }else{
 
-        console.log("falksde ","rocketChatUser.rocketchatUserId && rocketChatUser.username")
-
         var loginResult = await login(EtherpadUserId);
-
-        console.log("loginResult ",loginResult)
-
         if(loginResult){
 
             rocketchatUserId = loginResult.userId ;
@@ -75,7 +67,6 @@ const login = async (EtherpadUserId, username , password) =>{
     
 }
 const saveCredential = async(EtherpadUserId,rocketchatUserId , rocketchatAuthToken , info) =>{
-    console.log("saveCredential",EtherpadUserId,rocketchatUserId , rocketchatAuthToken , info)
     if(info)
         await db.set(`ep_rocketchat_users_${config.host}:${EtherpadUserId}`,{rocketchatUserId : rocketchatUserId , rocketchatAuthToken:rocketchatAuthToken , ...info});
     else
@@ -108,7 +99,6 @@ const register = async( EtherpadUserId,randomUsername)=>{
 
         var rocketChatClient = new rocketChatClientInstance(config.protocol,config.host,config.port,config.userId,config.token,()=>{});
         var newUser = await rocketChatClient.users.create(userToAdd);
-        console.log("newUser",newUser);
         saveCredential(EtherpadUserId , newUser.user._id , null , {username :userToAdd.username , password :userToAdd.password } )
         return { userId :newUser.user._id , info:userToAdd };
     }catch(e){

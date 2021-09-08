@@ -10,7 +10,6 @@ const config = {
 };
 
 describe("test 'me' interface to get user detail information", function () {
-    console.log(config)
     var rocketChatClientObj = null;
     beforeEach(function (done) {
         rocketChatClientObj = new RocketChatClient("https",config.host,config.port,config.userId,config.token, done);

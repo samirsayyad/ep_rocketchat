@@ -13,15 +13,11 @@ const rocketchatAuthenticator = require("../helpers/rocketchatAuthenticator");
 const sendMessageToChat = require("./sendMessageToChat").sendMessageToChat;
  
 exports.updateRocketChatUser = async (message)=>{
-    console.log("message",message)
-
     const padId = message.padId;
     const userId = message.userId;
     const data = message.data;
-    console.log(config)
     try{
         const rocketchatUserAuth = await rocketchatAuthenticator.runValidator(userId);
-        console.log(rocketchatUserAuth);
         const rocketChatClient = new rocketChatClientInstance(config.protocol,config.host,config.port,config.userId,config.token,()=>{});
         await rocketChatClient.users.update(rocketchatUserAuth.rocketchatUserId  ,{
             "username" : `${userId}`,

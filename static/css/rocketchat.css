@@ -174,10 +174,53 @@
 .header_chat_room_container{
   display: flex;
   align-items: center;
-  width: 50%;
+  max-width: 50%;
   float: left;
   height: 100%;
+  margin-right: 5px;
 }
+.ep_rocketchat_onlineUsersList{
+  display: flex;
+  align-items: center;
+  width: 20%;
+  float: left;
+  height: 100%; 
+  flex-direction: row;
+  margin: auto;
+  cursor: pointer;
+}
+.ep_rocketchat_onlineUsersList:first-child {
+  margin: 0;
+}
+
+.ep_rocketchat_onlineUsersList_avatarImg{
+  width: 26px;
+  height: 26px;
+  box-sizing: border-box;
+  border-radius: 145.833px;
+  border: 1px solid #fff;
+}
+.ep_rocketchat_onlineUsersList_avatar{
+  margin: 0 -14px 0 0;
+  position: relative;
+  transition: all .2s cubic-bezier(0,.71,.47,1.1);
+  display: flex;
+  flex-direction: row;
+  float: left;
+  overflow: hidden;
+}
+.ep_rocketchat_onlineUsersList_avatar:hover,
+ .ep_rocketchat_onlineUsersList_avatar:hover{
+	border-color: #2678ff;
+	z-index: 1;
+	transform: scale(1.2);
+}
+
+.ep_rocketchat_onlineUsersList_avatar:active {
+	transform: scale(0.9);
+}
+
+
 
 .header_chat_room_close_container{
   display: flex;

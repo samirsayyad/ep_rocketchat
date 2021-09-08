@@ -1,7 +1,6 @@
 const chatResizer = require('../chatResizer').chatResizer
 
 exports.clientGeneralRoomInit = function clientGeneralRoomInit(payLoad){
-
     const params = new URLSearchParams(location.search);
     const headerId = params.get('id');
     const headerParamText = params.get('header');
@@ -32,6 +31,15 @@ exports.clientGeneralRoomInit = function clientGeneralRoomInit(payLoad){
             <div id='header_chat_room' class='header_chat_room'>
                 <span class='master_header_chat_room' id='master_header_chat_room'>${headerText}</span>
             </div>
+ 
+        </div>
+        <div id='ep_rocketchat_onlineUsersList' class='ep_rocketchat_onlineUsersList'>
+            <div class="ep_rocketchat_onlineUsersList_avatar" data-userid="a.ae75SSmKmBdZqoyi" data-id="user_a.ae75SSmKmBdZqoyi" id="user_a.ae75SSmKmBdZqoyi">
+                <div data-userid="a.ae75SSmKmBdZqoyi" class="ep_rocketchat_onlineUsersList_avatarImg" style="background: url(/static/getUserProfileImage/a.ae75SSmKmBdZqoyi/asdas) no-repeat 50% 50% ; background-size : 28px;background-color: #fff;" data-id="user_a.ae75SSmKmBdZqoyi"></div>
+            </div>
+            <div class="ep_rocketchat_onlineUsersList_avatar" data-userid="a.ae75SSmKmBdZqoyi" data-id="user_a.ae75SSmKmBdZqoyi" id="user_a.ae75SSmKmBdZqoyi">
+                <div data-userid="a.ae75SSmKmBdZqoyi" class="ep_rocketchat_onlineUsersList_avatarImg" style="background: url(/static/getUserProfileImage/a.ae75SSmKmBdZqoyi/asdas) no-repeat 50% 50% ; background-size : 28px;background-color: #fff;" data-id="user_a.ae75SSmKmBdZqoyi"></div>
+            </div>
         </div>
         <div class='header_chat_room_close_container'>
 
@@ -53,11 +61,12 @@ exports.clientGeneralRoomInit = function clientGeneralRoomInit(payLoad){
 
     if(headerId && headerId!=="" && (headerParamText && headerParamText!="") ){
         localStorage.setItem("lastActiveHeader",null); // because of initialize of header need to be null temporary and scroll will fill it
-        $(`#${headerId}`).click();
+        //$(`#${headerId}`).click();
+
+        $(`#${headerId}`).click(function(e){e.preventDefault();}).click();
+
     }else{
-        let tempHeaderText = trimLeftTexts($("#generalItem").attr("title")) ;
-        $("#generalItem").text(tempHeaderText); 
-        $("#master_header_chat_room").text(tempHeaderText);
+        $("#master_header_chat_room").text($("#generalItem").text());
     }
 
 
