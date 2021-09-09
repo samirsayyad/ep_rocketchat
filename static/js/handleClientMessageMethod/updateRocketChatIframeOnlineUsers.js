@@ -4,7 +4,7 @@ exports.updateRocketChatIframeOnlineUsers = function updateRocketChatIframeOnlin
     var elements="";
     payLoad.data.onlineUsers.online.forEach(element => {
         elements += ` 
-        <div class="ep_rocketchat_onlineUsersList_avatar">
+        <div data-userId="${element.username}" class="avatar">
             <div class="ep_rocketchat_onlineUsersList_avatarImg" style="background: url(${payLoad.data.rocketChatBaseUrl}/avatar/${element.username}) no-repeat 50% 50% ; background-size : 28px;background-color: #fff;" ></div>
         </div>`
     });

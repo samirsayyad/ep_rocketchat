@@ -23,8 +23,6 @@ exports.aceInitialized = function aceInitialized(){
         $("#editorcontainer iframe").addClass('fullHeightEditor')
 
 
-
-
         handleRocketChatNotifications();
         return []
 }

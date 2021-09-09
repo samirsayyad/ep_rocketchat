@@ -34,12 +34,6 @@ exports.clientGeneralRoomInit = function clientGeneralRoomInit(payLoad){
  
         </div>
         <div id='ep_rocketchat_onlineUsersList' class='ep_rocketchat_onlineUsersList'>
-            <div class="ep_rocketchat_onlineUsersList_avatar" data-userid="a.ae75SSmKmBdZqoyi" data-id="user_a.ae75SSmKmBdZqoyi" id="user_a.ae75SSmKmBdZqoyi">
-                <div data-userid="a.ae75SSmKmBdZqoyi" class="ep_rocketchat_onlineUsersList_avatarImg" style="background: url(/static/getUserProfileImage/a.ae75SSmKmBdZqoyi/asdas) no-repeat 50% 50% ; background-size : 28px;background-color: #fff;" data-id="user_a.ae75SSmKmBdZqoyi"></div>
-            </div>
-            <div class="ep_rocketchat_onlineUsersList_avatar" data-userid="a.ae75SSmKmBdZqoyi" data-id="user_a.ae75SSmKmBdZqoyi" id="user_a.ae75SSmKmBdZqoyi">
-                <div data-userid="a.ae75SSmKmBdZqoyi" class="ep_rocketchat_onlineUsersList_avatarImg" style="background: url(/static/getUserProfileImage/a.ae75SSmKmBdZqoyi/asdas) no-repeat 50% 50% ; background-size : 28px;background-color: #fff;" data-id="user_a.ae75SSmKmBdZqoyi"></div>
-            </div>
         </div>
         <div class='header_chat_room_close_container'>
 
@@ -70,6 +64,12 @@ exports.clientGeneralRoomInit = function clientGeneralRoomInit(payLoad){
     }
 
 
+
+
+        
+    $("#ep_rocketchat_onlineUsersList").on( "click",".avatar", function(){
+        $('#usersIconList').trigger("avatarClick",$(this).attr("data-userId"));
+    })
     $( "#header_chat_room_close" ).on( "click", function() {
 
         $("#ep_rocketchat_container").animate({bottom:'-40%'},function(){

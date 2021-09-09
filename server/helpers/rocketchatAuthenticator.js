@@ -3,26 +3,33 @@ const loginApi = require("../../rocketChat/api/separated").login
 const db = require('ep_etherpad-lite/node/db/DB');
 const rocketChatClientInstance = require("../../rocketChat/clients/rocketChatClientInstance").rocketChatClientInstance;
 
+const getUserByEtherUserId = async(etherpadUserId)=>{
+    return await db.get(`ep_rocketchat_users_${config.host}:${etherpadUserId}`)
+}
 
-const runValidator = async (EtherpadUserId)=>{
-    const rocketChatUser = await db.get(`ep_rocketchat_users_${config.host}:${EtherpadUserId}`) || [];
+const getByRocketChatUserId = async(rocketChatUserId)=>{
+    return await db.get(`ep_rocketchat_users_${config.host}:${etherpadUserId}`)
+}
+
+const runValidator = async (etherpadUserId)=>{
+    const rocketChatUser = await db.get(`ep_rocketchat_users_${config.host}:${etherpadUserId}`) || [];
     var rocketchatUserId , rocketchatAuthToken;
     if(rocketChatUser.rocketchatUserId && rocketChatUser.username){
         rocketchatUserId = rocketChatUser.rocketchatUserId ;
         // regenerate token
-        var loginResult = await login(EtherpadUserId,rocketChatUser.username,rocketChatUser.password);
+        var loginResult = await login(etherpadUserId,rocketChatUser.username,rocketChatUser.password);
         rocketchatAuthToken = loginResult.authToken;
     }else{
 
-        var loginResult = await login(EtherpadUserId);
+        var loginResult = await login(etherpadUserId);
         if(loginResult){
 
             rocketchatUserId = loginResult.userId ;
             rocketchatAuthToken = loginResult.authToken;
         }else{
-            var registerResult = await register(EtherpadUserId) || await register(EtherpadUserId,true);
+            var registerResult = await register(etherpadUserId) || await register(etherpadUserId,true);
             if(registerResult){
-                var loginResult = await login(EtherpadUserId,registerResult.info.username ,registerResult.info.password  );
+                var loginResult = await login(etherpadUserId,registerResult.info.username ,registerResult.info.password  );
                 rocketchatUserId = loginResult.userId ;
                 rocketchatAuthToken = loginResult.authToken;
             }else{
@@ -36,25 +43,25 @@ const runValidator = async (EtherpadUserId)=>{
     return { rocketchatUserId : rocketchatUserId , rocketchatAuthToken : rocketchatAuthToken  }
 }
 
-const login = async (EtherpadUserId, username , password) =>{
+const login = async (etherpadUserId, username , password) =>{
     try{
 
         if(!username || !password){
-            const globalProfileInfo = await db.get(`ep_profile_modal:${EtherpadUserId}`) || {};
+            const globalProfileInfo = await db.get(`ep_profile_modal:${etherpadUserId}`) || {};
             if(globalProfileInfo.username)
                 var tempUsername = globalProfileInfo.username.replace(/\s/g, '') || "Anonymous"
             else
                 var tempUsername = "Anonymous";
         
-            var password = `${tempUsername}-${EtherpadUserId}@docs.plus${config.passwordSalt}` ;
-            //var username = `${tempUsername}_${EtherpadUserId.replace(/\s/g, '.')}`;
-            var username = EtherpadUserId;
+            var password = `${tempUsername}-${etherpadUserId}@docs.plus${config.passwordSalt}` ;
+            //var username = `${tempUsername}_${etherpadUserId.replace(/\s/g, '.')}`;
+            var username = etherpadUserId;
     
         }
 
         var loginResult =await loginApi(config.protocol, config.host, config.port, username ,password);
         if(loginResult){
-            //await saveCredential(EtherpadUserId ,loginResult.data.userId , loginResult.data.authToken ,  null );
+            //await saveCredential(etherpadUserId ,loginResult.data.userId , loginResult.data.authToken ,  null );
             return { userId : loginResult.data.userId , authToken: loginResult.data.authToken } || false;
         }else{
             return false;
@@ -66,23 +73,26 @@ const login = async (EtherpadUserId, username , password) =>{
     }
     
 }
-const saveCredential = async(EtherpadUserId,rocketchatUserId , rocketchatAuthToken , info) =>{
-    if(info)
-        await db.set(`ep_rocketchat_users_${config.host}:${EtherpadUserId}`,{rocketchatUserId : rocketchatUserId , rocketchatAuthToken:rocketchatAuthToken , ...info});
-    else
-        await db.set(`ep_rocketchat_users_${config.host}:${EtherpadUserId}`,{rocketchatUserId : rocketchatUserId , rocketchatAuthToken:rocketchatAuthToken});
+const saveCredential = async(etherpadUserId,rocketchatUserId , rocketchatAuthToken , info) =>{
+    if(info){
+        await db.set(`ep_rocketchat_users_${config.host}:${etherpadUserId}`,{rocketchatUserId : rocketchatUserId , rocketchatAuthToken:rocketchatAuthToken , ...info});
+        await db.set(`ep_rocketchat_users_${config.host}:${rocketchatUserId}`,{etherpadUserId : etherpadUserId , rocketchatAuthToken:rocketchatAuthToken , ...info});
+    }else{
+        await db.set(`ep_rocketchat_users_${config.host}:${etherpadUserId}`,{rocketchatUserId : rocketchatUserId , rocketchatAuthToken:rocketchatAuthToken});
+        await db.set(`ep_rocketchat_users_${config.host}:${rocketchatUserId}`,{etherpadUserId : etherpadUserId , rocketchatAuthToken:rocketchatAuthToken});
+    }
 
 }
-const register = async( EtherpadUserId,randomUsername)=>{
+const register = async( etherpadUserId,randomUsername)=>{
     try{
-        const globalProfileInfo = await db.get(`ep_profile_modal:${EtherpadUserId}`) || {};
+        const globalProfileInfo = await db.get(`ep_profile_modal:${etherpadUserId}`) || {};
         if(globalProfileInfo.username)
             var name = globalProfileInfo.username.replace(/\s/g, '') || "Anonymous"
         else
             var name = "Anonymous";
         
-        let password = `${name}-${EtherpadUserId}@docs.plus${config.passwordSalt}` ;
-        let usernameUserId = `${(!randomUsername) ? EtherpadUserId : EtherpadUserId + Math.floor(Math.random() * 10000)}`; // if random enabled means something bad happend for users
+        let password = `${name}-${etherpadUserId}@docs.plus${config.passwordSalt}` ;
+        let usernameUserId = `${(!randomUsername) ? etherpadUserId : etherpadUserId +"_"+ Math.floor(Math.random() * 10000)}`; // if random enabled means something bad happend for users
         let email = globalProfileInfo.email ? globalProfileInfo.email : `${usernameUserId}@docs.plus`;
 
         var userToAdd = {
@@ -99,7 +109,7 @@ const register = async( EtherpadUserId,randomUsername)=>{
 
         var rocketChatClient = new rocketChatClientInstance(config.protocol,config.host,config.port,config.userId,config.token,()=>{});
         var newUser = await rocketChatClient.users.create(userToAdd);
-        saveCredential(EtherpadUserId , newUser.user._id , null , {username :userToAdd.username , password :userToAdd.password } )
+        saveCredential(etherpadUserId , newUser.user._id , null , {username :userToAdd.username , password :userToAdd.password } )
         return { userId :newUser.user._id , info:userToAdd };
     }catch(e){
         console.log("register method : ",e.message);
@@ -111,5 +121,7 @@ const register = async( EtherpadUserId,randomUsername)=>{
 
 
 module.exports = {
-    runValidator : runValidator
+    runValidator : runValidator,
+    getUserByEtherUserId : getUserByEtherUserId ,
+    getByRocketChatUserId: getByRocketChatUserId
 }

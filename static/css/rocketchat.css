@@ -200,7 +200,7 @@
   border-radius: 145.833px;
   border: 1px solid #fff;
 }
-.ep_rocketchat_onlineUsersList_avatar{
+.avatar{
   margin: 0 -14px 0 0;
   position: relative;
   transition: all .2s cubic-bezier(0,.71,.47,1.1);
@@ -209,14 +209,14 @@
   float: left;
   overflow: hidden;
 }
-.ep_rocketchat_onlineUsersList_avatar:hover,
- .ep_rocketchat_onlineUsersList_avatar:hover{
+.avatar:hover,
+ .avatar:hover{
 	border-color: #2678ff;
 	z-index: 1;
 	transform: scale(1.2);
 }
 
-.ep_rocketchat_onlineUsersList_avatar:active {
+.avatar:active {
 	transform: scale(0.9);
 }
 
