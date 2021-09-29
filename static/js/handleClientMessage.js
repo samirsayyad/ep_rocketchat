@@ -16,6 +16,15 @@ exports.handleClientMessage_CUSTOM = function handleClientMessage_CUSTOM(hook, c
             updateRocketChatIframe(context.payload)
         updateRocketChatIframeOnlineUsers(context.payload)
     }
+
+
+    if (context.payload.action == 'updateOnlineUsersList') {
+        const lastActiveHeader = localStorage.getItem("lastActiveHeader");
+        if (lastActiveHeader == context.payload.data.room )
+            updateRocketChatIframeOnlineUsers(context.payload)
+    }
+
+    
     if(context.payload.action == 'EP_PROFILE_USER_LOGIN_UPDATE'){ // raised by ep_profile_modal
         if (current_user_id == context.payload.userId) {
             const message = {
@@ -57,5 +66,40 @@ exports.handleClientMessage_CUSTOM = function handleClientMessage_CUSTOM(hook, c
     }
     
     
+    return[];
+}
+
+exports.handleClientMessage_USER_NEWINFO = function handleClientMessage_USER_NEWINFO(hook, context, cb){
+    const current_user_id = pad.getUserId();
+    const lastActiveHeader = localStorage.getItem("lastActiveHeader");
+
+    const message = {
+        type: 'ep_rocketchat',
+        action: 'ep_rocketchat_updateOnlineUsersList',
+        userId : current_user_id,
+        padId: pad.getPadId(),
+        data: {
+            headerId : lastActiveHeader
+        },
+      };
+    pad.collabClient.sendMessage(message);
+    return[];
+}
+
+
+exports.handleClientMessage_USER_LEAVE = function handleClientMessage_USER_LEAVE(hook, context, cb){
+    const current_user_id = pad.getUserId();
+    const lastActiveHeader = localStorage.getItem("lastActiveHeader");
+
+    const message = {
+        type: 'ep_rocketchat',
+        action: 'ep_rocketchat_updateOnlineUsersList',
+        userId : current_user_id,
+        padId: pad.getPadId(),
+        data: {
+            headerId : lastActiveHeader
+        },
+      };
+    pad.collabClient.sendMessage(message);
     return[];
 }

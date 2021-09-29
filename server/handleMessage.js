@@ -3,6 +3,7 @@ const updateRocketChatUser = require("./handleMessageMethod/updateRocketChatUser
 const updateImageRocketChatUser = require("./handleMessageMethod/updateImageRocketChatUser").updateImageRocketChatUser;
 const handleRooms = require("./handleMessageMethod/handleRooms").handleRooms;
 const sendMessageToChat = require("./handleMessageMethod/sendMessageToChat").sendMessageToChat;
+const updateOnlineUsersList = require("./handleMessageMethod/updateOnlineUsersList").updateOnlineUsersList;
 exports.handleMessage = (hook_name, context, callback) => {
   let isRocketChatMessage = false;
   if (context) {
@@ -39,6 +40,9 @@ exports.handleMessage = (hook_name, context, callback) => {
   }
   if (message.action === 'ep_rocketchat_sendMessageToChat') {
     sendMessageToChat(message)
+  }
+  if (message.action === 'ep_rocketchat_updateOnlineUsersList') {
+    updateOnlineUsersList(message,context.client)
   }
 
    
