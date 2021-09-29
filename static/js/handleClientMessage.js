@@ -19,9 +19,9 @@ exports.handleClientMessage_CUSTOM = function handleClientMessage_CUSTOM(hook, c
 
 
     if (context.payload.action == 'updateOnlineUsersList') {
-        const lastActiveHeader = localStorage.getItem("lastActiveHeader");
-        if (lastActiveHeader == context.payload.data.room )
-            updateRocketChatIframeOnlineUsers(context.payload)
+        //const lastActiveHeader = localStorage.getItem("lastActiveHeader");
+        //if (lastActiveHeader == context.payload.data.room )
+        updateRocketChatIframeOnlineUsers(context.payload)
     }
 
     
