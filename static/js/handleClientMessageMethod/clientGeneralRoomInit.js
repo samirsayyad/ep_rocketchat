@@ -24,26 +24,32 @@ exports.clientGeneralRoomInit = function clientGeneralRoomInit(payLoad){
         $(".tocWrapper").css({"border-right":"1px solid #DADCE0"});
 
     }
-
-    var chatHtml= `<div id='ep_rocketchat_container' class="${activeClass}">
-    <div class='ep_rocketchat_header'>
-        <div class='header_chat_room_container'>
-            <div id='header_chat_room' class='header_chat_room'>
-                <span class='master_header_chat_room' id='master_header_chat_room'>${headerText}</span>
-            </div>
- 
-        </div>
-        <div id='ep_rocketchat_onlineUsersList' class='ep_rocketchat_onlineUsersList'>
-        </div>
-        <div class='header_chat_room_close_container'>
-
-            <div id='header_chat_room_close' class='header_chat_room_close'>
-                
-            </div>
-        </div>
-    </div>
-    <iframe id="ep_rocketchat_iframe" class="ep_rocketchat_iframe" src="${payLoad.data.rocketChatBaseUrl}/channel/${channelId}?layout=embedded"  frameborder="۰" title="myframe"></iframe></div>`
+    var chatHtml = $('#ep_rocketchat_chatBar').tmpl({
+        activeClass : activeClass ,
+        headerText: headerText,
+        payLoad : payLoad,
+        channelId : channelId
+    });
     $('body').append(chatHtml);
+
+    // var chatHtml= `<div id='ep_rocketchat_container' class="${activeClass}">
+    // <div class='ep_rocketchat_header'>
+    //     <div class='header_chat_room_container'>
+    //         <div id='header_chat_room' class='header_chat_room'>
+    //             <span class='master_header_chat_room' id='master_header_chat_room'>${headerText}</span>
+    //         </div>
+ 
+    //     </div>
+    //     <div id='ep_rocketchat_onlineUsersList' class='ep_rocketchat_onlineUsersList'>
+    //     </div>
+    //     <div class='header_chat_room_close_container'>
+
+    //         <div id='header_chat_room_close' class='header_chat_room_close'>
+                
+    //         </div>
+    //     </div>
+    // </div>
+    // <iframe id="ep_rocketchat_iframe" class="ep_rocketchat_iframe" src="${payLoad.data.rocketChatBaseUrl}/channel/${channelId}?layout=embedded"  frameborder="۰" title="myframe"></iframe></div>`
 
     if ( (headerId || headerId!=null)  ){
         $('#editorcontainer').css({

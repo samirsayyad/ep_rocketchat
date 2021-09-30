@@ -143,8 +143,14 @@
   background-image: url(../image/close.png);
   width: 14px;
   height: 14px;
-  float: right;
   cursor: pointer;
+}
+.header_videochat_icon{
+  background-image: url(../image/camera.png);
+  width: 32px;
+  height: 18px;
+  cursor: pointer;
+  margin-right: 1em;
 }
 .header_chat_room_close_rec1{
   position: absolute;
@@ -225,7 +231,7 @@
 .header_chat_room_close_container{
   display: flex;
   align-items: center;
-  width: 3%;
+  width: 5%;
   float: right;
   height: 100%;
   justify-content: center;
