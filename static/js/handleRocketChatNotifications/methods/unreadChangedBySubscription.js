@@ -1,5 +1,5 @@
 exports.unreadChangedBySubscription = function unreadChangedBySubscription (data){
-    if(data.alert == true){
+    if(data.alert == true && data.ls){
         const padId = clientVars.padId;
         const userId = pad.getUserId();
         const notificationElement = $(`#${data.name}_notification`);
