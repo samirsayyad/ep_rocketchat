@@ -28,7 +28,8 @@ exports.clientGeneralRoomInit = function clientGeneralRoomInit(payLoad){
         activeClass : activeClass ,
         headerText: headerText,
         payLoad : payLoad,
-        channelId : channelId
+        channelId,
+        headerId
     });
     $('body').append(chatHtml);
 
@@ -69,10 +70,6 @@ exports.clientGeneralRoomInit = function clientGeneralRoomInit(payLoad){
         $("#master_header_chat_room").text($("#generalItem").text());
     }
 
-
-
-
-        
     $("#ep_rocketchat_onlineUsersList").on( "click",".avatar", function(){
         $('#usersIconList').trigger("avatarClick",$(this).attr("data-userId"));
     })

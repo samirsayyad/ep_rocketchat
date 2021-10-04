@@ -10,10 +10,15 @@
             <div id='ep_rocketchat_onlineUsersList' class='ep_rocketchat_onlineUsersList'>
             </div>
             <div class='header_chat_room_close_container'>
-    
 
-                <div id='header_videochat_icon' class='header_videochat_icon'>
-                    
+                <div id='header_videochat_icon' data-id="${headerId}" data-action="JOIN" data-join="PLUS" class='header_videochat_icon wrtc_roomLink'>
+                    <span class="icon">
+                        <span class="userCount"></span>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="#A8ABAE" width="42" height="36" viewBox="0 0 42 36" fill="none">
+                            <rect x="9" y="11" width="18" height="14" rx="2" />
+                            <path d="M24 18L34.5 11.9378L34.5 24.0622L24 18Z"/>
+                        </svg>
+                    </span>
                 </div>
                 <div id='header_chat_room_close' class='header_chat_room_close'>
                     
@@ -21,5 +26,5 @@
 
             </div>
         </div>
-        <iframe id="ep_rocketchat_iframe" class="ep_rocketchat_iframe" src="${payLoad.data.rocketChatBaseUrl}/channel/${channelId}?layout=embedded"  frameborder="۰" title="myframe"></iframe></div>
+        <!-- <iframe id="ep_rocketchat_iframe" class="ep_rocketchat_iframe" src="${payLoad.data.rocketChatBaseUrl}/channel/${channelId}?layout=embedded"  frameborder="۰" title="myframe"></iframe></div> -->
 </script>
