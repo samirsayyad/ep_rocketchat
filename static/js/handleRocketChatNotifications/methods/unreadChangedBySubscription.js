@@ -2,10 +2,17 @@ exports.unreadChangedBySubscription = function unreadChangedBySubscription (data
     if(data.alert == true && data.ls){
         const padId = clientVars.padId;
         const userId = pad.getUserId();
-        const notificationElement = $(`#${data.name}_notification`);
+        const headerId = (data.name == `${padId}-general-channel`) ? "general" : data.name  ; 
+        const lastActiveHeader = localStorage.getItem("lastActiveHeader");
+        if (lastActiveHeader == headerId )
+            return;
+
+        const notificationElement = $(`#${headerId}_notification`);
+        var lastUnreadCount = localStorage.getItem(`${headerId}_unreadCount`) || 1;
+
         if(notificationElement.length){
-            if(data.unread == 0){
-                var unreadNotificationTemplate = $('#ep_rocketchat_unreadNotification').tmpl(data);
+            if(data.unread == 0 && lastUnreadCount > 0){
+                var unreadNotificationTemplate = $('#ep_rocketchat_unreadNotification').tmpl({unread : lastUnreadCount});
                 notificationElement.html(unreadNotificationTemplate);
             }
             if(data.unread > 0){
@@ -13,7 +20,7 @@ exports.unreadChangedBySubscription = function unreadChangedBySubscription (data
                 notificationElement.html(mentionNotificationTemplate);
             }
     
-            var rowContainer=$(`#${data.name}_container`) ;
+            var rowContainer=$(`#${headerId}_container`) ;
             if(rowContainer.length){
                 var elementStatus = checkInView(rowContainer, true );
                 if (elementStatus.visible == false){
