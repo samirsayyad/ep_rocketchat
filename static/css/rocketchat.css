@@ -37,6 +37,9 @@
   padding: 0 6px;
   display: flex;
   align-items: center;
+  flex-wrap:nowrap;
+  flex-direction: row;
+  justify-content: space-between;
 }
 .header_chat_room{
   font-family: Roboto;
@@ -245,8 +248,9 @@
   float: left;
   height: 100%; 
   flex-direction: row;
-  margin: auto;
   cursor: pointer;
+  margin-right: auto;
+  margin-left: 20px;
 }
 .ep_rocketchat_onlineUsersList:first-child {
   margin: 0;
