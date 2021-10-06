@@ -28,9 +28,10 @@ exports.unreadChangedBySubscription = function unreadChangedBySubscription (data
                 }
             }
         }
-    }else{
-        $(`#${data.name}_notification`).empty()
     }
+    // else{
+    //     $(`#${data.name}_notification`).empty()
+    // }
     
 }
 
