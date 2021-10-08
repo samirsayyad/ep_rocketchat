@@ -37,6 +37,7 @@ exports.handleClientMessage_CUSTOM = function handleClientMessage_CUSTOM(hook, c
             pad.collabClient.sendMessage(message);
         }
     }
+
     if(context.payload.action == 'EP_PROFILE_USER_LOGOUT_UPDATE'){ // raised by ep_profile_modal
         if (current_user_id == context.payload.userId) {
             const message = {
@@ -53,6 +54,7 @@ exports.handleClientMessage_CUSTOM = function handleClientMessage_CUSTOM(hook, c
             pad.collabClient.sendMessage(message);
         }
     }
+
     if(context.payload.action == 'EP_PROFILE_USER_IMAGE_CHANGE'){ // raised by ep_profile_modal
         if (current_user_id == context.payload.userId) {
             const message = {
@@ -64,6 +66,22 @@ exports.handleClientMessage_CUSTOM = function handleClientMessage_CUSTOM(hook, c
             pad.collabClient.sendMessage(message);
         }
     }
+
+    if (context.payload.action === 'recieveTitleMessage') {
+        const message = context.payload.message;
+        let padTitle;
+        if (message) {
+          padTitle = message;
+        } else {
+          const padId = pad.getPadId();
+          padTitle = padId;
+        }
+    
+        if(!padTitle && clientVars.ep_set_title_on_pad && clientVars.ep_set_title_on_pad.hasOwnProperty('title'))
+          padTitle = clientVars.ep_set_title_on_pad.title
+    
+        $('#parent_header_chat_room').text(padTitle);
+      }
     
     
     return[];

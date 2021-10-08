@@ -7,7 +7,7 @@ exports.clientGeneralRoomInit = function clientGeneralRoomInit(payLoad){
 
     const lastActiveHeader = localStorage.getItem("lastActiveHeader");
     var channelId= `${payLoad.padId}-general-channel`;    
-    var headerText="";
+    var headerText= clientVars.ep_set_title_on_pad.title;
     var activeClass = "ep_rocketchat_container"; 
     if ( (!headerId || headerId==null)  && (!headerParamText || headerParamText==null)  ){ // if there isn't any active header and param should add as hidden  && (!lastActiveHeader || lastActiveHeader == null || lastActiveHeader == "null" )
         activeClass = "ep_rocketchat_container_hidden";
@@ -67,7 +67,7 @@ exports.clientGeneralRoomInit = function clientGeneralRoomInit(payLoad){
         $(`#${headerId}`).click(function(e){e.preventDefault();}).click();
 
     }else{
-        $("#master_header_chat_room").text($("#generalItem").text());
+        $("#master_header_chat_room").text(clientVars.ep_set_title_on_pad.title);
     }
 
     $("#ep_rocketchat_onlineUsersList").on( "click",".avatar", function(){
