@@ -1,5 +1,5 @@
 exports.unreadChangedBySubscription = function unreadChangedBySubscription (data){
-    if(data.alert == true && data.ls){
+    if(data.alert == true){
         const padId = clientVars.padId;
         const userId = pad.getUserId();
         const headerId = (data.name == `${padId}-general-channel`) ? "general" : data.name  ; 
@@ -21,7 +21,7 @@ exports.unreadChangedBySubscription = function unreadChangedBySubscription (data
             }
     
             var rowContainer=$(`#${headerId}_container`) ;
-            if(rowContainer.length){
+            if(rowContainer.length && headerId != "general"){
                 var elementStatus = checkInView(rowContainer, true );
                 if (elementStatus.visible == false){
                     $("#bottomNewMention").css({"display":"block"})
