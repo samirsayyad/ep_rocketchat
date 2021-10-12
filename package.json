@@ -1,6 +1,6 @@
 {
   "name": "ep_rocketchat",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Integrating rocketchat with Etherpad",
   "main": "server.js",
   "directories": {
