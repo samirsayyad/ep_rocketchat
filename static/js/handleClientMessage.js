@@ -69,10 +69,10 @@ exports.handleClientMessage_CUSTOM = function handleClientMessage_CUSTOM(hook, c
 
     if (context.payload.action === 'recieveTitleMessage') {
         const message = context.payload.message;
-        const padTitle = message? message: pad.getPadId();
-        $('#parent_header_chat_room').text(padTitle);
+        const padTitle = message ? message: pad.getPadId();
+        if(padTitle)
+            $('#parent_header_chat_room').text(padTitle);
     }
-    
     
     return[];
 }
