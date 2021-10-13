@@ -22,13 +22,13 @@ exports.unreadChangedBySubscription = function unreadChangedBySubscription (data
                 notificationElement.html(unreadNotificationTemplate);
             }
     
-            var rowContainer=$(`#${headerId}_container`) ;
-            if(rowContainer.length && headerId != "general"){
-                var elementStatus = checkInView(rowContainer, true );
-                if (elementStatus.visible == false){
-                    $("#bottomNewMention").css({"display":"block"})
-                }
-            }
+            // var rowContainer=$(`#${headerId}_container`) ;
+            // if(rowContainer.length && headerId != "general"){
+            //     var elementStatus = checkInView(rowContainer, true );
+            //     if (elementStatus.visible == false){
+            //         $("#bottomNewMention").css({"display":"block"})
+            //     }
+            // }
         }
     }
     // else{
