@@ -14,10 +14,12 @@ exports.unreadChangedBySubscription = function unreadChangedBySubscription (data
             if(data.unread == 0 && lastUnreadCount > 0){
                 var unreadNotificationTemplate = $('#ep_rocketchat_unreadNotification').tmpl({unread : lastUnreadCount});
                 notificationElement.html(unreadNotificationTemplate);
-            }
-            if(data.unread > 0){
+            }else if(data.unread > 0){
                 var mentionNotificationTemplate = $('#ep_rocketchat_mentionNotification').tmpl(data);
                 notificationElement.html(mentionNotificationTemplate);
+            }else if(data.unread == 0 && data.ls){
+                var unreadNotificationTemplate = $('#ep_rocketchat_unreadNotification').tmpl({unread : lastUnreadCount || 1});
+                notificationElement.html(unreadNotificationTemplate);
             }
     
             var rowContainer=$(`#${headerId}_container`) ;
