@@ -14,7 +14,7 @@ exports.unreadChangedBySubscription = function unreadChangedBySubscription (data
             if(data.unread == 0 && lastUnreadCount > 0){
                 var unreadNotificationTemplate = $('#ep_rocketchat_unreadNotification').tmpl({unread : lastUnreadCount});
                 notificationElement.html(unreadNotificationTemplate);
-            }else if(data.unread > 0){
+            }else if(data.unread > 0 && data.ls ){
                 var mentionNotificationTemplate = $('#ep_rocketchat_mentionNotification').tmpl(data);
                 notificationElement.html(mentionNotificationTemplate);
             }else if(data.unread == 0 && data.ls){
