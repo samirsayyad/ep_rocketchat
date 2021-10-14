@@ -21,6 +21,7 @@ exports.clientVars = (hook, context, callback) => {
         ep_rocketchat:{
             baseUrl : config.baseUrl,
             rocketChatBaseUrl : `${config.protocol}://${config.host}`
+            status : (!config.userId || ) 
         },
     };
 }   
