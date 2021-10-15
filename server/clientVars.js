@@ -20,8 +20,8 @@ exports.clientVars = (hook, context, callback) => {
     return {
         ep_rocketchat:{
             baseUrl : config.baseUrl,
-            rocketChatBaseUrl : `${config.protocol}://${config.host}`
-           // status : (!config.userId || ) 
+            rocketChatBaseUrl : `${config.protocol}://${config.host}`,
+            status : (!config.userId || !config.host || !config.token ) ? false : true
         },
     };
 }   
