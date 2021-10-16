@@ -1,5 +1,5 @@
 exports.unreadChangedBySubscription = function unreadChangedBySubscription (data){
-    if(data.alert == true && data.ls){
+    if(data.alert == true){
         const padId = clientVars.padId;
         const userId = pad.getUserId();
         const headerId = (data.name == `${padId}-general-channel`) ? "general" : data.name  ; 
@@ -14,19 +14,21 @@ exports.unreadChangedBySubscription = function unreadChangedBySubscription (data
             if(data.unread == 0 && lastUnreadCount > 0){
                 var unreadNotificationTemplate = $('#ep_rocketchat_unreadNotification').tmpl({unread : lastUnreadCount});
                 notificationElement.html(unreadNotificationTemplate);
-            }
-            if(data.unread > 0){
+            }else if(data.unread > 0 && data.ls ){
                 var mentionNotificationTemplate = $('#ep_rocketchat_mentionNotification').tmpl(data);
                 notificationElement.html(mentionNotificationTemplate);
+            }else if(data.unread == 0 && data.ls){
+                var unreadNotificationTemplate = $('#ep_rocketchat_unreadNotification').tmpl({unread : lastUnreadCount || 1});
+                notificationElement.html(unreadNotificationTemplate);
             }
     
-            var rowContainer=$(`#${headerId}_container`) ;
-            if(rowContainer.length){
-                var elementStatus = checkInView(rowContainer, true );
-                if (elementStatus.visible == false){
-                    $("#bottomNewMention").css({"display":"block"})
-                }
-            }
+            // var rowContainer=$(`#${headerId}_container`) ;
+            // if(rowContainer.length && headerId != "general"){
+            //     var elementStatus = checkInView(rowContainer, true );
+            //     if (elementStatus.visible == false){
+            //         $("#bottomNewMention").css({"display":"block"})
+            //     }
+            // }
         }
     }
     // else{

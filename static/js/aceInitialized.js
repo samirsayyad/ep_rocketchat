@@ -24,5 +24,8 @@ exports.aceInitialized = function aceInitialized(){
 
 
         handleRocketChatNotifications();
+
+ 
+  
         return []
 }

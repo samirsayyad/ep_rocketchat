@@ -69,20 +69,10 @@ exports.handleClientMessage_CUSTOM = function handleClientMessage_CUSTOM(hook, c
 
     if (context.payload.action === 'recieveTitleMessage') {
         const message = context.payload.message;
-        let padTitle;
-        if (message) {
-          padTitle = message;
-        } else {
-          const padId = pad.getPadId();
-          padTitle = padId;
-        }
-    
-        if(!padTitle && clientVars.ep_set_title_on_pad && clientVars.ep_set_title_on_pad.hasOwnProperty('title'))
-          padTitle = clientVars.ep_set_title_on_pad.title
-    
-        $('#parent_header_chat_room').text(padTitle);
-      }
-    
+        const padTitle = message ? message: pad.getPadId();
+        if(padTitle)
+            $('#parent_header_chat_room').text(padTitle);
+    }
     
     return[];
 }
