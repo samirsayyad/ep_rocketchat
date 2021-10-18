@@ -7,6 +7,8 @@ exports.updateRocketChatIframe = function updateRocketChatIframe(payLoad){
         let padId =payLoad.padId;
         room = (room == `${padId}-general-channel` ) ? "general" : room;
         localStorage.setItem(`${room}_unreadCount`,0);
+        localStorage.setItem(`${room}_newMessage`,0);
+
         $(`#${room}_notification`).empty()
 
     }catch(e){
