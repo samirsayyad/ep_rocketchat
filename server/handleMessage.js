@@ -11,7 +11,7 @@ exports.handleMessage = (hook_name, context, callback) => {
       if (context.message.type === 'COLLABROOM') {
         if (context.message.data) {
           if (context.message.data.type) {
-            if (context.message.data.type === 'ep_rocketchat') {
+            if (context.message.data.type === 'ep_rocketchat' || context.message.data.type === 'ep_profile_modal') {
               isRocketChatMessage = true;
             }
           }
@@ -43,6 +43,19 @@ exports.handleMessage = (hook_name, context, callback) => {
   }
   if (message.action === 'ep_rocketchat_updateOnlineUsersList') {
     updateOnlineUsersList(message,context.client)
+  }
+  if (message.action === 'ep_profile_modal_ready'){ // sync with ep_profile_modal
+    updateRocketChatUser({
+      padId : message.padId,
+      userId : message.userId,
+      data :{
+        userName : message.data.userName,
+        avatarUrlReset : false ,
+        messageChatText : false
+
+      }
+    })
+
   }
 
    
