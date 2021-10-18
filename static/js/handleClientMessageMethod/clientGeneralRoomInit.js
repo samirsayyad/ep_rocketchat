@@ -38,7 +38,7 @@ exports.clientGeneralRoomInit = function clientGeneralRoomInit(payLoad){
         localStorage.setItem("lastActiveHeader",null); // because of initialize of header need to be null temporary and scroll will fill it
         //$(`#${headerId}`).click();
 
-        $(`#${headerId}`).click(function(e){e.preventDefault();}).click();
+        $(`#${headerId}_container`).click(function(e){e.preventDefault();}).click();
 
     }else{
         $("#master_header_chat_room").text(clientVars.ep_set_title_on_pad.title);
