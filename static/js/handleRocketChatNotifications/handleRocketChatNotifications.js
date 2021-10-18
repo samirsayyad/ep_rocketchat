@@ -5,6 +5,7 @@ exports.handleRocketChatNotifications = function handleRocketChatNotifications (
     window.addEventListener('message', function(e) {
         const eventName = e.data.eventName;
         const data = e.data.data;
+        console.log(eventName,data)
         if(eventName == "notification"){
             notificationsMethod(data)
         }

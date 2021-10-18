@@ -1,5 +1,5 @@
 exports.unreadChangedBySubscription = function unreadChangedBySubscription (data){
-    if(data.alert == true){
+    if(data.alert == true && data.unread > 0){
         const padId = clientVars.padId;
         const userId = pad.getUserId();
         const headerId = (data.name == `${padId}-general-channel`) ? "general" : data.name  ; 
@@ -11,16 +11,17 @@ exports.unreadChangedBySubscription = function unreadChangedBySubscription (data
         var lastUnreadCount = localStorage.getItem(`${headerId}_unreadCount`) || 1;
 
         if(notificationElement.length){
-            if(data.unread == 0 && lastUnreadCount > 0){
-                var unreadNotificationTemplate = $('#ep_rocketchat_unreadNotification').tmpl({unread : lastUnreadCount});
-                notificationElement.html(unreadNotificationTemplate);
-            }else if(data.unread > 0 && data.ls ){
-                var mentionNotificationTemplate = $('#ep_rocketchat_mentionNotification').tmpl(data);
-                notificationElement.html(mentionNotificationTemplate);
-            }else if(data.unread == 0 && data.ls){
-                var unreadNotificationTemplate = $('#ep_rocketchat_unreadNotification').tmpl({unread : lastUnreadCount || 1});
-                notificationElement.html(unreadNotificationTemplate);
-            }
+            
+            // if(data.unread == 0 && lastUnreadCount > 0){
+            //     var unreadNotificationTemplate = $('#ep_rocketchat_unreadNotification').tmpl({unread : lastUnreadCount});
+            //     notificationElement.html(unreadNotificationTemplate);
+            // }else if(data.unread > 0 && data.ls ){
+            //     var mentionNotificationTemplate = $('#ep_rocketchat_mentionNotification').tmpl(data);
+            //     notificationElement.html(mentionNotificationTemplate);
+            // }else if(data.unread == 0 && data.ls){
+            //     var unreadNotificationTemplate = $('#ep_rocketchat_unreadNotification').tmpl({unread : lastUnreadCount || 1});
+            //     notificationElement.html(unreadNotificationTemplate);
+            // }
     
             // var rowContainer=$(`#${headerId}_container`) ;
             // if(rowContainer.length && headerId != "general"){
@@ -29,6 +30,10 @@ exports.unreadChangedBySubscription = function unreadChangedBySubscription (data
             //         $("#bottomNewMention").css({"display":"block"})
             //     }
             // }
+
+
+            var unreadNotificationTemplate = $('#ep_rocketchat_unreadNotification').tmpl({unread : lastUnreadCount || data.unread});
+            notificationElement.html(unreadNotificationTemplate);
         }
     }
     // else{
