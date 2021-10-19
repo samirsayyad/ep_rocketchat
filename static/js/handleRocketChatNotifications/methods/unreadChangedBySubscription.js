@@ -1,5 +1,5 @@
 exports.unreadChangedBySubscription = function unreadChangedBySubscription (data){
-    if(data.alert == true && data.unread > 0 && data.ls){
+    if(data.alert == true && data.ls){
         const padId = clientVars.padId;
         const userId = pad.getUserId();
         const headerId = (data.name == `${padId}-general-channel`) ? "general" : data.name  ; 
@@ -8,8 +8,7 @@ exports.unreadChangedBySubscription = function unreadChangedBySubscription (data
             return;
 
         const notificationElement = $(`#${headerId}_notification`);
-        var lastUnreadCount = localStorage.getItem(`${headerId}_unreadCount`) || 1;
-
+        var lastUnreadCount = localStorage.getItem(`${headerId}_unreadCount`) || localStorage.getItem(`${headerId}_newMessage`) || 1;
         if(notificationElement.length){
             
             // if(data.unread == 0 && lastUnreadCount > 0){
