@@ -75,7 +75,7 @@ exports.handleRooms = async (message,socketClient)=>{
       var onlineUsers = await getOnlineUsersApi(config, rocketChatRoom.channel._id );
 
       // join all users
-      var addAllResult = await rocketChatClient.channels.addAll( rocketChatRoom.channel._id );
+      //var addAllResult = await rocketChatClient.channels.addAll( rocketChatRoom.channel._id );
       // join all users
 
 

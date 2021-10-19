@@ -27,7 +27,7 @@ const runValidator = async (etherpadUserId)=>{
             rocketchatUserId = loginResult.userId ;
             rocketchatAuthToken = loginResult.authToken;
         }else{
-            var registerResult = await register(etherpadUserId) || await register(etherpadUserId,true);
+            var registerResult = await register(etherpadUserId) ;  //|| await register(etherpadUserId,true);
             if(registerResult){
                 var loginResult = await login(etherpadUserId,registerResult.info.username ,registerResult.info.password  );
                 rocketchatUserId = loginResult.userId ;
