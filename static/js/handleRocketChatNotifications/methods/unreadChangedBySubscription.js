@@ -1,5 +1,5 @@
 exports.unreadChangedBySubscription = function unreadChangedBySubscription (data){
-    if(data.alert == true && data.ls){
+    if(data.alert == true){
         const padId = clientVars.padId;
         const userId = pad.getUserId();
         const headerId = (data.name == `${padId}-general-channel`) ? "general" : data.name  ; 
