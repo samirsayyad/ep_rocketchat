@@ -4,15 +4,15 @@ const db = require('ep_etherpad-lite/node/db/DB');
 const rocketChatClientInstance = require("../../rocketChat/clients/rocketChatClientInstance").rocketChatClientInstance;
 
 const getUserByEtherUserId = async(etherpadUserId)=>{
-    return await db.get(`ep_rocketchat_users_${config.host}:${etherpadUserId}`)
+    return await db.get(`ep_rocketchat_users_${config.dbRocketchatKey}:${etherpadUserId}`)
 }
 
 const getByRocketChatUserId = async(rocketChatUserId)=>{
-    return await db.get(`ep_rocketchat_users_${config.host}:${etherpadUserId}`)
+    return await db.get(`ep_rocketchat_users_${config.dbRocketchatKey}:${etherpadUserId}`)
 }
 
 const runValidator = async (etherpadUserId)=>{
-    const rocketChatUser = await db.get(`ep_rocketchat_users_${config.host}:${etherpadUserId}`) || [];
+    const rocketChatUser = await db.get(`ep_rocketchat_users_${config.dbRocketchatKey}:${etherpadUserId}`) || [];
     var rocketchatUserId , rocketchatAuthToken;
     if(rocketChatUser.rocketchatUserId && rocketChatUser.username){
         rocketchatUserId = rocketChatUser.rocketchatUserId ;
@@ -75,11 +75,11 @@ const login = async (etherpadUserId, username , password) =>{
 }
 const saveCredential = async(etherpadUserId,rocketchatUserId , rocketchatAuthToken , info) =>{
     if(info){
-        await db.set(`ep_rocketchat_users_${config.host}:${etherpadUserId}`,{rocketchatUserId : rocketchatUserId , rocketchatAuthToken:rocketchatAuthToken , ...info});
-        await db.set(`ep_rocketchat_users_${config.host}:${rocketchatUserId}`,{etherpadUserId : etherpadUserId , rocketchatAuthToken:rocketchatAuthToken , ...info});
+        await db.set(`ep_rocketchat_users_${config.dbRocketchatKey}:${etherpadUserId}`,{rocketchatUserId : rocketchatUserId , rocketchatAuthToken:rocketchatAuthToken , ...info});
+        await db.set(`ep_rocketchat_users_${config.dbRocketchatKey}:${rocketchatUserId}`,{etherpadUserId : etherpadUserId , rocketchatAuthToken:rocketchatAuthToken , ...info});
     }else{
-        await db.set(`ep_rocketchat_users_${config.host}:${etherpadUserId}`,{rocketchatUserId : rocketchatUserId , rocketchatAuthToken:rocketchatAuthToken});
-        await db.set(`ep_rocketchat_users_${config.host}:${rocketchatUserId}`,{etherpadUserId : etherpadUserId , rocketchatAuthToken:rocketchatAuthToken});
+        await db.set(`ep_rocketchat_users_${config.dbRocketchatKey}:${etherpadUserId}`,{rocketchatUserId : rocketchatUserId , rocketchatAuthToken:rocketchatAuthToken});
+        await db.set(`ep_rocketchat_users_${config.dbRocketchatKey}:${rocketchatUserId}`,{etherpadUserId : etherpadUserId , rocketchatAuthToken:rocketchatAuthToken});
     }
 
 }

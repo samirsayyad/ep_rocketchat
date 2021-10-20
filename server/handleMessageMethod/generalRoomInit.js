@@ -2,13 +2,7 @@ const rocketChatClientInstance = require("../../rocketChat/clients/rocketChatCli
 const settings = require('ep_etherpad-lite/node/utils/Settings');
 const db = require('ep_etherpad-lite/node/db/DB');
 const sharedTransmitter = require("../helpers/sharedTransmitter")
-const config = {
-    protocol: settings.ep_rocketchat.protocol,
-    host :  settings.ep_rocketchat.host,
-    port : settings.ep_rocketchat.port,
-    userId :  settings.ep_rocketchat.userId,
-    token : settings.ep_rocketchat.token
-};
+const config = require("../helpers/configs");
 const getOnlineUsersApi = require("../../rocketChat/api/separated").getChannelOnlineUsers
 
 /**
@@ -22,14 +16,14 @@ exports.generalRoomInit = async (message,socketClient,initialize)=>{
   try{
     const rocketChatClient = new rocketChatClientInstance(config.protocol,config.host,config.port,config.userId,config.token,()=>{});
 
-    var rocketChatRoom = await db.get(`${config.host}:ep_rocketchat:rooms:${padId}`) || false ;
+    var rocketChatRoom = await db.get(`${config.dbRocketchatKey}:ep_rocketchat:rooms:${padId}`) || false ;
 
     // create room if not exist
     if(!rocketChatRoom){
       try{
         var roomResult = await rocketChatClient.channels.create(`${padId}-general-channel`);
         if(roomResult.success){
-          db.set(`${config.host}:ep_rocketchat:rooms:${padId}`,roomResult);
+          db.set(`${config.dbRocketchatKey}:ep_rocketchat:rooms:${padId}`,roomResult);
         }
 
         rocketChatRoom = roomResult
@@ -39,13 +33,13 @@ exports.generalRoomInit = async (message,socketClient,initialize)=>{
 
         const rocketChatClient = new rocketChatClientInstance(config.protocol,config.host,config.port,config.userId,config.token,()=>{});
         var roomInfoResult = await rocketChatClient.channels.info(`${padId}-general-channel`);
-        db.set(`${config.host}:ep_rocketchat:rooms:${padId}`,roomInfoResult);
+        db.set(`${config.dbRocketchatKey}:ep_rocketchat:rooms:${padId}`,roomInfoResult);
         rocketChatRoom = roomInfoResult
       }
 
     }else{
       var roomInfoResult = await rocketChatClient.channels.info(`${padId}-general-channel`);
-      db.set(`${config.host}:ep_rocketchat:rooms:${padId}`,roomInfoResult);
+      db.set(`${config.dbRocketchatKey}:ep_rocketchat:rooms:${padId}`,roomInfoResult);
       rocketChatRoom = roomInfoResult
     }
 

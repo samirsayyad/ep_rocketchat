@@ -3,14 +3,7 @@ const settings = require('ep_etherpad-lite/node/utils/Settings');
 const securityManager = require('ep_etherpad-lite/node/db/SecurityManager');
 const AuthorManager = require('ep_etherpad-lite/node/db/AuthorManager');
 const db = require('ep_etherpad-lite/node/db/DB');
-
-const config = {
-    protocol: settings.ep_rocketchat.protocol,
-    host :  settings.ep_rocketchat.host,
-    port : settings.ep_rocketchat.port,
-    userId :  settings.ep_rocketchat.userId,
-    token : settings.ep_rocketchat.token
-};
+const config = require("./helpers/configs");
 const rocketchatAuthenticator = require("./helpers/rocketchatAuthenticator");
 
 
