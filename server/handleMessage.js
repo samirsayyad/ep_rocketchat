@@ -39,7 +39,7 @@ exports.handleMessage = (hook_name, context, callback) => {
     handleRooms(message,context.client)
   }
   if (message.action === 'ep_rocketchat_sendMessageToChat') {
-    sendMessageToChat(message)
+    sendMessageToChat(message);
   }
   if (message.action === 'ep_rocketchat_updateOnlineUsersList') {
     updateOnlineUsersList(message,context.client)

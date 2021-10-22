@@ -4,6 +4,8 @@ const db = require('ep_etherpad-lite/node/db/DB');
 const sharedTransmitter = require("../helpers/sharedTransmitter")
 const getOnlineUsersApi = require("../../rocketChat/api/separated").getChannelOnlineUsers
 const generalRoomInit = require("./generalRoomInit").generalRoomInit
+const joinChanel = require("../../rocketChat/api/separated").joinChanel
+const rocketchatAuthenticator = require("../helpers/rocketchatAuthenticator");
 
 const config = require("../helpers/configs");
 
@@ -71,6 +73,19 @@ exports.handleRooms = async (message,socketClient)=>{
       //var addAllResult = await rocketChatClient.channels.addAll( rocketChatRoom.channel._id );
       // join all users
 
+      // handle join users
+    const userJoined = await db.get(`${config.dbRocketchatKey}:ep_rocketchat_join_${padId}_${userId}`) || null;
+    if(!userJoined){
+      const rocketchatUserAuth = await rocketchatAuthenticator.runValidator(userId);
+      if(!rocketchatUserAuth){
+        console.error("rocketchatUserAuth",rocketchatUserAuth)
+      }else{
+        let joinResult = await joinChanel(config, rocketChatRoom.channel._id ,rocketchatUserAuth.rocketchatAuthToken,rocketchatUserAuth.rocketchatUserId);
+        console.log(joinResult)
+        db.set(`${config.dbRocketchatKey}:ep_rocketchat_join_${padId}_${userId}`,"Y")
+      }
+    }
+    // handle join users
 
       const msg = {
           type: 'COLLABROOM',

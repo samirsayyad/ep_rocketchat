@@ -27,5 +27,24 @@ module.exports = {
       } catch (error) {
         return error.response.body
       }
+    },
+
+    joinChanel : async (config, roomId, token,userId) => {
+      try {
+        const response = await axios.post(`${config.protocol}://${config.host}:${config.port}/api/v1/channels.join`,
+        {
+          "roomId" : roomId
+        },
+        {
+          headers: {
+            'X-Auth-Token': token ,
+            'X-User-Id': userId 
+          }
+         }
+        )
+        return response.data
+      } catch (error) {
+        return error.response.body
+      }
     }
 }
