@@ -39,6 +39,7 @@ exports.handleRooms = async (message,socketClient)=>{
       }
       const rocketChatClient = new rocketChatClientInstance(config.protocol,config.host,config.port,config.userId,config.token,()=>{});
       var rocketChatRoom = await db.get(`${config.dbRocketchatKey}:ep_rocketchat:rooms:${data.headerId}`) || false ;
+      console.log("rocketChatRoom",rocketChatRoom)
       if(rocketChatRoom==false){
 
 
@@ -80,9 +81,15 @@ exports.handleRooms = async (message,socketClient)=>{
       if(!rocketchatUserAuth){
         console.error("rocketchatUserAuth",rocketchatUserAuth)
       }else{
-        let joinResult = await joinChanel(config, rocketChatRoom.channel._id ,rocketchatUserAuth.rocketchatAuthToken,rocketchatUserAuth.rocketchatUserId);
-        console.log(joinResult)
-        db.set(`${config.dbRocketchatKey}:ep_rocketchat_join_${padId}_${userId}`,"Y")
+        try{
+          let joinResult = await joinChanel(config, rocketChatRoom.channel._id ,rocketchatUserAuth.rocketchatAuthToken,rocketchatUserAuth.rocketchatUserId);
+          console.log(joinResult)
+          db.set(`${config.dbRocketchatKey}:ep_rocketchat_join_${padId}_${userId}`,"Y")
+        }catch(e){
+          console.log(e.message,"joinChanel of handleRooms")
+
+        }
+
       }
     }
     // handle join users
