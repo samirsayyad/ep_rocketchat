@@ -54,7 +54,7 @@ exports.handleRooms = async (message,socketClient)=>{
           console.log(e.message , "channels.create")
           const rocketChatClient = new rocketChatClientInstance(config.protocol,config.host,config.port,config.userId,config.token,()=>{});
           var roomInfoResult = await rocketChatClient.channels.info(data.headerId );
-          db.set(`${config.dbRocketchatKey}:ep_rocketchat:rooms:${padId}`,roomInfoResult);
+          db.set(`${config.dbRocketchatKey}:ep_rocketchat:rooms:${data.headerId}`,roomInfoResult);
           rocketChatRoom = roomInfoResult
         }
           
@@ -62,13 +62,18 @@ exports.handleRooms = async (message,socketClient)=>{
           
       }else{
         var roomInfoResult = await rocketChatClient.channels.info(data.headerId );
-        db.set(`${config.dbRocketchatKey}:ep_rocketchat:rooms:${padId}`,roomInfoResult);
+        db.set(`${config.dbRocketchatKey}:ep_rocketchat:rooms:${data.headerId}`,roomInfoResult);
         rocketChatRoom = roomInfoResult
       }
 
 
+      try{
+        var onlineUsers = await getOnlineUsersApi(config, rocketChatRoom.channel._id );
+      }catch(e){
+        console.log(e.message,"onlineUsers of handleRooms")
 
-      var onlineUsers = await getOnlineUsersApi(config, rocketChatRoom.channel._id );
+      }
+      
 
       // join all users
       //var addAllResult = await rocketChatClient.channels.addAll( rocketChatRoom.channel._id );
