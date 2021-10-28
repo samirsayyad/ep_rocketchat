@@ -61,17 +61,23 @@ exports.handleRooms = async (message,socketClient)=>{
         
           
       }
-      // else{
-      //   try{
-      //     var roomInfoResult = await rocketChatClient.channels.info(data.headerId );
-      //     db.set(`${config.dbRocketchatKey}:ep_rocketchat:rooms:${data.headerId}`,roomInfoResult);
-      //     rocketChatRoom = roomInfoResult
-      //   }catch(e){
-      //     console.log(e.message,"roomInfoResult of handleRooms")
+      else{
+        try{
+          var roomInfoResult = await rocketChatClient.channels.info(data.headerId );
+          db.set(`${config.dbRocketchatKey}:ep_rocketchat:rooms:${data.headerId}`,roomInfoResult);
+          rocketChatRoom = roomInfoResult
+        }catch(e){
+          const rocketChatClient = new rocketChatClientInstance(config.protocol,config.host,config.port,config.userId,config.token,()=>{});
+          var roomResult = await rocketChatClient.channels.create( data.headerId )
+          if(roomResult.success){
+              await db.set(`${config.dbRocketchatKey}:ep_rocketchat:rooms:${data.headerId}`,roomResult);
+          }
+          rocketChatRoom = roomResult
+          console.log(e.message,"roomInfoResult of handleRooms")
 
-      //   }
+        }
 
-      // }
+      }
 
 
       try{
