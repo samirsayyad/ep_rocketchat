@@ -58,7 +58,6 @@ exports.generalRoomInit = async (message,socketClient,initialize)=>{
         console.error("rocketchatUserAuth",rocketchatUserAuth)
       }else{
         let joinResult = await joinChanel(config, rocketChatRoom.channel._id ,rocketchatUserAuth.rocketchatAuthToken,rocketchatUserAuth.rocketchatUserId);
-        console.log(joinResult)
         db.set(`${config.dbRocketchatKey}:ep_rocketchat_join_${padId}_${userId}`,"Y")
       }
     }

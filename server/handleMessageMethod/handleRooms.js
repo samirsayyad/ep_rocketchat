@@ -39,7 +39,6 @@ exports.handleRooms = async (message,socketClient)=>{
       }
       const rocketChatClient = new rocketChatClientInstance(config.protocol,config.host,config.port,config.userId,config.token,()=>{});
       var rocketChatRoom = await db.get(`${config.dbRocketchatKey}:ep_rocketchat:rooms:${data.headerId}`) || false ;
-      console.log("rocketChatRoom",rocketChatRoom)
       if(rocketChatRoom==false){
 
 
@@ -67,13 +66,14 @@ exports.handleRooms = async (message,socketClient)=>{
           db.set(`${config.dbRocketchatKey}:ep_rocketchat:rooms:${data.headerId}`,roomInfoResult);
           rocketChatRoom = roomInfoResult
         }catch(e){
+          console.log(e.message,"roomInfoResult of handleRooms")
+
           const rocketChatClient = new rocketChatClientInstance(config.protocol,config.host,config.port,config.userId,config.token,()=>{});
           var roomResult = await rocketChatClient.channels.create( data.headerId )
           if(roomResult.success){
               await db.set(`${config.dbRocketchatKey}:ep_rocketchat:rooms:${data.headerId}`,roomResult);
           }
           rocketChatRoom = roomResult
-          console.log(e.message,"roomInfoResult of handleRooms")
 
         }
 
@@ -101,7 +101,6 @@ exports.handleRooms = async (message,socketClient)=>{
       }else{
         try{
           let joinResult = await joinChanel(config, rocketChatRoom.channel._id ,rocketchatUserAuth.rocketchatAuthToken,rocketchatUserAuth.rocketchatUserId);
-          console.log(joinResult)
           db.set(`${config.dbRocketchatKey}:ep_rocketchat_join_${padId}_${userId}`,"Y")
         }catch(e){
           console.log(e.message,"joinChanel of handleRooms")
@@ -122,7 +121,7 @@ exports.handleRooms = async (message,socketClient)=>{
               action: 'updateRocketChatIframe',
               data: {
                 //room :`${padId}_header_${title}`,
-                room : data.headerId ,
+                room : data.headerId.toLowerCase() ,
                 rocketChatBaseUrl :  `${config.protocol}://${config.host}`,
                 onlineUsers : onlineUsers
               },
