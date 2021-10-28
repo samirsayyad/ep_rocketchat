@@ -60,11 +60,18 @@ exports.handleRooms = async (message,socketClient)=>{
           
         
           
-      }else{
-        var roomInfoResult = await rocketChatClient.channels.info(data.headerId );
-        db.set(`${config.dbRocketchatKey}:ep_rocketchat:rooms:${data.headerId}`,roomInfoResult);
-        rocketChatRoom = roomInfoResult
       }
+      // else{
+      //   try{
+      //     var roomInfoResult = await rocketChatClient.channels.info(data.headerId );
+      //     db.set(`${config.dbRocketchatKey}:ep_rocketchat:rooms:${data.headerId}`,roomInfoResult);
+      //     rocketChatRoom = roomInfoResult
+      //   }catch(e){
+      //     console.log(e.message,"roomInfoResult of handleRooms")
+
+      //   }
+
+      // }
 
 
       try{
