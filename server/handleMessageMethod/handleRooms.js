@@ -43,7 +43,7 @@ exports.handleRooms = async (message,socketClient)=>{
 
 
         try{
-          var roomResult = await rocketChatClient.channels.create( data.headerId )
+          var roomResult = await rocketChatClient.channels.create( data.headerId.toLowerCase() )
           if(roomResult.success){
               await db.set(`${config.dbRocketchatKey}:ep_rocketchat:rooms:${data.headerId}`,roomResult);
           }
@@ -52,7 +52,7 @@ exports.handleRooms = async (message,socketClient)=>{
         }catch(e){
           console.log(e.message , "channels.create")
           const rocketChatClient = new rocketChatClientInstance(config.protocol,config.host,config.port,config.userId,config.token,()=>{});
-          var roomInfoResult = await rocketChatClient.channels.info(data.headerId );
+          var roomInfoResult = await rocketChatClient.channels.info(data.headerId.toLowerCase() );
           db.set(`${config.dbRocketchatKey}:ep_rocketchat:rooms:${data.headerId}`,roomInfoResult);
           rocketChatRoom = roomInfoResult
         }
@@ -62,14 +62,14 @@ exports.handleRooms = async (message,socketClient)=>{
       }
       else{
         try{
-          var roomInfoResult = await rocketChatClient.channels.info(data.headerId );
+          var roomInfoResult = await rocketChatClient.channels.info(data.headerId.toLowerCase() );
           db.set(`${config.dbRocketchatKey}:ep_rocketchat:rooms:${data.headerId}`,roomInfoResult);
           rocketChatRoom = roomInfoResult
         }catch(e){
           console.log(e.message,"roomInfoResult of handleRooms")
 
           const rocketChatClient = new rocketChatClientInstance(config.protocol,config.host,config.port,config.userId,config.token,()=>{});
-          var roomResult = await rocketChatClient.channels.create( data.headerId )
+          var roomResult = await rocketChatClient.channels.create( data.headerId.toLowerCase() )
           if(roomResult.success){
               await db.set(`${config.dbRocketchatKey}:ep_rocketchat:rooms:${data.headerId}`,roomResult);
           }
