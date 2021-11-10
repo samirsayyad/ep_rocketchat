@@ -29,7 +29,7 @@ module.exports = {
       }
     },
 
-    joinChanel : async (config, roomId, token,userId) => {
+    joinChannel : async (config, roomId, token,userId) => {
       try {
         const response = await axios.post(`${config.protocol}://${config.host}:${config.port}/api/v1/channels.join`,
         {
@@ -44,7 +44,25 @@ module.exports = {
         )
         return response.data
       } catch (error) {
-        return error.response.body
+        return error.response
+      }
+    },
+    joinChannels : async (config, roomIds, token,userId) => {
+      try {
+        const response = await axios.post(`${config.protocol}://${config.host}:${config.port}/api/v1/channels.joinToAll`,
+        {
+          "rooms" : roomIds
+        },
+        {
+          headers: {
+            'X-Auth-Token': token ,
+            'X-User-Id': userId 
+          }
+         }
+        )
+        return response.data
+      } catch (error) {
+        return error.response
       }
     }
 }

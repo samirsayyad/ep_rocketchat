@@ -71,6 +71,17 @@ exports.clientGeneralRoomInit = function clientGeneralRoomInit(payLoad){
 
        
     });
+
+
+
+    // document.getElementById("ep_rocketchat_iframe").addEventListener( "load", function(e) {
+    //     console.log("payLoad.data.rcToken",payLoad.data.rcToken)
+    //     document.getElementById("ep_rocketchat_iframe").contentWindow.parent.postMessage({
+    //         event: 'login-with-token',
+    //         loginToken: payLoad.data.rcToken
+    //     }, '*');
+    
+    // } );
 }
 
 function trimLeftTexts(text){

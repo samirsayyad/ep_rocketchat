@@ -11,7 +11,6 @@ exports.sendMessageToChat = async (message)=>{
     const data = message.data;
      
     try{
-
         const rocketChatClient = new rocketChatClientInstance(config.protocol,config.host,config.port,config.userId,config.token,()=>{});
         await rocketChatClient.chat.postMessage({
             "channel":`${padId}-general-channel`,

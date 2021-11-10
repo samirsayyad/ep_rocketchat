@@ -4,7 +4,7 @@ const db = require('ep_etherpad-lite/node/db/DB');
 const sharedTransmitter = require("../helpers/sharedTransmitter")
 const config = require("../helpers/configs");
 const getOnlineUsersApi = require("../../rocketChat/api/separated").getChannelOnlineUsers
-const joinChanel = require("../../rocketChat/api/separated").joinChanel
+const joinChannel = require("../../rocketChat/api/separated").joinChannel
 const rocketchatAuthenticator = require("../helpers/rocketchatAuthenticator");
 
 /**
@@ -16,6 +16,8 @@ exports.generalRoomInit = async (message,socketClient,initialize)=>{
   const userId = message.userId ;
 
   try{
+    const rocketchatUserAuth = await rocketchatAuthenticator.runValidator(userId);
+
     const rocketChatClient = new rocketChatClientInstance(config.protocol,config.host,config.port,config.userId,config.token,()=>{});
 
     var rocketChatRoom = await db.get(`${config.dbRocketchatKey}:ep_rocketchat:rooms:${padId}`) || false ;
@@ -53,35 +55,43 @@ exports.generalRoomInit = async (message,socketClient,initialize)=>{
     // handle join users
     const userJoined = await db.get(`${config.dbRocketchatKey}:ep_rocketchat_join_${padId}_${userId}`) || null;
     if(!userJoined){
-      const rocketchatUserAuth = await rocketchatAuthenticator.runValidator(userId);
-      if(!rocketchatUserAuth){
-        console.error("rocketchatUserAuth",rocketchatUserAuth)
-      }else{
-        let joinResult = await joinChanel(config, rocketChatRoom.channel._id ,rocketchatUserAuth.rocketchatAuthToken,rocketchatUserAuth.rocketchatUserId);
-        db.set(`${config.dbRocketchatKey}:ep_rocketchat_join_${padId}_${userId}`,"Y")
+      const canUserJoin = await db.get(`${config.dbRocketchatKey}:ep_rocketchat_canJoin_${padId}_${userId}`);
+      if(canUserJoin){
+        if(!rocketchatUserAuth){
+          console.error("rocketchatUserAuth",rocketchatUserAuth)
+        }else{
+          try{
+            await joinChannel(config, rocketChatRoom.channel._id ,rocketchatUserAuth.rocketchatAuthToken,rocketchatUserAuth.rocketchatUserId);
+            await db.set(`${config.dbRocketchatKey}:ep_rocketchat_join_${padId}_${userId}`,"Y")
+          }catch(e){
+            console.log(e.message,"joinChannel of handleRooms")
+          }
+        }
       }
     }
     // handle join users
-      
+     
+    const msg = {
+      type: 'COLLABROOM',
+      data: {
+        type: 'CUSTOM',
+        payload: {
+          padId: padId,
+          userId: message.userId,
+          action: (initialize) ? 'clientGeneralRoomInit' : 'updateRocketChatIframe',
+          data: {
+            room : `${padId}-general-channel`,
+            rocketChatBaseUrl : `${config.protocol}://${config.host}`,
+            onlineUsers : onlineUsers,
+            rcId : rocketchatUserAuth.rocketchatUserId,
+            rcToken: rocketchatUserAuth.rocketchatAuthToken,
+          },
+        },
+      },
+    };
+    sharedTransmitter.sendToUser(msg, socketClient); 
   }catch(e){
     console.log(e.message , "generalRoomInit")
   }
 
-  const msg = {
-    type: 'COLLABROOM',
-    data: {
-      type: 'CUSTOM',
-      payload: {
-        padId: padId,
-        userId: message.userId,
-        action: (initialize) ? 'clientGeneralRoomInit' : 'updateRocketChatIframe',
-        data: {
-          room : `${padId}-general-channel`,
-          rocketChatBaseUrl : `${config.protocol}://${config.host}`,
-          onlineUsers : onlineUsers
-        },
-      },
-    },
-  };
-  sharedTransmitter.sendToUser(msg, socketClient);
 }

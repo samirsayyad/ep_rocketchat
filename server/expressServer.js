@@ -8,53 +8,43 @@ const rocketchatAuthenticator = require("./helpers/rocketchatAuthenticator");
 
 
 exports.expressCreateServer = (hookName, context) => {
-    context.app.get('/static/pluginfw/ep_rocketchat/rocket_chat_auth_get', async(req, res) => {
+    context.app.get('/static/pluginfw/ep_rocketchat/rocket_chat_auth_get/:userId', async(req, res) => {
         res.set('Access-Control-Allow-Origin', `https://${config.host}` )
         res.set('Access-Control-Allow-Credentials', 'true');
-        const {session : {user} = {}} = req;
-        const accessObj = await securityManager.checkAccess(
-            "NOT_MATTER_PADID", req.cookies.sessionID, req.cookies.token, user);
-        // if (accessObj.accessStatus == "grant"){
-        //     if (req.session.user && req.session.rocketchatAuthToken) {
-        //         res.status(200).json({ loginToken: req.session.rocketchatAuthToken })
-        //         return;
-        //     } else {
-
-        //         const rocketchatUserAuth = await rocketchatAuthenticator.runValidator(accessObj.authorID);
-        //         console.log("rocket_chat_auth_get",rocketchatUserAuth)
-        //         res.status(200).json({ loginToken: rocketchatUserAuth.authToken })
-        //         return;
-                 
-        //     }
-        // }else{
-        //     res.status(200).json({ loginToken: accessObj.accessStatus})
-        //     return;
-        // }
-
-        const rocketchatUserAuth = await rocketchatAuthenticator.runValidator(accessObj.authorID);
+        const etherUserId = req.params.userId || false;
+        if(!etherUserId){
+            res.send({ loginToken: false })
+            return;
+        }
+        const rocketchatUserAuth = await rocketchatAuthenticator.runValidator(etherUserId);
         res.send({ loginToken: rocketchatUserAuth.rocketchatAuthToken })
         return;
 
 
       })
-    context.app.get('/static/pluginfw/ep_rocketchat/rocket_chat_iframe', (req, res) => {
+    context.app.get('/static/pluginfw/ep_rocketchat/rocket_chat_iframe/:userId', async(req, res) => {
         res.set('Access-Control-Allow-Origin', `https://${config.host}` )
         res.set('Access-Control-Allow-Credentials', 'true');
-
+        const etherUserId = req.params.userId || false;
+        if(!etherUserId){
+            res.send(``)
+            return;
+        }
         if (req.session.user && req.session.user.rocketchatAuthToken) {
             // We are sending a script tag to the front-end with the RocketChat Auth Token that will be used to authenticate the user
             return res.send(`<script>
                 window.parent.postMessage({
                 event: 'login-with-token',
-                loginToken: ${req.session.user.rocketchatAuthToken}
+                loginToken: '${req.session.user.rocketchatAuthToken}'
                 }, '${ config.host }');
             </script>
             `)
         } else {
+            const rocketchatUserAuth = await rocketchatAuthenticator.runValidator(etherUserId);
             return res.send(`<script>
             window.parent.postMessage({
             event: 'login-with-token',
-            loginToken: ${config.token}
+            loginToken: '${rocketchatUserAuth.rocketchatAuthToken}'
             }, '${ config.host }');
         </script>
         `)        }

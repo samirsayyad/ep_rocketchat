@@ -7,5 +7,5 @@ module.exports = {
     token : settings.ep_rocketchat.token,
     baseUrl : settings.ep_rocketchat.baseUrl,
     passwordSalt : settings.ep_rocketchat.passwordSalt,
-    dbRocketchatKey : settings.ep_rocketchat.dbRocketchatKey
+    dbRocketchatKey : settings.ep_rocketchat.rocketChatDbKey
 };

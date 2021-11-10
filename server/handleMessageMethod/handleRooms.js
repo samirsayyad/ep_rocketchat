@@ -4,7 +4,7 @@ const db = require('ep_etherpad-lite/node/db/DB');
 const sharedTransmitter = require("../helpers/sharedTransmitter")
 const getOnlineUsersApi = require("../../rocketChat/api/separated").getChannelOnlineUsers
 const generalRoomInit = require("./generalRoomInit").generalRoomInit
-const joinChanel = require("../../rocketChat/api/separated").joinChanel
+const joinChannel = require("../../rocketChat/api/separated").joinChannel
 const rocketchatAuthenticator = require("../helpers/rocketchatAuthenticator");
 
 const config = require("../helpers/configs");
@@ -15,27 +15,11 @@ exports.handleRooms = async (message,socketClient)=>{
     const data = message.data;
     var title =  data.title.replace(/\s+/g, '-')
     try{
+      const rocketchatUserAuth = await rocketchatAuthenticator.runValidator(userId);
+
       if (data.headerId =="GENERAL"){
         await generalRoomInit(message,socketClient);
         return;
-        // const msg = {
-        //   type: 'COLLABROOM',
-        //   data: {
-        //     type: 'CUSTOM',
-        //     payload: {
-        //       padId: padId,
-        //       userId: userId,
-        //       action: 'updateRocketChatIframe',
-        //       data: {
-        //         room :`${padId}-general-channel`,
-        //         //room : data.headerId ,
-        //         rocketChatBaseUrl :  `${config.protocol}://${config.host}`
-        //       },
-        //     },
-        //   },
-        // };
-        // sharedTransmitter.sendToUser(msg,socketClient);
-        // return;
       }
       const rocketChatClient = new rocketChatClientInstance(config.protocol,config.host,config.port,config.userId,config.token,()=>{});
       var rocketChatRoom = await db.get(`${config.dbRocketchatKey}:ep_rocketchat:rooms:${data.headerId}`) || false ;
@@ -88,26 +72,27 @@ exports.handleRooms = async (message,socketClient)=>{
       }
       
 
-      // join all users
+    // join all users
       //var addAllResult = await rocketChatClient.channels.addAll( rocketChatRoom.channel._id );
-      // join all users
+    // join all users
 
-      // handle join users
-    const userJoined = await db.get(`${config.dbRocketchatKey}:ep_rocketchat_join_${padId}_${userId}`) || null;
+    // handle join users
+    const userJoined = await db.get(`${config.dbRocketchatKey}:ep_rocketchat_join_${padId}_${userId}_${data.headerId}`) || null;
     if(!userJoined){
-      const rocketchatUserAuth = await rocketchatAuthenticator.runValidator(userId);
-      if(!rocketchatUserAuth){
-        console.error("rocketchatUserAuth",rocketchatUserAuth)
-      }else{
-        try{
-          let joinResult = await joinChanel(config, rocketChatRoom.channel._id ,rocketchatUserAuth.rocketchatAuthToken,rocketchatUserAuth.rocketchatUserId);
-          db.set(`${config.dbRocketchatKey}:ep_rocketchat_join_${padId}_${userId}`,"Y")
-        }catch(e){
-          console.log(e.message,"joinChanel of handleRooms")
-
+      const canUserJoin = await db.get(`${config.dbRocketchatKey}:ep_rocketchat_canJoin_${padId}_${userId}`);
+      if(canUserJoin){
+        if(!rocketchatUserAuth){
+          console.error("rocketchatUserAuth",rocketchatUserAuth)
+        }else{
+          try{
+            await joinChannel(config, rocketChatRoom.channel._id ,rocketchatUserAuth.rocketchatAuthToken,rocketchatUserAuth.rocketchatUserId);
+            await db.set(`${config.dbRocketchatKey}:ep_rocketchat_join_${padId}_${userId}`,"Y")
+          }catch(e){
+            console.log(e.message,"joinChannel of handleRooms")
+          }
         }
-
       }
+
     }
     // handle join users
 
@@ -123,7 +108,9 @@ exports.handleRooms = async (message,socketClient)=>{
                 //room :`${padId}_header_${title}`,
                 room : data.headerId.toLowerCase() ,
                 rocketChatBaseUrl :  `${config.protocol}://${config.host}`,
-                onlineUsers : onlineUsers
+                onlineUsers : onlineUsers,
+                rcId : rocketchatUserAuth.rocketchatUserId,
+                rcToken: rocketchatUserAuth.rocketchatAuthToken,
               },
             },
           },

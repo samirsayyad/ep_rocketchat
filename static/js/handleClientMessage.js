@@ -1,7 +1,7 @@
 const clientGeneralRoomInit = require("./handleClientMessageMethod/clientGeneralRoomInit").clientGeneralRoomInit;
 const updateRocketChatIframe = require("./handleClientMessageMethod/updateRocketChatIframe").updateRocketChatIframe;
 const updateRocketChatIframeOnlineUsers = require("./handleClientMessageMethod/updateRocketChatIframeOnlineUsers").updateRocketChatIframeOnlineUsers;
-
+const gatherUpHeaderIds = require("./handleClientMessageMethod/gatherUpHeaderIds").gatherUpHeaderIds;
 exports.handleClientMessage_CUSTOM = function handleClientMessage_CUSTOM(hook, context, cb){
     const current_user_id = pad.getUserId();
 
@@ -22,6 +22,11 @@ exports.handleClientMessage_CUSTOM = function handleClientMessage_CUSTOM(hook, c
         //const lastActiveHeader = localStorage.getItem("lastActiveHeader");
         //if (lastActiveHeader == context.payload.data.room )
         updateRocketChatIframeOnlineUsers(context.payload)
+    }
+
+    if(context.payload.action == 'gatherUpHeaderIds'){
+        if(current_user_id == context.payload.userId )
+            gatherUpHeaderIds(context.payload)
     }
 
     
