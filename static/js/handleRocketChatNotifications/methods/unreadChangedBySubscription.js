@@ -9,30 +9,31 @@ exports.unreadChangedBySubscription = function unreadChangedBySubscription (data
 
         const notificationElement = $(`#${headerId}_notification`);
         var lastUnreadCount = localStorage.getItem(`${headerId}_unreadCount`) || localStorage.getItem(`${headerId}_newMessage`) || 1;
+        var unreadMentionedCount = localStorage.getItem(`${headerId}_unreadMentionedCount_${userId}`) || 0;
+
         if(notificationElement.length){
             
-            // if(data.unread == 0 && lastUnreadCount > 0){
-            //     var unreadNotificationTemplate = $('#ep_rocketchat_unreadNotification').tmpl({unread : lastUnreadCount});
-            //     notificationElement.html(unreadNotificationTemplate);
-            // }else if(data.unread > 0 && data.ls ){
-            //     var mentionNotificationTemplate = $('#ep_rocketchat_mentionNotification').tmpl(data);
-            //     notificationElement.html(mentionNotificationTemplate);
-            // }else if(data.unread == 0 && data.ls){
-            //     var unreadNotificationTemplate = $('#ep_rocketchat_unreadNotification').tmpl({unread : lastUnreadCount || 1});
-            //     notificationElement.html(unreadNotificationTemplate);
-            // }
-    
-            // var rowContainer=$(`#${headerId}_container`) ;
-            // if(rowContainer.length && headerId != "general"){
-            //     var elementStatus = checkInView(rowContainer, true );
-            //     if (elementStatus.visible == false){
-            //         $("#bottomNewMention").css({"display":"block"})
-            //     }
-            // }
 
+            if(unreadMentionedCount == 0)
+                var unreadNotificationTemplate = $('#ep_rocketchat_unreadNotification').tmpl({unread : lastUnreadCount || data.unread});
+            else{
+                var unreadNotificationTemplate = $('#ep_rocketchat_mentionNotification').tmpl({unread : unreadMentionedCount});
+                let realHeaderId = notificationElement.attr("data-headerId") 
+                var rowContainer=$(`#${realHeaderId}_container`) ;
+                if(rowContainer.length && headerId != "general"){
+                    var elementStatus = checkInView(rowContainer, true );
+                    if (elementStatus.visible == false){
+                        $("#bottomNewMention").css({"display":"block"})
+                    }
+                }
+            }
 
-            var unreadNotificationTemplate = $('#ep_rocketchat_unreadNotification').tmpl({unread : lastUnreadCount || data.unread});
             notificationElement.html(unreadNotificationTemplate);
+
+            
+
+            
+
         }
     }
     // else{
@@ -41,17 +42,13 @@ exports.unreadChangedBySubscription = function unreadChangedBySubscription (data
     
 }
 
-function checkInView(elem,partial){
+function checkInView(elem){
     var container = $("#toc");
-    var contHeight = container.height();
-    var contTop = container.scrollTop();
-    var contBottom = contTop + contHeight ;
+    var docViewTop = container.scrollTop();
+    var docViewBottom = docViewTop + container.height();
 
-    var elemTop = $(elem).offset().top - container.offset().top;
+    var elemTop = $(elem).offset().top;
     var elemBottom = elemTop + $(elem).height();
-    var isTotal = (elemTop >= 0 && elemBottom <=contHeight);
-    var isPart = ((elemTop < 0 && elemBottom > 0 ) || (elemTop > 0 && elemTop <= container.height())) && partial ;
 
-    
-    return  { visible : isTotal  || isPart , topLocation:(elemTop < 0 && elemBottom < 0) } ;
-  }
+    return {visible : ((elemBottom <= docViewBottom) && (elemTop >= docViewTop)) }  ;
+}

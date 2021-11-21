@@ -1,6 +1,7 @@
 exports.newMessageMethod = function newMessageMethod (data){
     const padId = pad.getPadId();
-    const headerId = (data.name == `${padId}-general-channel`) ? "general" : data.name  ; 
+    const roomId = data.name ;
+    const headerId = (roomId == `${padId}-general-channel`) ? "general" : roomId ; 
     var lastUnreadCount = localStorage.getItem(`${headerId}_unreadCount`) || 0;
     if (lastUnreadCount > 0) return; // it means rocketchat is sending new-message + notification together
     
