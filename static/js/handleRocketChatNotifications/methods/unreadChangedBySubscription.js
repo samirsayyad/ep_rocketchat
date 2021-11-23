@@ -13,7 +13,7 @@ exports.unreadChangedBySubscription = function unreadChangedBySubscription (data
         if (!notificationElement.length)
             notificationElement = $(`#${data.fname.toLowerCase()}_notification`);
 
-        var lastUnreadCount = localStorage.getItem(`${headerId}_unreadCount`) || localStorage.getItem(`${headerId}_newMessage`) || 1;
+        var lastUnreadCount = localStorage.getItem(`${headerId}_unreadCount`) || localStorage.getItem(`${headerId}_newMessage`) || false;
         var unreadMentionedCount = localStorage.getItem(`${headerId}_unreadMentionedCount_${userId}`) || 0;
 
         if(notificationElement.length){
