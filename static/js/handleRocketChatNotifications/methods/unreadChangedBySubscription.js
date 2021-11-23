@@ -4,7 +4,7 @@ exports.unreadChangedBySubscription = function unreadChangedBySubscription (data
         const userId = pad.getUserId();
         const headerId = (data.name == `${padId}-general-channel`) ? "general" : data.name  ; 
         const lastActiveHeader = localStorage.getItem("lastActiveHeader");
-        if (lastActiveHeader == headerId )
+        if (lastActiveHeader.toLowerCase() == headerId )
             return;
 
         var notificationElement = $(`#${headerId}_notification`);
@@ -13,8 +13,9 @@ exports.unreadChangedBySubscription = function unreadChangedBySubscription (data
         if (!notificationElement.length)
             notificationElement = $(`#${data.fname.toLowerCase()}_notification`);
 
-        var lastUnreadCount = localStorage.getItem(`${headerId}_unreadCount`) || localStorage.getItem(`${headerId}_newMessage`) || false;
-        var unreadMentionedCount = localStorage.getItem(`${headerId}_unreadMentionedCount_${userId}`) || 0;
+        var lastUnreadCount = parseInt(localStorage.getItem(`${headerId}_unreadCount`)) || parseInt(localStorage.getItem(`${headerId}_newMessage`)) || false;
+        console.profile(lastUnreadCount)
+        var unreadMentionedCount = parseInt(localStorage.getItem(`${headerId}_unreadMentionedCount_${userId}`)) || 0;
 
         if(notificationElement.length){
             

@@ -5,12 +5,12 @@ exports.notificationsMethod = function notificationsMethod (data){
 
         const headerId = (data.notification.payload.name == `${padId}-general-channel`) ? "general" : data.notification.payload.name  ; 
         const lastActiveHeader = localStorage.getItem("lastActiveHeader");
-        if (lastActiveHeader == headerId )
+        if (lastActiveHeader.toLowerCase() == headerId )
             return;
 
 
         // check mentioned this user
-        var unreadMentionedCount = localStorage.getItem(`${headerId}_unreadMentionedCount_${userId}`) || 0;
+        var unreadMentionedCount = parseInt(localStorage.getItem(`${headerId}_unreadMentionedCount_${userId}`)) || 0;
         unreadMentionedCount = parseInt(unreadMentionedCount);
         if ( [`@${userId}`,"@all"].includes(data.notification.payload.message.msg) ){
             
@@ -20,7 +20,7 @@ exports.notificationsMethod = function notificationsMethod (data){
                 $(`#${headerId}_notification`).html(unreadNotificationTemplate);
         }else{
 
-            var lastUnreadCount = localStorage.getItem(`${headerId}_unreadCount`) || 0;
+            var lastUnreadCount = parseInt(localStorage.getItem(`${headerId}_unreadCount`)) || 0;
             lastUnreadCount++; 
             localStorage.setItem(`${headerId}_unreadCount`,lastUnreadCount);
             var unreadNotificationTemplate = $('#ep_rocketchat_unreadNotification').tmpl({unread : lastUnreadCount + unreadMentionedCount});
