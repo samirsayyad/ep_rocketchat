@@ -16,14 +16,16 @@ exports.clientGeneralRoomInit = function clientGeneralRoomInit(payLoad){
         $(`#${lastActiveHeader}_container`).removeClass("highlightHeader");
         localStorage.setItem("lastActiveHeader",null);
     }else{
+        channelId = headerId.toLowerCase();
         $(".tocWrapper").css({"border-right":"1px solid #DADCE0"});
     }
+    //let lowerCaseHeaderId = headerId.toLowerCase()
     var chatHtml = $('#ep_rocketchat_chatBar').tmpl({
         activeClass : activeClass ,
         headerText: headerText,
         payLoad : payLoad,
         channelId,
-        headerId
+        headerId //lowerCaseHeaderId
     });
     $('body').append(chatHtml);
     if ( (headerId || headerId!=null)  ){
@@ -38,7 +40,11 @@ exports.clientGeneralRoomInit = function clientGeneralRoomInit(payLoad){
         localStorage.setItem("lastActiveHeader",null); // because of initialize of header need to be null temporary and scroll will fill it
         //$(`#${headerId}`).click();
 
-        $(`#${headerId}_container`).click(function(e){e.preventDefault();}).click();
+        $(`#${headerId}_container`).click(function(e){e.preventDefault();}).click()
+        $('#toc').animate({
+        scrollTop: $(`#${headerId}_container`).offset().top
+        });
+        //$(`#${headerId}_container`).click()
 
     }else{
         $("#master_header_chat_room").text(clientVars.ep_set_title_on_pad.title);
