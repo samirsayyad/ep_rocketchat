@@ -7,7 +7,12 @@ exports.unreadChangedBySubscription = function unreadChangedBySubscription (data
         if (lastActiveHeader == headerId )
             return;
 
-        const notificationElement = $(`#${headerId}_notification`);
+        var notificationElement = $(`#${headerId}_notification`);
+        if (!notificationElement.length)
+            notificationElement = $(`#${data.fname}_notification`);
+        if (!notificationElement.length)
+            notificationElement = $(`#${data.fname.toLowerCase()}_notification`);
+
         var lastUnreadCount = localStorage.getItem(`${headerId}_unreadCount`) || localStorage.getItem(`${headerId}_newMessage`) || 1;
         var unreadMentionedCount = localStorage.getItem(`${headerId}_unreadMentionedCount_${userId}`) || 0;
 
