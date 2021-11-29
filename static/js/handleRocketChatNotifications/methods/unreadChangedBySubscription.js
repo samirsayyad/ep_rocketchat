@@ -1,3 +1,5 @@
+const newMention = require("./newMentionHelper").newMentionHelper;
+const removeNewMentionHelper= require("./newMentionHelper").removeNewMentionHelper;
 exports.unreadChangedBySubscription = function unreadChangedBySubscription (data){
     if(data.alert == true && data.unread!=0){
         const padId = clientVars.padId;
@@ -17,10 +19,13 @@ exports.unreadChangedBySubscription = function unreadChangedBySubscription (data
         var unreadMentionedCount = parseInt(localStorage.getItem(`${headerId}_unreadMentionedCount_${userId}`)) || 0;
 
         if(notificationElement.length){
-            if(unreadMentionedCount == 0)
+            if(unreadMentionedCount == 0){
                 var unreadNotificationTemplate = $('#ep_rocketchat_unreadNotification').tmpl({unread : lastUnreadCount || data.unread});
-            else{
+                removeNewMentionHelper(notificationElement.attr("data-headerid"));
+            
+            }else{
                 var unreadNotificationTemplate = $('#ep_rocketchat_mentionNotification').tmpl({unread : unreadMentionedCount});
+                newMention(notificationElement.attr("data-headerid")); // because of Rocketchat make to lower case need to access real header id via notificationElement.attr("data-headerid")
             }
             notificationElement.html(unreadNotificationTemplate);
         }

@@ -1,5 +1,6 @@
 const padcookie = require('ep_etherpad-lite/static/js/pad_cookie').padcookie;
 const handleRocketChatNotifications = require('./handleRocketChatNotifications/handleRocketChatNotifications').handleRocketChatNotifications
+const handleNewMentionButton = require('./handleRocketChatNotifications/methods/newMentionHelper').handleNewMentionButton
 
 exports.aceInitialized = function aceInitialized(){
         const padId = clientVars.padId;
@@ -24,7 +25,7 @@ exports.aceInitialized = function aceInitialized(){
 
 
         handleRocketChatNotifications();
- 
+        handleNewMentionButton();
   
         return []
 }
