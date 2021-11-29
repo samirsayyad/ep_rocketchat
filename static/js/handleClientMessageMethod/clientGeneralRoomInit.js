@@ -73,9 +73,10 @@ exports.clientGeneralRoomInit = function clientGeneralRoomInit(payLoad){
         const params = new URLSearchParams(location.search);
         params.delete('id');
         params.delete('header');
-        window.history.replaceState({}, '', `${location.pathname}?${params}`);
-
-       
+        let url = location.pathname;
+        if (params.toString().length > 0) url = `${location.pathname}?${params}`;
+        window.history.replaceState({}, document.title, url);
+        
     });
 
 
