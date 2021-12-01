@@ -10,16 +10,6 @@ exports.aceInitialized = function aceInitialized(){
         padcookie.setPref("chatAlwaysVisible", false);
         $('#options-stickychat').parent().hide();
         $('#options-chatandusers').parent().hide();
-        const message = {
-                type: 'ep_rocketchat',
-                action: 'ep_rocketchat_generalRoomInit',
-                userId,
-                padId: padId,
-                data: {
-                        rocketChatBaseUrl: clientVars.ep_rocketchat.rocketChatBaseUrl    
-                },
-              };
-        pad.collabClient.sendMessage(message);
 
         //$("#editorcontainer iframe").addClass('fullHeightEditor')
 

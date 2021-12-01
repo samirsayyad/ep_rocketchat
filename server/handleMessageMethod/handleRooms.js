@@ -3,7 +3,6 @@ const settings = require('ep_etherpad-lite/node/utils/Settings');
 const db = require('ep_etherpad-lite/node/db/DB');
 const sharedTransmitter = require("../helpers/sharedTransmitter")
 const getOnlineUsersApi = require("../../rocketChat/api/separated").getChannelOnlineUsers
-const generalRoomInit = require("./generalRoomInit").generalRoomInit
 const joinChannel = require("../../rocketChat/api/separated").joinChannel
 const rocketchatAuthenticator = require("../helpers/rocketchatAuthenticator");
 
@@ -17,8 +16,8 @@ exports.handleRooms = async (message,socketClient)=>{
     try{
       const rocketchatUserAuth = await rocketchatAuthenticator.runValidator(userId);
 
-      if (data.headerId =="GENERAL"){
-        await generalRoomInit(message,socketClient);
+      if (data.headerId ==`${padId}-general-channel`) {
+        sendToUpdateRocketChatIframe(padId,userId,data.headerId,rocketchatUserAuth,onlineUsers,config ,socketClient)
         return;
       }
       const rocketChatClient = new rocketChatClientInstance(config.protocol,config.host,config.port,config.userId,config.token,()=>{});
@@ -95,28 +94,34 @@ exports.handleRooms = async (message,socketClient)=>{
 
     }
     // handle join users
+    sendToUpdateRocketChatIframe(padId,userId,data.headerId,rocketchatUserAuth,onlineUsers,config , socketClient)
 
-      const msg = {
-          type: 'COLLABROOM',
-          data: {
-            type: 'CUSTOM',
-            payload: {
-              padId: padId,
-              userId: userId,
-              action: 'updateRocketChatIframe',
-              data: {
-                //room :`${padId}_header_${title}`,
-                room : data.headerId.toLowerCase() ,
-                rocketChatBaseUrl :  `${config.protocol}://${config.host}`,
-                onlineUsers : onlineUsers,
-                rcId : rocketchatUserAuth.rocketchatUserId,
-                rcToken: rocketchatUserAuth.rocketchatAuthToken,
-              },
-            },
-          },
-        };
-        sharedTransmitter.sendToUser(msg,socketClient);
     }catch(e){
         console.log(e.message,"channels.create of handleRooms - general")
     }
+}
+
+
+const sendToUpdateRocketChatIframe = (padId , userId , headerId ,rocketchatUserAuth ,onlineUsers , config ,socketClient)=>{
+  const msg = {
+    type: 'COLLABROOM',
+    data: {
+      type: 'CUSTOM',
+      payload: {
+        padId: padId,
+        userId: userId,
+        action: 'updateRocketChatIframe',
+        data: {
+          //room :`${padId}_header_${title}`,
+          room : headerId.toLowerCase() ,
+          rocketChatBaseUrl :  `${config.protocol}://${config.host}`,
+          onlineUsers : onlineUsers,
+          rcId : rocketchatUserAuth.rocketchatUserId,
+          rcToken: rocketchatUserAuth.rocketchatAuthToken,
+        },
+      },
+    },
+  };
+  sharedTransmitter.sendToUser(msg,socketClient);
+
 }

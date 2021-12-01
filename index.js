@@ -9,7 +9,5 @@ exports.eejsBlock_styles = (hookName, args, cb) => {
 exports.eejsBlock_scripts = (hook_name, args, cb) => {
   args.content += eejs.require('ep_rocketchat/templates/mentionNotification.html', {}, module);
   args.content += eejs.require('ep_rocketchat/templates/unreadNotification.html', {}, module);
-  args.content += eejs.require('ep_rocketchat/templates/chatBar.html', {}, module);
-
   return [];
 };
