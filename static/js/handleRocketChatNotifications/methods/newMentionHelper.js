@@ -53,12 +53,18 @@ exports.handleNewMentionButton = function handleNewMentionButton(){
             var targetElement = lastScrolledElement.nextAll("[mentioned=true]").first()
             if(targetElement.length){
                 $('#bottomNewMention').attr("_lastscrolled",targetElement.attr('id'));
-                $('#toc').animate({
-                    scrollTop: targetElement.offset().top - __extraHeightOfContainer
+                // $('#toc').animate({
+                //     scrollTop: targetElement.offset().top - __extraHeightOfContainer
+                // });
+                $(targetElement)[0].scrollIntoView({
+                    behavior: 'smooth',
                 });
             }else{
-                $('#toc').animate({
-                    scrollTop: lastScrolledElement.offset().top - __extraHeightOfContainer
+                // $('#toc').animate({
+                //     scrollTop: lastScrolledElement.offset().top - __extraHeightOfContainer
+                // });
+                $(lastScrolledElement)[0].scrollIntoView({
+                    behavior: 'smooth',
                 });
             }
         }else{
@@ -66,9 +72,20 @@ exports.handleNewMentionButton = function handleNewMentionButton(){
             mentionedItems.each(function(i) { 
                 var elementStatus = checkInView(this);
                 if(elementStatus.visible == false ){
-                    $('#toc').animate({
-                        scrollTop: $(this).offset().top - __extraHeightOfContainer
+                    // $('#toc').animate({
+                    //     scrollTop: $(this).offset().top - __extraHeightOfContainer
+                    // });
+
+                    // const padContainer = $('iframe[name="ace_outer"]').contents().find('iframe').contents();
+                    // console.log("click",padContainer.find(`#${this.id}_container`))
+                    // padContainer.find(`#${this.id}_container`)[0].scrollIntoView({
+                    //   behavior: 'smooth',
+                    // });
+                    $(this)[0].scrollIntoView({
+                        behavior: 'smooth',
                     });
+
+
                     $('#bottomNewMention').attr("_lastscrolled",this.id);
                     if (i == (mentionedItems.length-1)){
                         $('#bottomNewMention').css({"display":"none"})
