@@ -1,7 +1,7 @@
 .ep_rocketchat_container{
     z-index: 999;
     width: 83%;
-    position: absolute;
+    position: fixed;
     bottom: 0px;
     right: 0;
     margin: auto;
@@ -14,7 +14,7 @@
   display: none;
   z-index: 999;
   width: 83%;
-  position: absolute;
+  position: fixed;
   bottom: 0px;
   right: 0;
   margin: auto;
