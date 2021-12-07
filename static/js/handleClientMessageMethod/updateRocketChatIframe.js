@@ -1,6 +1,7 @@
+const notificationHelper =  require("../handleRocketChatNotifications/methods/helper/notificationHelper");
+
 exports.updateRocketChatIframe = function updateRocketChatIframe(payLoad){
     try{
-        console.log($("#ep_rocketchat_iframe"))
         //$("#ep_rocketchat_iframe").attr({"src": `${payLoad.data.rocketChatBaseUrl}/channel/${payLoad.data.room}?layout=embedded`})
         document.getElementById("ep_rocketchat_iframe").contentWindow.postMessage(
             {  externalCommand: 'go',  path:  `/channel/${payLoad.data.room}?layout=embedded` }, '*')
@@ -9,9 +10,12 @@ exports.updateRocketChatIframe = function updateRocketChatIframe(payLoad){
         let userId =payLoad.userId;
 
         room = (room == `${padId}-general-channel` ) ? "general" : room;
-        localStorage.setItem(`${room}_unreadCount`,0);
-        localStorage.setItem(`${room}_newMessage`,0);
-        localStorage.setItem(`${room}_unreadMentionedCount_${userId}`,0);
+
+        notificationHelper.setUnreadCount(room,0);
+        notificationHelper.setNewMessageCount(room,0);
+        notificationHelper.setUserUnreadMentionedCount(room,userId,0);
+        notificationHelper.setHistoryCount(room,0); 
+        notificationHelper.setLastActiveHeader(room); 
 
         $(`#${room}_notification`).empty()
 

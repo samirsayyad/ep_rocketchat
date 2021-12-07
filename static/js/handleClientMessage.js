@@ -1,6 +1,7 @@
 const updateRocketChatIframe = require("./handleClientMessageMethod/updateRocketChatIframe").updateRocketChatIframe;
 const updateRocketChatIframeOnlineUsers = require("./handleClientMessageMethod/updateRocketChatIframeOnlineUsers").updateRocketChatIframeOnlineUsers;
 const gatherUpHeaderIds = require("./handleClientMessageMethod/gatherUpHeaderIds").gatherUpHeaderIds;
+const updateChannelsMessageCount = require("./handleClientMessageMethod/updateChannelsMessageCount").updateChannelsMessageCount;
 exports.handleClientMessage_CUSTOM = function handleClientMessage_CUSTOM(hook, context, cb){
     const current_user_id = pad.getUserId();
 
@@ -9,6 +10,12 @@ exports.handleClientMessage_CUSTOM = function handleClientMessage_CUSTOM(hook, c
             updateRocketChatIframe(context.payload)
         updateRocketChatIframeOnlineUsers(context.payload)
     }
+    if (context.payload.action == 'updateChannelsMessageCount') {
+        if(current_user_id == context.payload.userId )
+            updateChannelsMessageCount(context.payload)
+    }
+
+    
 
 
     if (context.payload.action == 'updateOnlineUsersList') {

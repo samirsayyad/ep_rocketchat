@@ -44,7 +44,7 @@ exports.handleMessage = (hook_name, context, callback) => {
   }
 
   if (message.action === 'ep_rocketchat_joinToAllChannels') {
-    joinUserToAllChannels(message);
+    joinUserToAllChannels(message,context.client);
   }
   
   if (message.action === 'ep_rocketchat_updateOnlineUsersList') {

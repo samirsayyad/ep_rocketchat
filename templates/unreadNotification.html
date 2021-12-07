@@ -1,6 +1,6 @@
 <script id="ep_rocketchat_unreadNotification" type="text/html">
     <div class="bubble_notify">
-        <span class="bubble_notify_number">${unread}</span>
+        <span class="bubble_notify_number">${unread > 99 ? 99 : unread}</span>
 
     <div class="bubble_notify_tail">
     </div>

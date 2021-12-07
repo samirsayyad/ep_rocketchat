@@ -13,8 +13,6 @@ exports.removeNewMentionHelper = function removeNewMentionHelper(headerId ){
     var rowContainer=$(`#${headerId}_container`) ;
     if(rowContainer.length && headerId != "general")
         rowContainer.attr("mentioned","false");
-
-
 }
 exports.handleNewMentionButton = function handleNewMentionButton(){
 
