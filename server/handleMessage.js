@@ -5,6 +5,9 @@ const sendMessageToChat = require("./handleMessageMethod/sendMessageToChat").sen
 const updateOnlineUsersList = require("./handleMessageMethod/updateOnlineUsersList").updateOnlineUsersList;
 const joinUserToAllChannels = require("./handleMessageMethod/joinUserToAllChannels").joinUserToAllChannels;
 const transportToFront = require("./handleMessageMethod/transportToFront").transportToFront
+
+const getHistoryNotification = require("./handleMessageMethod/getHistoryNotification").getHistoryNotification;
+
 exports.handleMessage = (hook_name, context, callback) => {
   let isRocketChatMessage = false;
   if (context) {
@@ -39,7 +42,7 @@ exports.handleMessage = (hook_name, context, callback) => {
   if (message.action === 'ep_rocketchat_sendMessageToChat_login') {
     sendMessageToChat(message);
     //join channels flow start here by sending req to frontend for gather up header ids that we use as rooms
-    transportToFront( message.userId , message.padId, "gatherUpHeaderIds"  , null , context.client )
+    transportToFront( message.userId , message.padId, "gatherUpHeaderIds"  , {forwardTo : "ep_rocketchat_joinToAllChannels"} , context.client )
 
   }
 
@@ -51,6 +54,7 @@ exports.handleMessage = (hook_name, context, callback) => {
     updateOnlineUsersList(message,context.client)
   }
   if (message.action === 'ep_profile_modal_ready'){ // sync with ep_profile_modal
+    console.log( " message.data", message.data)
     updateRocketChatUser({
       padId : message.padId,
       userId : message.userId,
@@ -62,6 +66,15 @@ exports.handleMessage = (hook_name, context, callback) => {
       }
     })
 
+    if( message.data.user_status == "1" ){ // it means user is not logged in
+      transportToFront( message.userId , message.padId, "gatherUpHeaderIds"  , {forwardTo : "ep_rocketchat_getHistoryNotification"} , context.client )
+
+    }
+
+  }
+
+  if(message.action === 'ep_rocketchat_getHistoryNotification'){
+    getHistoryNotification(message,context.client)
   }
 
    

@@ -64,5 +64,23 @@ module.exports = {
       } catch (error) {
         return error.response
       }
+    },
+    getChannelsMessageCount : async (config, roomIds)=>{
+      try {
+        const response = await axios.post(`${config.protocol}://${config.host}:${config.port}/api/v1/channels.getChannelsMessageCount`,
+        {
+          "rooms" : roomIds
+        },
+        {
+          headers: {
+            'X-Auth-Token': config.token ,
+            'X-User-Id': config.userId 
+          }
+         }
+        )
+        return response.data
+      } catch (error) {
+        return error.response.body
+      }
     }
 }

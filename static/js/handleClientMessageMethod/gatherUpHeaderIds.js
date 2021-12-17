@@ -1,3 +1,9 @@
+/*
+forwardTo : {
+    ep_rocketchat_joinToAllChannels,
+    ep_rocketchat_getHistoryNotification
+}
+**/
 exports.gatherUpHeaderIds = function gatherUpHeaderIds(payLoad){
     try{
         var headerIds = [];
@@ -13,7 +19,7 @@ exports.gatherUpHeaderIds = function gatherUpHeaderIds(payLoad){
         headerIds.push(`${payLoad.padId}-general-channel`)
         const message = {
             type: 'ep_rocketchat',
-            action: 'ep_rocketchat_joinToAllChannels',
+            action: payLoad.data.forwardTo,
             userId : payLoad.userId,
             padId: payLoad.padId,
             data: {
