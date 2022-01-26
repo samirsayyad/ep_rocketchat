@@ -10,7 +10,12 @@ exports.updateRocketChatIframe = function updateRocketChatIframe(payLoad){
         let userId =payLoad.userId;
 
         room = (room == `${padId}-general-channel` ) ? "general" : room;
-
+        
+        setTimeout(()=>{
+            document.getElementById("ep_rocketchat_iframe").contentWindow.postMessage(
+                {  externalCommand: 'userEtherpadStatus',  path:  `/channel/${payLoad.data.room}?layout=embedded` }, '*')
+        },2000)
+        
         notificationHelper.setUnreadCount(room,0);
         notificationHelper.setNewMessageCount(room,0);
         notificationHelper.setUserUnreadMentionedCount(room,userId,0);

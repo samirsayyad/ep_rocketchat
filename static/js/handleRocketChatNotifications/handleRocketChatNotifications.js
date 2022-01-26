@@ -2,10 +2,10 @@ const notificationsMethod = require("./methods/notificationsMethod").notificatio
 const unreadChangedBySubscription = require("./methods/unreadChangedBySubscription").unreadChangedBySubscription;
 const newMessageMethod = require("./methods/newMessageMethod").newMessageMethod;
 exports.handleRocketChatNotifications = function handleRocketChatNotifications (){
-    window.addEventListener('message', function(e) {
+    bindEvent(window,'message',function(e) {
         const eventName = e.data.eventName;
         const data = e.data.data;
-        //console.log(eventName,data)
+        console.log(e,eventName,data,e.data)
         if(eventName == "notification"){
             notificationsMethod(data)
         }
@@ -16,4 +16,12 @@ exports.handleRocketChatNotifications = function handleRocketChatNotifications (
             unreadChangedBySubscription(data)
         }
     });
+}
+
+function bindEvent(element, eventName, eventHandler) {
+    if (element.addEventListener){
+        element.addEventListener(eventName, eventHandler, false);
+    } else if (element.attachEvent) {
+        element.attachEvent('on' + eventName, eventHandler);
+    }
 }

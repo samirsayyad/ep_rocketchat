@@ -83,4 +83,21 @@ module.exports = {
         return error.response.body
       }
     }
+    ,
+    getChannelMessages : async (config, roomName)=>{
+      try {
+        const response = await axios.get(`${config.protocol}://${config.host}:${config.port}/api/v1/channels.messages?roomName=${roomName}`,
+        {
+          headers: {
+            'X-Auth-Token': config.token ,
+            'X-User-Id': config.userId 
+          }
+         }
+        )
+        return response.data
+      } catch (error) {
+        return error.response.body
+      }
+    },
+
 }

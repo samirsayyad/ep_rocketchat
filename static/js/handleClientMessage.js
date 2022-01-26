@@ -2,9 +2,15 @@ const updateRocketChatIframe = require("./handleClientMessageMethod/updateRocket
 const updateRocketChatIframeOnlineUsers = require("./handleClientMessageMethod/updateRocketChatIframeOnlineUsers").updateRocketChatIframeOnlineUsers;
 const gatherUpHeaderIds = require("./handleClientMessageMethod/gatherUpHeaderIds").gatherUpHeaderIds;
 const updateChannelsMessageCount = require("./handleClientMessageMethod/updateChannelsMessageCount").updateChannelsMessageCount;
+const updateRocketChatAnonymousInterface = require("./handleClientMessageMethod/updateRocketChatAnonymousInterface").updateRocketChatAnonymousInterface;
+
 exports.handleClientMessage_CUSTOM = function handleClientMessage_CUSTOM(hook, context, cb){
     const current_user_id = pad.getUserId();
 
+    if( context.payload.action =='updateRocketChatAnonymousInterface'){
+        if(current_user_id == context.payload.userId )
+        updateRocketChatAnonymousInterface(context.payload)
+    }
     if (context.payload.action == 'updateRocketChatIframe') {
         if(current_user_id == context.payload.userId )
             updateRocketChatIframe(context.payload)

@@ -7,7 +7,7 @@ const joinUserToAllChannels = require("./handleMessageMethod/joinUserToAllChanne
 const transportToFront = require("./handleMessageMethod/transportToFront").transportToFront
 
 const getHistoryNotification = require("./handleMessageMethod/getHistoryNotification").getHistoryNotification;
-
+const handleAnonymousCondition = require("./handleMessageMethod/handleAnonymousCondition").handleAnonymousCondition;
 exports.handleMessage = (hook_name, context, callback) => {
   let isRocketChatMessage = false;
   if (context) {
@@ -37,7 +37,10 @@ exports.handleMessage = (hook_name, context, callback) => {
     updateImageRocketChatUser(message)
   }
   if (message.action === 'ep_rocketchat_handleRooms') {
-    handleRooms(message,context.client)
+    console.log(message.data.userStatus,"message.data.userStatus")
+      handleRooms(message,context.client)
+      if(message.data.userStatus != "login")
+        handleAnonymousCondition(message,context.client)
   }
   if (message.action === 'ep_rocketchat_sendMessageToChat_login') {
     sendMessageToChat(message);

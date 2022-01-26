@@ -16,6 +16,5 @@ exports.aceInitialized = function aceInitialized(){
 
         handleRocketChatNotifications();
         handleNewMentionButton();
-  
         return []
 }

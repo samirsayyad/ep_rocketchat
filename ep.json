@@ -16,6 +16,7 @@
 				"handleMessage": "ep_rocketchat/server/handleMessage",
 				"clientVars": "ep_rocketchat/server/clientVars:clientVars",
 				"eejsBlock_scripts":"ep_rocketchat/index:eejsBlock_scripts",
+				"eejsBlock_styles"   : "ep_rocketchat/index:eejsBlock_styles",
 				"padCreate":"ep_rocketchat/server/padCreate"
 			}
 		}
