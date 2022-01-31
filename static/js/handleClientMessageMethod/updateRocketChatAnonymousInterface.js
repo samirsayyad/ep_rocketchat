@@ -1,18 +1,5 @@
+const __LOGOUT= '1';
 exports.updateRocketChatAnonymousInterface = function updateRocketChatAnonymousInterface(payLoad){
-
-
-    // $("#ep_rocketchat_iframe").css({"display":"none"})
-
-    // const chatHtml = $("#ep_rocketchat_anonymousInterface").tmpl()
- 
-
-
-    // $('#ep_rocketchat_container').append(chatHtml);
-
-
-
-    //setTimeout(()=>{
-        document.getElementById("ep_rocketchat_iframe").contentWindow.postMessage(
-            {  externalCommand: 'userEtherpadStatus', status : "loginNeeded"}, '*')
-    //},2000)
+    document.getElementById("ep_rocketchat_iframe").contentWindow.postMessage(
+        {  externalCommand: 'userEtherpadStatus', status : clientVars.ep_profile_modal.user_status === __LOGOUT ? "loginNeeded" : "LoggedIn"}, '*')
 }

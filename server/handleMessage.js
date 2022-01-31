@@ -37,7 +37,6 @@ exports.handleMessage = (hook_name, context, callback) => {
     updateImageRocketChatUser(message)
   }
   if (message.action === 'ep_rocketchat_handleRooms') {
-    console.log(message.data.userStatus,"message.data.userStatus")
       handleRooms(message,context.client)
       if(message.data.userStatus != "login")
         handleAnonymousCondition(message,context.client)
@@ -57,7 +56,6 @@ exports.handleMessage = (hook_name, context, callback) => {
     updateOnlineUsersList(message,context.client)
   }
   if (message.action === 'ep_profile_modal_ready'){ // sync with ep_profile_modal
-    console.log( " message.data", message.data)
     updateRocketChatUser({
       padId : message.padId,
       userId : message.userId,

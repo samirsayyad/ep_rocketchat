@@ -46,6 +46,8 @@ exports.handleClientMessage_CUSTOM = function handleClientMessage_CUSTOM(hook, c
                 data: context.payload,
               };
             pad.collabClient.sendMessage(message);
+            updateRocketChatAnonymousInterface(context.payload)
+
         }
     }
 
@@ -63,6 +65,8 @@ exports.handleClientMessage_CUSTOM = function handleClientMessage_CUSTOM(hook, c
                 },
               };
             pad.collabClient.sendMessage(message);
+            updateRocketChatAnonymousInterface(context.payload)
+
         }
     }
 
