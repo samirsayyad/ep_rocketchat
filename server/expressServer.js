@@ -9,7 +9,7 @@ const rocketchatAuthenticator = require("./helpers/rocketchatAuthenticator");
 
 exports.expressCreateServer = (hookName, context) => {
     context.app.get('/static/pluginfw/ep_rocketchat/rocket_chat_auth_get/:userId', async(req, res) => {
-        res.set('Access-Control-Allow-Origin', `https://${config.host}` )
+        res.set('Access-Control-Allow-Origin', `${config.protocol}://${config.host}` )
         res.set('Access-Control-Allow-Credentials', 'true');
         const etherUserId = req.params.userId || false;
         if(!etherUserId){
@@ -23,7 +23,7 @@ exports.expressCreateServer = (hookName, context) => {
 
       })
     context.app.get('/static/pluginfw/ep_rocketchat/rocket_chat_iframe/:userId', async(req, res) => {
-        res.set('Access-Control-Allow-Origin', `https://${config.host}` )
+        res.set('Access-Control-Allow-Origin', `${config.protocol}://${config.host}` )
         res.set('Access-Control-Allow-Credentials', 'true');
         const etherUserId = req.params.userId || false;
         if(!etherUserId){
@@ -56,7 +56,7 @@ exports.expressCreateServer = (hookName, context) => {
             var done = ()=>{
     
             }
-            var rocketChatClient = new rocketChatClientInstance("https",config.host,config.port,config.userId,config.token,done);
+            var rocketChatClient = new rocketChatClientInstance(config.protocol,config.host,config.port,config.userId,config.token,done);
             try {
                 var login =await rocketChatClient.users.login({user : username, password: `${username}@docs.plus${config.userId}`})
                 res.status(201).json(login)

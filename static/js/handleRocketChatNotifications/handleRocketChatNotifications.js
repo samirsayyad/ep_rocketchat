@@ -15,6 +15,7 @@ exports.handleRocketChatNotifications = function handleRocketChatNotifications (
         if(eventName=="unread-changed-by-subscription"){
             unreadChangedBySubscription(data)
         }
+        
     });
 }
 

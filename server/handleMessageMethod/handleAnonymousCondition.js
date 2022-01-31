@@ -9,8 +9,8 @@ exports.handleAnonymousCondition = async function handleAnonymousCondition(messa
     const data = message.data;
     try{
         const headerId = data.headerId.toLowerCase()
-        const channelMessages = await getChannelMessages(config,headerId)
-        console.log(JSON.stringify(channelMessages));
+        // const channelMessages = await getChannelMessages(config,headerId)
+        // console.log(JSON.stringify(channelMessages));
 
         const msg = {
             type: 'COLLABROOM',
