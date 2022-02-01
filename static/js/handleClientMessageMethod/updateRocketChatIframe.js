@@ -3,20 +3,20 @@ const notificationHelper =  require("../handleRocketChatNotifications/methods/he
 exports.updateRocketChatIframe = function updateRocketChatIframe(payLoad){
     try{
  
-        $("#ep_rocketchat_iframe").animate({
-            opacity: 0
-          }, {
-            duration: 500,
-            complete: function () {
-              document.getElementById("ep_rocketchat_iframe").contentWindow.postMessage(
-                    {  externalCommand: 'go',  path:  `/channel/${payLoad.data.room}?layout=embedded` }, '*')
-              $("#chat-loading").css({"opacity":1})
+        // $("#ep_rocketchat_iframe").animate({
+        //     opacity: 0
+        //   }, {
+        //     duration: 500,
+        //     complete: function () {
 
-              $("#chat-loading").css({"display":"flex"})
-            }
-        });
+        //       $("#chat-loading").css({"opacity":1})
 
+        //       $("#chat-loading").css({"display":"flex"})
+        //     }
+        // });
 
+        document.getElementById("ep_rocketchat_iframe").contentWindow.postMessage(
+            {  externalCommand: 'go',  path:  `/channel/${payLoad.data.room}?layout=embedded` }, '*')
 
         //$("#ep_rocketchat_iframe").attr({"src": `${payLoad.data.rocketChatBaseUrl}/channel/${payLoad.data.room}?layout=embedded`})
 
