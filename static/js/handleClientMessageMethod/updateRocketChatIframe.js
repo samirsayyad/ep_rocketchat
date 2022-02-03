@@ -14,9 +14,18 @@ exports.updateRocketChatIframe = function updateRocketChatIframe(payLoad){
         //       $("#chat-loading").css({"display":"flex"})
         //     }
         // });
+        console.log(clientVars.ep_rocketchat,clientVars.ep_rocketchat.token)
+
+        // document.getElementById("ep_rocketchat_iframe").contentWindow.postMessage(
+        //     {  externalCommand: 'logout',  loginToken: clientVars.ep_rocketchat.token }, '*')
+        // document.getElementById("ep_rocketchat_iframe").contentWindow.postMessage(
+        //     {  externalCommand: 'login-with-token',  loginToken: clientVars.ep_rocketchat.token }, '*')
 
         document.getElementById("ep_rocketchat_iframe").contentWindow.postMessage(
             {  externalCommand: 'go',  path:  `/channel/${payLoad.data.room}?layout=embedded` }, '*')
+
+
+
 
         //$("#ep_rocketchat_iframe").attr({"src": `${payLoad.data.rocketChatBaseUrl}/channel/${payLoad.data.room}?layout=embedded`})
 

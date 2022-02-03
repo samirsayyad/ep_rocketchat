@@ -12,6 +12,7 @@ exports.expressCreateServer = (hookName, context) => {
         res.set('Access-Control-Allow-Origin', `${config.protocol}://${config.host}` )
         res.set('Access-Control-Allow-Credentials', 'true');
         const etherUserId = req.params.userId || false;
+        console.log(etherUserId);
         if(!etherUserId){
             res.send({ loginToken: false })
             return;
@@ -26,6 +27,7 @@ exports.expressCreateServer = (hookName, context) => {
         res.set('Access-Control-Allow-Origin', `${config.protocol}://${config.host}` )
         res.set('Access-Control-Allow-Credentials', 'true');
         const etherUserId = req.params.userId || false;
+        console.log(etherUserId);
         if(!etherUserId){
             res.send(``)
             return;
