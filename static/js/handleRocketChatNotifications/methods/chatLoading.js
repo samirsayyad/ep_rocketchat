@@ -1,13 +1,13 @@
 exports.chatLoading = function chatLoading (){
-    $("#ep_rocketchat_iframe").animate({
-        opacity: 0
-      }, {
-        duration: 200,
-        complete: function () {
+	$('#ep_rocketchat_iframe').animate({
+		opacity: 0
+	}, {
+		duration: 200,
+		complete: function () {
 
-          $("#chat-loading").css({"opacity":1})
+			$('#chat-loading').css({'opacity':1});
 
-          $("#chat-loading").css({"display":"flex"})
-        }
-    });
-}
+			$('#chat-loading').css({'display':'flex'});
+		}
+	});
+};

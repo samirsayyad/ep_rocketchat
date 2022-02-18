@@ -14,11 +14,30 @@
     "mocha": "^8.4.0",
     "should": "^13.2.3"
   },
-  "devDependencies": {},
   "scripts": {
     "test": " userId=xxx token=xxx host=xxx port=xxx protocol=https mocha",
     "test-and-coverage": "istanbul cover node_modules/mocha/bin/_mocha --report lcovonly -- --colors test/",
-    "start": "node server.js"
+    "start": "node server.js",
+    "lint": "eslint --fix .",
+    "lint:dry": "eslint --fix-dry-run ."
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": "etherpad/plugin",
+    "ignorePatterns": [],
+    "globals": {
+      "$": true,
+      "documentReady": true,
+      "contributors": true,
+      "profileForm": true,
+      "usersProfileSection": true,
+      "postAceInit": true,
+      "aceInitialized": true,
+      "handleClientMessage": true,
+      "helper": true,
+      "shared": true,
+      "syncData": true
+    }
   },
   "repository": {
     "type": "git",
@@ -38,5 +57,13 @@
   "bugs": {
     "url": "https://github.com/samirsayyad/ep_rocketchat/issues"
   },
-  "homepage": "https://github.com/samirsayyad/ep_rocketchat#readme"
+  "homepage": "https://github.com/samirsayyad/ep_rocketchat#readme",
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-etherpad": "^1.0.23",
+    "eslint-plugin-mocha": "^8.0.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prefer-arrow": "^1.2.2",
+    "eslint-plugin-promise": "^4.2.1"
+  }
 }
