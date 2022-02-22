@@ -1,4 +1,3 @@
-const settings = require('ep_etherpad-lite/node/utils/Settings');
 const config = require('./helpers/configs');
 const rocketchatAuthenticator = require('./helpers/rocketchatAuthenticator');
 

@@ -3,8 +3,6 @@ const handleRocketChatNotifications = require('./handleRocketChatNotifications/h
 const handleNewMentionButton = require('./handleRocketChatNotifications/methods/helper/newMentionHelper').handleNewMentionButton;
 
 exports.aceInitialized = function aceInitialized(){
-	const padId = clientVars.padId;
-	const userId = pad.getUserId();
 	$('#chaticon').hide();
 	$('#options-stickychat').prop('checked', false);
 	padcookie.setPref('chatAlwaysVisible', false);

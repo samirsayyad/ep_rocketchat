@@ -27,13 +27,13 @@ exports.unreadChangedBySubscription = function unreadChangedBySubscription (data
                             parseInt( notificationHelper.getNewMessageCount(headerId) ) || false;
 	var unreadMentionedCount = parseInt(notificationHelper.getUserUnreadMentionedCount(headerId,userId)) || 0;
 
-
+	var unreadNotificationTemplate;
 	if(unreadMentionedCount == 0){
-		var unreadNotificationTemplate = $('#ep_rocketchat_unreadNotification').tmpl({unread : historyCount || lastUnreadCount || data.unread});
+		unreadNotificationTemplate = $('#ep_rocketchat_unreadNotification').tmpl({unread : historyCount || lastUnreadCount || data.unread});
 		removeNewMentionHelper(notificationElement.attr('data-headerid'));
     
 	}else{
-		var unreadNotificationTemplate = $('#ep_rocketchat_mentionNotification').tmpl({unread : unreadMentionedCount});
+		unreadNotificationTemplate = $('#ep_rocketchat_mentionNotification').tmpl({unread : unreadMentionedCount});
 		newMention(notificationElement.attr('data-headerid')); // because of Rocketchat make to lower case need to access real header id via notificationElement.attr("data-headerid")
 	}
 	notificationElement.html(unreadNotificationTemplate);

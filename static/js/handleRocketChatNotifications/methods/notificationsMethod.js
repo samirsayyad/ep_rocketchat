@@ -22,12 +22,13 @@ exports.notificationsMethod = function notificationsMethod (data){
 
 
 		// check mentioned this user
+		var unreadNotificationTemplate;
 		var unreadMentionedCount = parseInt(  notificationHelper.getUserUnreadMentionedCount(headerId,userId) || 0 );
 		if ( [`@${userId}`,'@all'].includes(data.notification.payload.message.msg) ){ // it means mentioned by someone or generally
             
 			unreadMentionedCount++; 
 			notificationHelper.setUserUnreadMentionedCount(headerId,userId,unreadMentionedCount);
-			var unreadNotificationTemplate = $('#ep_rocketchat_mentionNotification').tmpl({unread : unreadMentionedCount });
+			unreadNotificationTemplate = $('#ep_rocketchat_mentionNotification').tmpl({unread : unreadMentionedCount });
 			notificationElement.html(unreadNotificationTemplate);
 			newMention(notificationElement.attr('data-headerid')); // because of Rocketchat make to lower case need to access real header id via notificationElement.attr("data-headerid")
 		}else{
@@ -45,7 +46,7 @@ exports.notificationsMethod = function notificationsMethod (data){
 			}
     
 
-			var unreadNotificationTemplate = $('#ep_rocketchat_unreadNotification').tmpl({unread : unReadCount + unreadMentionedCount});
+			unreadNotificationTemplate = $('#ep_rocketchat_unreadNotification').tmpl({unread : unReadCount + unreadMentionedCount});
 			notificationElement.html(unreadNotificationTemplate);    
 			removeNewMentionHelper(notificationElement.attr('data-headerid'));
 

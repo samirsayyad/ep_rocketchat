@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 const pageQueryMapping = require('./lists/pageQueryMapper');
 
 class IM {

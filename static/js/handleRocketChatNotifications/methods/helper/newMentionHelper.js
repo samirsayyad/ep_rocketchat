@@ -100,10 +100,11 @@ exports.handleNewMentionButton = function handleNewMentionButton(){
 };
 
 function checkLastElement(containerId){
+	var targetElement;
 	if(typeof containerId != String)
-		var targetElement = $(containerId);
+		targetElement = $(containerId);
 	else
-		var targetElement = $(`#${containerId}`).nextAll('[mentioned=true]').last();
+		targetElement = $(`#${containerId}`).nextAll('[mentioned=true]').last();
         
 	if(targetElement.length){
 		var elementStatus = checkInView(targetElement);

@@ -6,8 +6,6 @@ function rocketChatClientInstance (protocol, host, port, userId, token, onConnec
 	if (arguments.length === 1) {
 		host = arguments[0].host || 'localhost';
 		port = arguments[0].port || 3000;
-		username = arguments[0].userId || '';
-		password = arguments[0].token || '';
 		onConnected = arguments[0].onConnected;
 		basepath = (arguments[0].basepath || '').replace(/^\/+|\/+$/g, '');
 		protocol = arguments[0].protocol || 'http';
@@ -35,7 +33,7 @@ function rocketChatClientInstance (protocol, host, port, userId, token, onConnec
 		restClientObj.setHeader('X-Auth-Token', token);
 		restClientObj.setHeader('X-User-Id', userId);
 
-		this.authentication.me(function (err, body) {
+		this.authentication.me(function (err) {
 			if (err) {
 				return onConnected(err, null);
 			}

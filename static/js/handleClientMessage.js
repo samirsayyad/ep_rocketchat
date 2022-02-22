@@ -4,7 +4,7 @@ const gatherUpHeaderIds = require('./handleClientMessageMethod/gatherUpHeaderIds
 const updateChannelsMessageCount = require('./handleClientMessageMethod/updateChannelsMessageCount').updateChannelsMessageCount;
 const updateRocketChatAnonymousInterface = require('./handleClientMessageMethod/updateRocketChatAnonymousInterface').updateRocketChatAnonymousInterface;
 
-exports.handleClientMessage_CUSTOM = function handleClientMessage_CUSTOM(hook, context, cb){
+exports.handleClientMessage_CUSTOM = function handleClientMessage_CUSTOM(_hook, context){
 	const current_user_id = pad.getUserId();
 
 	if( context.payload.action =='updateRocketChatAnonymousInterface'){
@@ -92,7 +92,7 @@ exports.handleClientMessage_CUSTOM = function handleClientMessage_CUSTOM(hook, c
 	return[];
 };
 
-exports.handleClientMessage_USER_NEWINFO = function handleClientMessage_USER_NEWINFO(hook, context, cb){
+exports.handleClientMessage_USER_NEWINFO = function handleClientMessage_USER_NEWINFO(){
 	const current_user_id = pad.getUserId();
 	const lastActiveHeader = localStorage.getItem('lastActiveHeader');
 
@@ -110,7 +110,7 @@ exports.handleClientMessage_USER_NEWINFO = function handleClientMessage_USER_NEW
 };
 
 
-exports.handleClientMessage_USER_LEAVE = function handleClientMessage_USER_LEAVE(hook, context, cb){
+exports.handleClientMessage_USER_LEAVE = function handleClientMessage_USER_LEAVE(){
 	const current_user_id = pad.getUserId();
 	const lastActiveHeader = localStorage.getItem('lastActiveHeader');
 
