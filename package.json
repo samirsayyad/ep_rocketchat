@@ -18,22 +18,8 @@
     "test": " userId=xxx token=xxx host=xxx port=xxx protocol=https mocha",
     "test-and-coverage": "istanbul cover node_modules/mocha/bin/_mocha --report lcovonly -- --colors test/",
     "start": "node server.js",
-    "lint": "eslint --fix .;exit 0",
+    "lint:fix": "eslint --fix .;",
     "lint:dry": "eslint --fix-dry-run ."
-  },
-  "eslintConfig": {
-    "root": true,
-    "extends": "etherpad/plugin",
-    "ignorePatterns": [],
-    "globals": {
-      "$": true,
-			"documentReady": true,
-			"pad": true,
-			"it":true,
-			"describe":true,
-			"before":true,
-			"process":true
-    }
   },
   "repository": {
     "type": "git",
@@ -55,11 +41,8 @@
   },
   "homepage": "https://github.com/samirsayyad/ep_rocketchat#readme",
   "devDependencies": {
-    "eslint": "^7.32.0",
-    "eslint-config-etherpad": "^1.0.23",
-    "eslint-plugin-mocha": "^8.0.0",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-prefer-arrow": "^1.2.2",
-    "eslint-plugin-promise": "^4.2.1"
+    "eslint": "^8.10.0",
+    "eslint-config-etherpad": "^3.0.3",
+    "typescript": "^4.6.2"
   }
 }
