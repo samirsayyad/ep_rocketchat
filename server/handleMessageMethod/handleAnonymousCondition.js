@@ -3,7 +3,7 @@
 const config = require('../helpers/configs');
 const sharedTransmitter = require('../helpers/sharedTransmitter');
 
-exports.handleAnonymousCondition = async function handleAnonymousCondition(message, socketClient) {
+exports.handleAnonymousCondition = async (message, socketClient) => {
   const padId = message.padId;
   const userId = message.userId;
   const data = message.data;

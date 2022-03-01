@@ -1,6 +1,5 @@
 'use strict';
 
-module.exports = Realtime;
 
 function Realtime(client) {
   this.client = client;
@@ -13,3 +12,5 @@ Realtime.prototype.joinChannel = function (roomId, callback) {
 Realtime.prototype.leaveChannel = function (roomId, callback) {
   this.client.request('method', 'leaveRoom', [roomId], callback);
 };
+
+module.exports = Realtime;

@@ -27,7 +27,7 @@ exports.joinUserToAllChannels = async (message, socketClient) => {
 
     const userGotHistoryStatus = await db.get(`${config.dbRocketchatKey}:ep_rocketchat_gotHistory_${padId}_${userId}`);
 
-    if (!channelsResults || !channelsResults.channels.length || userGotHistoryStatus == 'Y') return;
+    if (!channelsResults || !channelsResults.channels.length || userGotHistoryStatus === 'Y') return;
 
     channelsResults.channels.forEach((element) => {
       channelsMessageCount.push({

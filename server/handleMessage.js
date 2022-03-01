@@ -10,7 +10,7 @@ const transportToFront = require('./handleMessageMethod/transportToFront').trans
 
 const getHistoryNotification = require('./handleMessageMethod/getHistoryNotification').getHistoryNotification;
 const handleAnonymousCondition = require('./handleMessageMethod/handleAnonymousCondition').handleAnonymousCondition;
-exports.handleMessage = (hook_name, context) => {
+exports.handleMessage = (hookName, context) => {
   let isRocketChatMessage = false;
   if (context) {
     if (context.message && context.message) {
@@ -40,7 +40,7 @@ exports.handleMessage = (hook_name, context) => {
   }
   if (message.action === 'ep_rocketchat_handleRooms') {
     handleRooms(message, context.client);
-    if (message.data.userStatus != 'login') handleAnonymousCondition(message, context.client);
+    if (message.data.userStatus !== 'login') handleAnonymousCondition(message, context.client);
   }
   if (message.action === 'ep_rocketchat_sendMessageToChat_login') {
     sendMessageToChat(message);
@@ -67,7 +67,7 @@ exports.handleMessage = (hook_name, context) => {
       },
     });
 
-    if (message.data.user_status == '1') { // it means user is not logged in
+    if (message.data.user_status === '1') { // it means user is not logged in
       transportToFront(message.userId, message.padId, 'gatherUpHeaderIds', {forwardTo: 'ep_rocketchat_getHistoryNotification'}, context.client);
     }
   }

@@ -1,3 +1,5 @@
+'use strict';
+
 class Notify {
   constructor(client) {
     this.client = client;

@@ -1,8 +1,10 @@
+// eslint-disable-next-line eslint-comments/disable-enable-pair
+/* eslint-disable prefer-rest-params */
 'use strict';
 
 const restClient = require('./restClient');
 
-function rocketChatClientInstance(protocol, host, port, userId, token, onConnected) {
+const rocketChatClientInstance = (protocol, host, port, userId, token, onConnected) => {
   let basepath = '';
 
   if (arguments.length === 1) {
@@ -13,7 +15,7 @@ function rocketChatClientInstance(protocol, host, port, userId, token, onConnect
     protocol = arguments[0].protocol || 'http';
   }
 
-  onConnected = onConnected || function () {};
+  // onConnected = onConnected || () => {}
   const restClientObj = new restClient.RestClient(protocol, host, port, `${basepath}/api/v1/`);
   const wsClient = new restClient.WsClient('ws', host, port, `${basepath}/websocket`);
   this.authentication = new (require('../api/authentication'))(restClientObj);
@@ -44,5 +46,5 @@ function rocketChatClientInstance(protocol, host, port, userId, token, onConnect
   } else {
     onConnected(null, null);
   }
-}
+};
 exports.rocketChatClientInstance = rocketChatClientInstance;

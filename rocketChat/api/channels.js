@@ -1,3 +1,5 @@
+/* eslint-disable eslint-comments/disable-enable-pair */
+/* eslint-disable prefer-rest-params */
 'use strict';
 /* eslint prefer-rest-params: "error"*/
 

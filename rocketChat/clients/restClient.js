@@ -41,9 +41,7 @@ class WsClient extends Client {
     const wsOpts = proxyURL ? {agent: new HttpsProxyAgent(proxyURL)} : null;
     const ddpOptions = {
       endpoint: this.makeUri(),
-      SocketConstructor(endpoint) {
-        return new WebSocket(endpoint, wsOpts);
-      },
+      SocketConstructor: (endpoint) => new WebSocket(endpoint, wsOpts),
     };
     this.ddp = new DDP(ddpOptions);
   }

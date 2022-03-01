@@ -4,7 +4,7 @@ const getChannelsMessageCount = require('../../rocketChat/api/separated').getCha
 const config = require('../helpers/configs');
 const sharedTransmitter = require('../helpers/sharedTransmitter');
 
-exports.getHistoryNotification = async function getHistoryNotification(message, socketClient) {
+exports.getHistoryNotification = async (message, socketClient) => {
   const padId = message.padId;
   const userId = message.userId;
   const data = message.data;

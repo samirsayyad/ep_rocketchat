@@ -1,6 +1,5 @@
 'use strict';
 
-module.exports = Miscellaneous;
 
 function Miscellaneous(client) {
   this.client = client;
@@ -9,3 +8,5 @@ function Miscellaneous(client) {
 Miscellaneous.prototype.info = function (callback) {
   this.client.request('GET', 'info', null, callback);
 };
+
+module.exports = Miscellaneous;
