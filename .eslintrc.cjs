@@ -13,4 +13,11 @@ module.exports = {
   },
   root: true,
   extends: 'etherpad',
+  rules: {
+    'max-len': 0,
+  },
+  globals: {
+    clientVars: true,
+    pad: true,
+  },
 };

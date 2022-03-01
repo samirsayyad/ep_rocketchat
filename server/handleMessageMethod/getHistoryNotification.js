@@ -1,38 +1,40 @@
+'use strict';
+
 const getChannelsMessageCount = require('../../rocketChat/api/separated').getChannelsMessageCount;
 const config = require('../helpers/configs');
 const sharedTransmitter = require('../helpers/sharedTransmitter');
 
-exports.getHistoryNotification = async function getHistoryNotification(message,socketClient){
-	const padId = message.padId;
-	const userId = message.userId;
-	const data = message.data;
-	var channelsMessageCount=[];
+exports.getHistoryNotification = async function getHistoryNotification(message, socketClient) {
+  const padId = message.padId;
+  const userId = message.userId;
+  const data = message.data;
+  const channelsMessageCount = [];
 
-	const channelsResults = await getChannelsMessageCount(config, data.headerIds );
+  const channelsResults = await getChannelsMessageCount(config, data.headerIds);
 
-	if(!channelsResults || !channelsResults.channels.length) return ;
-        
-	channelsResults.channels.forEach(element => {
-		channelsMessageCount.push({
-			name : element.name,
-			fname : element.fname,
-			count : element.msgs,
-		});
-	});
+  if (!channelsResults || !channelsResults.channels.length) return;
 
-	const msg = {
-		type: 'COLLABROOM',
-		data: {
-			type: 'CUSTOM',
-			payload: {
-				padId: padId,
-				userId: userId,
-				action: 'updateChannelsMessageCount',
-				data: {
-					channelsMessageCount : channelsMessageCount
-				},
-			},
-		},
-	};
-	sharedTransmitter.sendToUser(msg,socketClient);
+  channelsResults.channels.forEach((element) => {
+    channelsMessageCount.push({
+      name: element.name,
+      fname: element.fname,
+      count: element.msgs,
+    });
+  });
+
+  const msg = {
+    type: 'COLLABROOM',
+    data: {
+      type: 'CUSTOM',
+      payload: {
+        padId,
+        userId,
+        action: 'updateChannelsMessageCount',
+        data: {
+          channelsMessageCount,
+        },
+      },
+    },
+  };
+  sharedTransmitter.sendToUser(msg, socketClient);
 };
