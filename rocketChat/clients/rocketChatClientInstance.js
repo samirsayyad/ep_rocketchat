@@ -46,5 +46,6 @@ const rocketChatClientInstance = (protocol, host, port, userId, token, onConnect
   } else {
     onConnected(null, null);
   }
+  return this;
 };
 exports.rocketChatClientInstance = rocketChatClientInstance;
