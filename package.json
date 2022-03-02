@@ -7,11 +7,11 @@
     "test": "test"
   },
   "dependencies": {
-    "axios": "^0.21.1",
+    "axios": "^0.26.0",
     "ddp": "^0.12.1",
     "https-proxy-agent": "^5.0.0",
     "istanbul": "^0.4.5",
-    "mocha": "^8.4.0",
+    "mocha": "^9.2.1",
     "should": "^13.2.3"
   },
   "scripts": {
@@ -42,7 +42,7 @@
   "homepage": "https://github.com/samirsayyad/ep_rocketchat#readme",
   "devDependencies": {
     "eslint": "^8.10.0",
-    "eslint-config-etherpad": "^3.0.3",
+    "eslint-config-etherpad": "^3.0.4",
     "typescript": "^4.6.2"
   }
 }
