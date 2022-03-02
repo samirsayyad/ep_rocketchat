@@ -3,7 +3,7 @@
 const config = require('../helpers/configs');
 const loginApi = require('../../rocketChat/api/separated').login;
 const db = require('ep_etherpad-lite/node/db/DB');
-const RocketChatClientInstance = require('../../rocketChat/clients/rocketChatClientInstance').rocketChatClientInstance;
+const rocketChatClientInstance = require('../../rocketChat/clients/rocketChatClientInstance').rocketChatClientInstance;
 
 const getUserByEtherUserId = async (etherpadUserId) => await db.get(`ep_rocketchat_users_${config.dbRocketchatKey}:${etherpadUserId}`);
 
@@ -69,7 +69,7 @@ const register = async (etherpadUserId, randomUsername) => {
       roles: ['user'],
     };
 
-    const rocketChatClient = new RocketChatClientInstance(config.protocol, config.host, config.port, config.userId, config.token, () => {});
+    const rocketChatClient = rocketChatClientInstance(config.protocol, config.host, config.port, config.userId, config.token, () => {});
     const newUser = await rocketChatClient.users.create(userToAdd);
     saveCredential(etherpadUserId, newUser.user._id, null, {username: userToAdd.username, password: userToAdd.password});
     return {userId: newUser.user._id, info: userToAdd};

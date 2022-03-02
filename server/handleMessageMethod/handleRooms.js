@@ -1,6 +1,6 @@
 'use strict';
 
-const RocketChatClientInstance = require('../../rocketChat/clients/rocketChatClientInstance').rocketChatClientInstance;
+const rocketChatClientInstance = require('../../rocketChat/clients/rocketChatClientInstance').rocketChatClientInstance;
 const db = require('ep_etherpad-lite/node/db/DB');
 const sharedTransmitter = require('../helpers/sharedTransmitter');
 const getOnlineUsersApi = require('../../rocketChat/api/separated').getChannelOnlineUsers;
@@ -48,7 +48,7 @@ exports.handleRooms = async (message, socketClient) => {
       sendToUpdateRocketChatIframe(padId, userId, data.headerId, rocketchatUserAuth, [], config, socketClient);
       return;
     }
-    const rocketChatClient = new RocketChatClientInstance(config.protocol, config.host, config.port, config.userId, config.token, () => {});
+    const rocketChatClient = rocketChatClientInstance(config.protocol, config.host, config.port, config.userId, config.token, () => {});
     let rocketChatRoom = await db.get(`${config.dbRocketchatKey}:ep_rocketchat:rooms:${data.headerId}`) || false;
     if (rocketChatRoom === false) {
       try {
@@ -59,7 +59,7 @@ exports.handleRooms = async (message, socketClient) => {
         rocketChatRoom = roomResult;
       } catch (e) {
         console.log(e.message, 'channels.create');
-        const rocketChatClient = new RocketChatClientInstance(config.protocol, config.host, config.port, config.userId, config.token, () => {});
+        const rocketChatClient = rocketChatClientInstance(config.protocol, config.host, config.port, config.userId, config.token, () => {});
         const roomInfoResult = await rocketChatClient.channels.info(data.headerId.toLowerCase());
         db.set(`${config.dbRocketchatKey}:ep_rocketchat:rooms:${data.headerId}`, roomInfoResult);
         rocketChatRoom = roomInfoResult;

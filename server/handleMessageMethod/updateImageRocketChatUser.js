@@ -1,6 +1,6 @@
 'use strict';
 
-const RocketChatClientInstance = require('../../rocketChat/clients/rocketChatClientInstance').rocketChatClientInstance;
+const rocketChatClientInstance = require('../../rocketChat/clients/rocketChatClientInstance').rocketChatClientInstance;
 const config = require('../helpers/configs');
 
 const rocketchatAuthenticator = require('../helpers/rocketchatAuthenticator');
@@ -11,7 +11,7 @@ exports.updateImageRocketChatUser = async (message) => {
   try {
     const rocketchatUserAuth = await rocketchatAuthenticator.runValidator(userId);
     if (rocketchatUserAuth) {
-      const rocketChatClient = new RocketChatClientInstance(config.protocol, config.host, config.port, config.userId, config.token, () => {});
+      const rocketChatClient = rocketChatClientInstance(config.protocol, config.host, config.port, config.userId, config.token, () => {});
       await rocketChatClient.users.setAvatar(rocketchatUserAuth.rocketchatUserId, `${config.baseUrl}/static/getUserProfileImage/${userId}/${padId}?t=${new Date().getTime()}`);
     }
   } catch (e) {

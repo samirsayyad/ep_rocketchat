@@ -1,6 +1,6 @@
 'use strict';
 
-const RocketChatClientInstance = require('../rocketChat/clients/rocketChatClientInstance').rocketChatClientInstance;
+const rocketChatClientInstance = require('../rocketChat/clients/rocketChatClientInstance').rocketChatClientInstance;
 const config = require('./helpers/configs');
 const rocketchatAuthenticator = require('./helpers/rocketchatAuthenticator');
 
@@ -51,7 +51,7 @@ exports.expressCreateServer = (hookName, context) => {
     const done = () => {
 
     };
-    const rocketChatClient = new RocketChatClientInstance(config.protocol, config.host, config.port, config.userId, config.token, done);
+    const rocketChatClient = rocketChatClientInstance(config.protocol, config.host, config.port, config.userId, config.token, done);
     try {
       const login = await rocketChatClient.users.login({user: username, password: `${username}@docs.plus${config.userId}`});
       res.status(201).json(login);
