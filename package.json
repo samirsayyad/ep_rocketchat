@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "axios": "^0.26.0",
+    "bluebird": "^3.7.2",
     "ddp": "^0.12.1",
     "https-proxy-agent": "^5.0.0",
     "istanbul": "^0.4.5",
