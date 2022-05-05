@@ -3,6 +3,7 @@
 const newMention = require('./helper/newMentionHelper').newMentionHelper;
 const removeNewMentionHelper = require('./helper/newMentionHelper').removeNewMentionHelper;
 const notificationHelper = require('./helper/notificationHelper');
+const pushMethod = require('./pushMethod');
 
 exports.notificationsMethod = (data) => {
   if (!data.fromOpenedRoom) { // must be false in order to notify user
@@ -11,7 +12,7 @@ exports.notificationsMethod = (data) => {
 
     const headerId = (data.notification.payload.name === `${padId}-general-channel`) ? 'general' : data.notification.payload.name;
     const lastActiveHeader = notificationHelper.getLastActiveHeader() || '';
-
+    pushMethod({title: 'New message', body: 'You have new message.'});
     if (lastActiveHeader.toLowerCase() === headerId) return;
 
     let notificationElement = $(`#${headerId}_notification`);

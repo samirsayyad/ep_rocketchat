@@ -3,11 +3,15 @@
 const newMention = require('./helper/newMentionHelper').newMentionHelper;
 const removeNewMentionHelper = require('./helper/newMentionHelper').removeNewMentionHelper;
 const notificationHelper = require('./helper/notificationHelper');
+const pushMethod = require('./pushMethod');
+
 exports.newMessageMethod = (data) => {
   const padId = pad.getPadId();
   const roomId = data.name;
   const userId = pad.getUserId();
   const headerId = (roomId === `${padId}-general-channel`) ? 'general' : roomId;
+
+  pushMethod({title: 'New message', body: 'You have new message.'});
 
   const lastActiveHeader = notificationHelper.getLastActiveHeader() || '';
   if (lastActiveHeader.toLowerCase() === headerId) return;
