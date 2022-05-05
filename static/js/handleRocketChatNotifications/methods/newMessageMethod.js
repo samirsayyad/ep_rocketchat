@@ -3,7 +3,7 @@
 const newMention = require('./helper/newMentionHelper').newMentionHelper;
 const removeNewMentionHelper = require('./helper/newMentionHelper').removeNewMentionHelper;
 const notificationHelper = require('./helper/notificationHelper');
-const pushMethod = require('./pushMethod');
+const pushMethod = require('./pushMethod').pushMethod;
 
 exports.newMessageMethod = (data) => {
   const padId = pad.getPadId();

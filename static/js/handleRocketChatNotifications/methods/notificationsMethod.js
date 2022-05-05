@@ -3,7 +3,7 @@
 const newMention = require('./helper/newMentionHelper').newMentionHelper;
 const removeNewMentionHelper = require('./helper/newMentionHelper').removeNewMentionHelper;
 const notificationHelper = require('./helper/notificationHelper');
-const pushMethod = require('./pushMethod');
+const pushMethod = require('./pushMethod').pushMethod;
 
 exports.notificationsMethod = (data) => {
   if (!data.fromOpenedRoom) { // must be false in order to notify user
