@@ -12,7 +12,7 @@ exports.notificationsMethod = (data) => {
 
     const headerId = (data.notification.payload.name === `${padId}-general-channel`) ? 'general' : data.notification.payload.name;
     const lastActiveHeader = notificationHelper.getLastActiveHeader() || '';
-    pushMethod({title: 'New message', body: 'You have new message.'});
+    
     if (lastActiveHeader.toLowerCase() === headerId) return;
 
     let notificationElement = $(`#${headerId}_notification`);
@@ -29,6 +29,7 @@ exports.notificationsMethod = (data) => {
       notificationHelper.setUserUnreadMentionedCount(headerId, userId, unreadMentionedCount);
       unreadNotificationTemplate = $('#ep_rocketchat_mentionNotification').tmpl({unread: unreadMentionedCount});
       notificationElement.html(unreadNotificationTemplate);
+      pushMethod({title: 'New message', body: 'You have new message.'});
       newMention(notificationElement.attr('data-headerid')); // because of Rocketchat make to lower case need to access real header id via notificationElement.attr("data-headerid")
     } else {
       const historyCount = parseInt(notificationHelper.getHistoryCount(headerId)) || 0;
