@@ -19,7 +19,7 @@ exports.unreadChangedBySubscription = (data) => {
 
   let notificationElement = $(`#${headerId}_notification`);
   if (!notificationElement.length) notificationElement = $(`#${data.fname}_notification`);
-  if (!notificationElement.length) notificationElement = $(`#${data.fname.toLowerCase()}_notification`);
+  if (!notificationElement.length) notificationElement = $(`#${(data.fname) ? data.fname.toLowerCase() : ''}_notification`);
   if (!notificationElement.length) return;
 
   const lastUnreadCount = parseInt(notificationHelper.getUnreadCount(headerId)) ||

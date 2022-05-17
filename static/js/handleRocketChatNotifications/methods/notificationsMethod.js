@@ -12,12 +12,12 @@ exports.notificationsMethod = (data) => {
 
     const headerId = (data.notification.payload.name === `${padId}-general-channel`) ? 'general' : data.notification.payload.name;
     const lastActiveHeader = notificationHelper.getLastActiveHeader() || '';
-    
+
     if (lastActiveHeader.toLowerCase() === headerId) return;
 
     let notificationElement = $(`#${headerId}_notification`);
     if (!notificationElement.length) notificationElement = $(`#${data.notification.payload.fname}_notification`);
-    if (!notificationElement.length) notificationElement = $(`#${data.notification.payload.fname.toLowerCase()}_notification`);
+    if (!notificationElement.length) notificationElement = $(`#${(data.notification.payload.fname) ? data.notification.payload.fname.toLowerCase() : ''}_notification`);
     if (!notificationElement.length) return;
 
 
