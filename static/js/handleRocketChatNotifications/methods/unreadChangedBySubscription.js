@@ -39,16 +39,16 @@ exports.unreadChangedBySubscription = (data) => {
     newMention(realHeaderId); // because of Rocketchat make to lower case need to access real header id via notificationElement.attr("data-headerid")
   }
   notificationElement.html(unreadNotificationTemplate);
-  if (isMobile) {
-    const unreadCount = unreadMentionedCount;
-    let $el = $bodyAceOuter().find('iframe')
-        .contents()
-        .find('#innerdocbody')
-        .find(`[headerid="${realHeaderId}"]`)[0];
-    if ($el) {
-      $el = $el.shadowRoot;
-      $el.querySelector('.counter').innerText = unreadCount;
-      console.log($el.querySelector('.counter'), unreadCount);
-    }
-  }
+  // if (isMobile) {
+  //   const unreadCount = unreadMentionedCount;
+  //   let $el = $bodyAceOuter().find('iframe')
+  //       .contents()
+  //       .find('#innerdocbody')
+  //       .find(`[headerid="${realHeaderId}"]`)[0];
+  //   if ($el) {
+  //     $el = $el.shadowRoot;
+  //     $el.querySelector('.counter').innerText = unreadCount;
+  //     console.log($el.querySelector('.counter'), unreadCount);
+  //   }
+  // }
 };

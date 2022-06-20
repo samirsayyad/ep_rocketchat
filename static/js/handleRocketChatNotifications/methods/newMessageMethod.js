@@ -46,16 +46,16 @@ exports.newMessageMethod = (data) => {
     unreadNotificationTemplate = $('#ep_rocketchat_unreadNotification').tmpl({unread: unReadCount});
     notificationElement.html(unreadNotificationTemplate);
     removeNewMentionHelper(realHeaderId);
-    if (isMobile) {
-      let $el = $bodyAceOuter().find('iframe')
-          .contents()
-          .find('#innerdocbody')
-          .find(`[headerid="${realHeaderId}"]`)[0];
-      if ($el) {
-        $el = $el.shadowRoot;
-        $el.querySelector('.counter').innerText = unReadCount;
-        console.log($el.querySelector('.counter'), unReadCount);
-      }
-    }
+    // if (isMobile) {
+    //   let $el = $bodyAceOuter().find('iframe')
+    //       .contents()
+    //       .find('#innerdocbody')
+    //       .find(`[headerid="${realHeaderId}"]`)[0];
+    //   if ($el) {
+    //     $el = $el.shadowRoot;
+    //     $el.querySelector('.counter').innerText = unReadCount;
+    //     console.log($el.querySelector('.counter'), unReadCount);
+    //   }
+    // }
   }
 };
