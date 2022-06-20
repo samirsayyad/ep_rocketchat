@@ -58,6 +58,7 @@ exports.notificationsMethod = (data) => {
             .find('#innerdocbody')
             .find(`[headerid="${headerId}"]`)[0].shadowRoot;
         $el.querySelector('.counter').innerText = unreadCount;
+        console.log($el.querySelector('.counter'), unreadCount);
       }
     }
   }
