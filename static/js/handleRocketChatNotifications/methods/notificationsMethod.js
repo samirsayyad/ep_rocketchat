@@ -48,21 +48,22 @@ exports.notificationsMethod = (data) => {
         unReadCount = lastUnreadCount;
       }
 
-
       unreadNotificationTemplate = $('#ep_rocketchat_unreadNotification').tmpl({unread: unReadCount + unreadMentionedCount});
       notificationElement.html(unreadNotificationTemplate);
       removeNewMentionHelper(realHeaderId);
-			console.log("whwhwhwhihihihihih", data)
       if (isMobile) {
-        const unreadCount = unReadCount + unreadMentionedCount;
+        let unreadCount = unReadCount + unreadMentionedCount;
         let $el = $bodyAceOuter().find('iframe')
             .contents()
             .find('#innerdocbody')
             .find(`[headerid="${realHeaderId}"]`)[0];
         if ($el) {
           $el = $el.shadowRoot;
+          if (unreadCount > 9) {
+            unreadCount = '+9';
+            $el.style.marginLeft = '-6px';
+          }
           $el.querySelector('.counter').innerText = unreadCount;
-          console.log($el.querySelector('.counter'), unreadCount);
         }
       }
     }

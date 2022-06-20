@@ -34,17 +34,19 @@ exports.unreadChangedBySubscription = (data) => {
   if (unreadMentionedCount === 0) {
     unreadNotificationTemplate = $('#ep_rocketchat_unreadNotification').tmpl({unread: historyCount || lastUnreadCount || data.unread});
     removeNewMentionHelper(realHeaderId);
-		console.log(historyCount || lastUnreadCount || data.unread)
     if (isMobile) {
-      const unreadCount = historyCount || lastUnreadCount || data.unread;
+      let unreadCount = historyCount || lastUnreadCount || data.unread;
       let $el = $bodyAceOuter().find('iframe')
           .contents()
           .find('#innerdocbody')
           .find(`[headerid="${realHeaderId}"]`)[0];
       if ($el) {
         $el = $el.shadowRoot;
+        if (unreadCount > 9) {
+          unreadCount = '+9';
+          $el.style.marginLeft = '-6px';
+        }
         $el.querySelector('.counter').innerText = unreadCount;
-        console.log($el.querySelector('.counter'), unreadCount);
       }
     }
   } else {
