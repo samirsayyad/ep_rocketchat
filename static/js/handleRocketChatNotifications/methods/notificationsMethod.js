@@ -5,10 +5,13 @@ const removeNewMentionHelper = require('./helper/newMentionHelper').removeNewMen
 const notificationHelper = require('./helper/notificationHelper');
 const pushMethod = require('./pushMethod').pushMethod;
 
+const $bodyAceOuter = () => $(document).find('iframe[name="ace_outer"]').contents();
+
 exports.notificationsMethod = (data) => {
   if (!data.fromOpenedRoom) { // must be false in order to notify user
     const padId = pad.getPadId();
     const userId = pad.getUserId();
+    const isMobile = clientVars.userAgent.isMobile;
 
     const headerId = (data.notification.payload.name === `${padId}-general-channel`) ? 'general' : data.notification.payload.name;
     const lastActiveHeader = notificationHelper.getLastActiveHeader() || '';
@@ -48,6 +51,14 @@ exports.notificationsMethod = (data) => {
       unreadNotificationTemplate = $('#ep_rocketchat_unreadNotification').tmpl({unread: unReadCount + unreadMentionedCount});
       notificationElement.html(unreadNotificationTemplate);
       removeNewMentionHelper(notificationElement.attr('data-headerid'));
+      if (isMobile) {
+        const unreadCount = unReadCount + unreadMentionedCount;
+        const $el = $bodyAceOuter().find('iframe')
+            .contents()
+            .find('#innerdocbody')
+            .find(`[headerid="${headerId}"]`)[0].shadowRoot;
+        $el.querySelector('.counter').innerText = unreadCount;
+      }
     }
   }
 };
