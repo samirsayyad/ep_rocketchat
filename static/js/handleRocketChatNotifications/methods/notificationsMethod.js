@@ -23,6 +23,7 @@ exports.notificationsMethod = (data) => {
     if (!notificationElement.length) notificationElement = $(`#${(data.notification.payload.fname) ? data.notification.payload.fname.toLowerCase() : ''}_notification`);
     if (!notificationElement.length) return;
 
+    const realHeaderId = notificationElement.attr('data-headerid');
 
     // check mentioned this user
     let unreadNotificationTemplate;
@@ -33,7 +34,7 @@ exports.notificationsMethod = (data) => {
       unreadNotificationTemplate = $('#ep_rocketchat_mentionNotification').tmpl({unread: unreadMentionedCount});
       notificationElement.html(unreadNotificationTemplate);
       pushMethod({title: 'New message', body: 'You have new message.'});
-      newMention(notificationElement.attr('data-headerid')); // because of Rocketchat make to lower case need to access real header id via notificationElement.attr("data-headerid")
+      newMention(realHeaderId); // because of Rocketchat make to lower case need to access real header id via notificationElement.attr("data-headerid")
     } else {
       const historyCount = parseInt(notificationHelper.getHistoryCount(headerId)) || 0;
       let unReadCount = 0;
@@ -50,15 +51,18 @@ exports.notificationsMethod = (data) => {
 
       unreadNotificationTemplate = $('#ep_rocketchat_unreadNotification').tmpl({unread: unReadCount + unreadMentionedCount});
       notificationElement.html(unreadNotificationTemplate);
-      removeNewMentionHelper(notificationElement.attr('data-headerid'));
+      removeNewMentionHelper(realHeaderId);
       if (isMobile) {
         const unreadCount = unReadCount + unreadMentionedCount;
-        const $el = $bodyAceOuter().find('iframe')
+        let $el = $bodyAceOuter().find('iframe')
             .contents()
             .find('#innerdocbody')
-            .find(`[headerid="${headerId}"]`)[0].shadowRoot;
-        $el.querySelector('.counter').innerText = unreadCount;
-        console.log($el.querySelector('.counter'), unreadCount);
+            .find(`[headerid="${realHeaderId}"]`)[0];
+        if ($el) {
+          $el = $el.shadowRoot;
+          $el.querySelector('.counter').innerText = unreadCount;
+          console.log($el.querySelector('.counter'), unreadCount);
+        }
       }
     }
   }

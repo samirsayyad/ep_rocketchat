@@ -25,6 +25,7 @@ exports.unreadChangedBySubscription = (data) => {
   if (!notificationElement.length) notificationElement = $(`#${(data.fname) ? data.fname.toLowerCase() : ''}_notification`);
   if (!notificationElement.length) return;
 
+  const realHeaderId = notificationElement.attr('data-headerid');
   const lastUnreadCount = parseInt(notificationHelper.getUnreadCount(headerId)) ||
                             parseInt(notificationHelper.getNewMessageCount(headerId)) || false;
   const unreadMentionedCount = parseInt(notificationHelper.getUserUnreadMentionedCount(headerId, userId)) || 0;
@@ -32,19 +33,22 @@ exports.unreadChangedBySubscription = (data) => {
   let unreadNotificationTemplate;
   if (unreadMentionedCount === 0) {
     unreadNotificationTemplate = $('#ep_rocketchat_unreadNotification').tmpl({unread: historyCount || lastUnreadCount || data.unread});
-    removeNewMentionHelper(notificationElement.attr('data-headerid'));
+    removeNewMentionHelper(realHeaderId);
   } else {
     unreadNotificationTemplate = $('#ep_rocketchat_mentionNotification').tmpl({unread: unreadMentionedCount});
-    newMention(notificationElement.attr('data-headerid')); // because of Rocketchat make to lower case need to access real header id via notificationElement.attr("data-headerid")
+    newMention(realHeaderId); // because of Rocketchat make to lower case need to access real header id via notificationElement.attr("data-headerid")
   }
   notificationElement.html(unreadNotificationTemplate);
   if (isMobile) {
     const unreadCount = unreadMentionedCount;
-    const $el = $bodyAceOuter().find('iframe')
+    let $el = $bodyAceOuter().find('iframe')
         .contents()
         .find('#innerdocbody')
-        .find(`[headerid="${headerId}"]`)[0].shadowRoot;
-    $el.querySelector('.counter').innerText = unreadCount;
-    console.log($el.querySelector('.counter'), unreadCount);
+        .find(`[headerid="${realHeaderId}"]`)[0];
+    if ($el) {
+      $el = $el.shadowRoot;
+      $el.querySelector('.counter').innerText = unreadCount;
+      console.log($el.querySelector('.counter'), unreadCount);
+    }
   }
 };
