@@ -52,6 +52,7 @@ exports.notificationsMethod = (data) => {
       unreadNotificationTemplate = $('#ep_rocketchat_unreadNotification').tmpl({unread: unReadCount + unreadMentionedCount});
       notificationElement.html(unreadNotificationTemplate);
       removeNewMentionHelper(realHeaderId);
+			console.log("whwhwhwhihihihihih", data)
       if (isMobile) {
         const unreadCount = unReadCount + unreadMentionedCount;
         let $el = $bodyAceOuter().find('iframe')
