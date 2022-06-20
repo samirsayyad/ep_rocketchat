@@ -4,11 +4,14 @@ const newMention = require('./helper/newMentionHelper').newMentionHelper;
 const removeNewMentionHelper = require('./helper/newMentionHelper').removeNewMentionHelper;
 const notificationHelper = require('./helper/notificationHelper');
 
+const $bodyAceOuter = () => $(document).find('iframe[name="ace_outer"]').contents();
+
 exports.unreadChangedBySubscription = (data) => {
   // if there is unseen history count must click on that header first
   const padId = clientVars.padId;
   const headerId = (data.name === `${padId}-general-channel`) ? 'general' : data.name;
   const historyCount = parseInt(notificationHelper.getHistoryCount(headerId)) || 0;
+  const isMobile = clientVars.userAgent.isMobile;
 
   if (historyCount === 0 && data.alert === false && data.unread === 0) return;
 
@@ -35,4 +38,13 @@ exports.unreadChangedBySubscription = (data) => {
     newMention(notificationElement.attr('data-headerid')); // because of Rocketchat make to lower case need to access real header id via notificationElement.attr("data-headerid")
   }
   notificationElement.html(unreadNotificationTemplate);
+  if (isMobile) {
+    const unreadCount = unreadMentionedCount;
+    const $el = $bodyAceOuter().find('iframe')
+        .contents()
+        .find('#innerdocbody')
+        .find(`[headerid="${headerId}"]`)[0].shadowRoot;
+    $el.querySelector('.counter').innerText = unreadCount;
+    console.log($el.querySelector('.counter'), unreadCount);
+  }
 };
