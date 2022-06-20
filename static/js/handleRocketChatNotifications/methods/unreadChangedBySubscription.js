@@ -34,21 +34,22 @@ exports.unreadChangedBySubscription = (data) => {
   if (unreadMentionedCount === 0) {
     unreadNotificationTemplate = $('#ep_rocketchat_unreadNotification').tmpl({unread: historyCount || lastUnreadCount || data.unread});
     removeNewMentionHelper(realHeaderId);
+		console.log(historyCount || lastUnreadCount || data.unread)
+    if (isMobile) {
+      const unreadCount = historyCount || lastUnreadCount || data.unread;
+      let $el = $bodyAceOuter().find('iframe')
+          .contents()
+          .find('#innerdocbody')
+          .find(`[headerid="${realHeaderId}"]`)[0];
+      if ($el) {
+        $el = $el.shadowRoot;
+        $el.querySelector('.counter').innerText = unreadCount;
+        console.log($el.querySelector('.counter'), unreadCount);
+      }
+    }
   } else {
     unreadNotificationTemplate = $('#ep_rocketchat_mentionNotification').tmpl({unread: unreadMentionedCount});
     newMention(realHeaderId); // because of Rocketchat make to lower case need to access real header id via notificationElement.attr("data-headerid")
   }
   notificationElement.html(unreadNotificationTemplate);
-  // if (isMobile) {
-  //   const unreadCount = unreadMentionedCount;
-  //   let $el = $bodyAceOuter().find('iframe')
-  //       .contents()
-  //       .find('#innerdocbody')
-  //       .find(`[headerid="${realHeaderId}"]`)[0];
-  //   if ($el) {
-  //     $el = $el.shadowRoot;
-  //     $el.querySelector('.counter').innerText = unreadCount;
-  //     console.log($el.querySelector('.counter'), unreadCount);
-  //   }
-  // }
 };
