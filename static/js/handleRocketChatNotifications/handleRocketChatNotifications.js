@@ -14,9 +14,11 @@ const bindEvent = (element, eventName, eventHandler) => {
 };
 
 exports.handleRocketChatNotifications = () => {
+	console.log("handleRocketChatNotifications, :====>>> ");
   bindEvent(window, 'message', (e) => {
     const eventName = e.data.eventName;
     const data = e.data.data;
+		console.log("windo event message", eventName, data);
     if (eventName === 'notification') {
       notificationsMethod(data);
     }
