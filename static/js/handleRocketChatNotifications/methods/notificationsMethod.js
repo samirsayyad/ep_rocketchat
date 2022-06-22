@@ -59,7 +59,7 @@ exports.notificationsMethod = (data) => {
       if ($el) {
         $el = $el.shadowRoot;
         if (unreadCount > 9) {
-          unreadCount = '+9';
+          unreadCount = '9+';
           if (isMobile) {
             $el.querySelectorAll('.counter').forEach((el) => {
               el.style.marginLeft = '-7px';
