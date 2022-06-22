@@ -61,9 +61,15 @@ exports.notificationsMethod = (data) => {
           $el = $el.shadowRoot;
           if (unreadCount > 9) {
             unreadCount = '+9';
-            $el.style.marginLeft = '-6px';
+            if (isMobile) {
+              $el.querySelectorAll('.counter').forEach((el) => {
+                el.style.marginLeft = '-7px';
+              });
+            }
           }
-          $el.querySelector('.counter').innerText = unreadCount;
+          $el.querySelectorAll('.counter').forEach((el) => {
+            el.innerText = unreadCount;
+          });
         }
       }
     }
