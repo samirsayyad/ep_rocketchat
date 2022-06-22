@@ -34,26 +34,24 @@ exports.unreadChangedBySubscription = (data) => {
   if (unreadMentionedCount === 0) {
     unreadNotificationTemplate = $('#ep_rocketchat_unreadNotification').tmpl({unread: historyCount || lastUnreadCount || data.unread});
     removeNewMentionHelper(realHeaderId);
-    if (isMobile) {
-      let unreadCount = historyCount || lastUnreadCount || data.unread;
-      let $el = $bodyAceOuter().find('iframe')
-          .contents()
-          .find('#innerdocbody')
-          .find(`[headerid="${realHeaderId}"]`)[0];
-      if ($el) {
-        $el = $el.shadowRoot;
-        if (unreadCount > 9) {
-          unreadCount = '+9';
-          if (isMobile) {
-            $el.querySelectorAll('.counter').forEach((el) => {
-              el.style.marginLeft = '-7px';
-            });
-          }
+    let unreadCount = historyCount || lastUnreadCount || data.unread;
+    let $el = $bodyAceOuter().find('iframe')
+        .contents()
+        .find('#innerdocbody')
+        .find(`[headerid="${realHeaderId}"]`)[0];
+    if ($el) {
+      $el = $el.shadowRoot;
+      if (unreadCount > 9) {
+        unreadCount = '+9';
+        if (isMobile) {
+          $el.querySelectorAll('.counter').forEach((el) => {
+            el.style.marginLeft = '-7px';
+          });
         }
-        $el.querySelectorAll('.counter').forEach((el) => {
-          el.innerText = unreadCount;
-        });
       }
+      $el.querySelectorAll('.counter').forEach((el) => {
+        el.innerText = unreadCount;
+      });
     }
   } else {
     unreadNotificationTemplate = $('#ep_rocketchat_mentionNotification').tmpl({unread: unreadMentionedCount});

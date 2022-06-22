@@ -51,26 +51,24 @@ exports.notificationsMethod = (data) => {
       unreadNotificationTemplate = $('#ep_rocketchat_unreadNotification').tmpl({unread: unReadCount + unreadMentionedCount});
       notificationElement.html(unreadNotificationTemplate);
       removeNewMentionHelper(realHeaderId);
-      if (isMobile) {
-        let unreadCount = unReadCount + unreadMentionedCount;
-        let $el = $bodyAceOuter().find('iframe')
-            .contents()
-            .find('#innerdocbody')
-            .find(`[headerid="${realHeaderId}"]`)[0];
-        if ($el) {
-          $el = $el.shadowRoot;
-          if (unreadCount > 9) {
-            unreadCount = '+9';
-            if (isMobile) {
-              $el.querySelectorAll('.counter').forEach((el) => {
-                el.style.marginLeft = '-7px';
-              });
-            }
+      let unreadCount = unReadCount + unreadMentionedCount;
+      let $el = $bodyAceOuter().find('iframe')
+          .contents()
+          .find('#innerdocbody')
+          .find(`[headerid="${realHeaderId}"]`)[0];
+      if ($el) {
+        $el = $el.shadowRoot;
+        if (unreadCount > 9) {
+          unreadCount = '+9';
+          if (isMobile) {
+            $el.querySelectorAll('.counter').forEach((el) => {
+              el.style.marginLeft = '-7px';
+            });
           }
-          $el.querySelectorAll('.counter').forEach((el) => {
-            el.innerText = unreadCount;
-          });
         }
+        $el.querySelectorAll('.counter').forEach((el) => {
+          el.innerText = unreadCount;
+        });
       }
     }
   }
