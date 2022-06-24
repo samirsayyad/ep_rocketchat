@@ -41,6 +41,7 @@ exports.unreadChangedBySubscription = (data) => {
         .find(`[headerid="${realHeaderId}"]`)[0];
 
     if ($el) {
+      $el = $el.shadowRoot;
       // change the inline icon when notification counter is 0
       if (!isMobile) {
         if (unreadCount === 0) {
@@ -54,7 +55,6 @@ exports.unreadChangedBySubscription = (data) => {
         }
       }
 
-      $el = $el.shadowRoot;
       if (unreadCount > 9) {
         unreadCount = '9+';
         if (isMobile) {
