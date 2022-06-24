@@ -39,6 +39,20 @@ exports.unreadChangedBySubscription = (data) => {
         .contents()
         .find('#innerdocbody')
         .find(`[headerid="${realHeaderId}"]`)[0];
+
+    // change the inline icon when notification counter is 0
+    if (!isMobile) {
+      if (unreadCount === 0) {
+        $el.querySelector('.bubbleNotify').style.display = 'none';
+        $el.querySelector('.mobileIcon').style.display = 'block';
+        $el.querySelector('.mobileIcon').style.marginTop = '5px';
+      } else if (unreadCount > 0) {
+        $el.querySelector('.bubbleNotify').style.display = 'block';
+        $el.querySelector('.mobileIcon').style.display = 'none';
+        $el.querySelector('.mobileIcon').style.marginTop = '0';
+      }
+    }
+
     if ($el) {
       $el = $el.shadowRoot;
       if (unreadCount > 9) {
