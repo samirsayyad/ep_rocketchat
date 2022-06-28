@@ -80,31 +80,35 @@ const register = async (etherpadUserId, randomUsername) => {
 };
 
 const runValidator = async (etherpadUserId) => {
-  const rocketChatUser = await db.get(`ep_rocketchat_users_${config.dbRocketchatKey}:${etherpadUserId}`) || [];
-  let rocketchatUserId, rocketchatAuthToken;
-  if (rocketChatUser.rocketchatUserId && rocketChatUser.username) {
-    rocketchatUserId = rocketChatUser.rocketchatUserId;
-    // regenerate token
-    const loginResult = await login(etherpadUserId, rocketChatUser.username, rocketChatUser.password);
-    rocketchatAuthToken = loginResult.authToken;
-  } else {
-    const loginResult = await login(etherpadUserId);
-    if (loginResult) {
-      rocketchatUserId = loginResult.userId;
+  try{
+    const rocketChatUser = await db.get(`ep_rocketchat_users_${config.dbRocketchatKey}:${etherpadUserId}`) || [];
+    let rocketchatUserId, rocketchatAuthToken;
+    if (rocketChatUser.rocketchatUserId && rocketChatUser.username && rocketChatUser.rocketchatAuthToken ) { // it means login once and store credential
+      rocketchatUserId = rocketChatUser.rocketchatUserId;
+      // regenerate token
+      const loginResult = await login(etherpadUserId, rocketChatUser.username, rocketChatUser.password);
       rocketchatAuthToken = loginResult.authToken;
     } else {
-      const registerResult = await register(etherpadUserId); // || await register(etherpadUserId,true);
-      if (registerResult) {
-        const loginResult = await login(etherpadUserId, registerResult.info.username, registerResult.info.password);
+      const loginResult = await login(etherpadUserId);
+      if (loginResult) {
         rocketchatUserId = loginResult.userId;
         rocketchatAuthToken = loginResult.authToken;
       } else {
-        console.error('registerResult', registerResult);
+        const registerResult = await register(etherpadUserId); // || await register(etherpadUserId,true);
+        if (registerResult) {
+          const loginResult = await login(etherpadUserId, registerResult.info.username, registerResult.info.password);
+          rocketchatUserId = loginResult.userId;
+          rocketchatAuthToken = loginResult.authToken;
+        } else {
+          console.error('registerResult', registerResult);
+        }
       }
     }
-  }
 
-  return {rocketchatUserId, rocketchatAuthToken};
+    return {rocketchatUserId, rocketchatAuthToken};
+  }catch(e){
+    console.log(e.message, 'runValidator');
+  }
 };
 
 
