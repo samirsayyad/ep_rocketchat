@@ -12,7 +12,7 @@ exports.updateRocketChatUser = async (message) => {
   const data = message.data;
   try {
     const rocketchatUserAuth = await rocketchatAuthenticator.runValidator(userId);
-    if(! rocketchatAuthToken.rocketchatAuthToken) throw new Error('updateRocketChatUser: rocketchatAuthToken is not correct');
+    if (!rocketchatUserAuth.rocketchatAuthToken) throw new Error('updateRocketChatUser: rocketchatAuthToken is not correct');
 
     const rocketChatClient = rocketChatClientInstance(config.protocol, config.host, config.port, config.userId, config.token, () => {});
     await rocketChatClient.users.update(rocketchatUserAuth.rocketchatUserId, {
@@ -29,6 +29,6 @@ exports.updateRocketChatUser = async (message) => {
       }
     }
   } catch (e) {
-    console.log(e.message, 'updateRocketChatUser',data);
+    console.log(e.message, 'updateRocketChatUser', data);
   }
 };

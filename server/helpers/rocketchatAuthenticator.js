@@ -80,10 +80,12 @@ const register = async (etherpadUserId, randomUsername) => {
 };
 
 const runValidator = async (etherpadUserId) => {
-  try{
+  try {
     const rocketChatUser = await db.get(`ep_rocketchat_users_${config.dbRocketchatKey}:${etherpadUserId}`) || [];
     let rocketchatUserId, rocketchatAuthToken;
-    if (rocketChatUser.rocketchatUserId && rocketChatUser.username && rocketChatUser.rocketchatAuthToken ) { // it means login once and store credential
+    if (rocketChatUser.rocketchatAuthToken && rocketChatUser.rocketchatUserId) return {rocketchatUserId: rocketChatUser.rocketchatUserId, rocketchatAuthToken: rocketChatUser.rocketchatAuthToken};
+
+    if (rocketChatUser.rocketchatUserId && rocketChatUser.username && !rocketChatUser.rocketchatAuthToken) { // it means login once and store credential
       rocketchatUserId = rocketChatUser.rocketchatUserId;
       // regenerate token
       const loginResult = await login(etherpadUserId, rocketChatUser.username, rocketChatUser.password);
@@ -105,8 +107,9 @@ const runValidator = async (etherpadUserId) => {
       }
     }
 
+    await saveCredential(etherpadUserId, rocketchatUserId, rocketchatAuthToken, null);
     return {rocketchatUserId, rocketchatAuthToken};
-  }catch(e){
+  } catch (e) {
     console.log(e.message, 'runValidator');
   }
 };

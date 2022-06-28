@@ -33,6 +33,31 @@ const sendToUpdateRocketChatIframe = (padId, userId, headerId, rocketchatUserAut
   sharedTransmitter.sendToUser(msg, socketClient);
 };
 
+const createRoom = async (headerId) => {
+  const rocketChatClient = rocketChatClientInstance(config.protocol, config.host, config.port, config.userId, config.token, () => {});
+  try {
+    const roomResult = await rocketChatClient.channels.create(headerId.toLowerCase());
+    if (roomResult.success) {
+      await db.set(`${config.dbRocketchatKey}:ep_rocketchat:rooms:${headerId}`, roomResult);
+    }
+    return roomResult;
+  } catch (e) {
+    console.log(e.message, 'createRoom');
+    return false;
+  }
+};
+
+const getRoomInfo = async (headerId) => {
+  try {
+    const rocketChatClient = rocketChatClientInstance(config.protocol, config.host, config.port, config.userId, config.token, () => {});
+    const roomInfoResult = await rocketChatClient.channels.info(headerId.toLowerCase());
+    db.set(`${config.dbRocketchatKey}:ep_rocketchat:rooms:${headerId}`, roomInfoResult);
+    return roomInfoResult;
+  } catch (e) {
+    console.log(e.message, 'getRoomInfo');
+    return false;
+  }
+};
 
 exports.handleRooms = async (message, socketClient) => {
   const padId = message.padId;
@@ -44,31 +69,18 @@ exports.handleRooms = async (message, socketClient) => {
     if (data.headerId === `${padId}-general-channel`) {
       // @ must develop and add instead of []
       // const onlineUsers = await getOnlineUsersApi(config, rocketChatRoom.channel._id);
+      await getRoomInfo(data.headerId) || await createRoom(data.headerId);
 
       sendToUpdateRocketChatIframe(padId, userId, data.headerId, rocketchatUserAuth, [], config, socketClient);
       return;
     }
-    const rocketChatClient = rocketChatClientInstance(config.protocol, config.host, config.port, config.userId, config.token, () => {});
     let rocketChatRoom = await db.get(`${config.dbRocketchatKey}:ep_rocketchat:rooms:${data.headerId}`) || false;
     if (rocketChatRoom === false) {
-      try {
-        const roomResult = await rocketChatClient.channels.create(data.headerId.toLowerCase());
-        if (roomResult.success) {
-          await db.set(`${config.dbRocketchatKey}:ep_rocketchat:rooms:${data.headerId}`, roomResult);
-        }
-        rocketChatRoom = roomResult;
-      } catch (e) {
-        console.log(e.message, 'channels.create');
-        const rocketChatClient = rocketChatClientInstance(config.protocol, config.host, config.port, config.userId, config.token, () => {});
-        const roomInfoResult = await rocketChatClient.channels.info(data.headerId.toLowerCase());
-        db.set(`${config.dbRocketchatKey}:ep_rocketchat:rooms:${data.headerId}`, roomInfoResult);
-        rocketChatRoom = roomInfoResult;
-      }
+      rocketChatRoom = await createRoom(data.headerId) || await getRoomInfo(data.headerId);
     }
 
 
     const onlineUsers = await getOnlineUsersApi(config, rocketChatRoom.channel._id);
-
 
     // handle join users
     const userJoined = await db.get(`${config.dbRocketchatKey}:ep_rocketchat_join_${padId}_${userId}_${data.headerId}`) || null;
