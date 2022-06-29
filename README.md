@@ -26,6 +26,6 @@ That need to setup iframe_auth_url like below there :
 `https://yourEtherpadInstance.com/static/pluginfw/ep_rocketchat/rocket_chat_auth_get`
 
 In order to config a rocketchat instance you can use below document:
-https://drive.google.com/file/d/1uaOj85wocAQHvjmD_pQIUEnDzednXedg/view?usp=sharing
+`https://drive.google.com/file/d/1uaOj85wocAQHvjmD_pQIUEnDzednXedg/view?usp=sharing`
 
 Still under development
