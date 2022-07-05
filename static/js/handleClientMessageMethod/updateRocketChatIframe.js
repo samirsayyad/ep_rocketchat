@@ -1,6 +1,7 @@
 'use strict';
 
 const notificationHelper = require('../handleRocketChatNotifications/methods/helper/notificationHelper');
+const $bodyAceOuter = () => $(document).find('iframe[name="ace_outer"]').contents();
 
 exports.updateRocketChatIframe = (payLoad) => {
   try {
@@ -15,6 +16,7 @@ exports.updateRocketChatIframe = (payLoad) => {
           $('#chat-loading').css({display: 'none'});
           $('#ep_rocketchat_iframe').animate({opacity: 1}, 500);
 
+          const isMobile = clientVars.userAgent.isMobile;
           let room = payLoad.data.room;
           const padId = payLoad.padId;
           const userId = payLoad.userId;
@@ -26,6 +28,24 @@ exports.updateRocketChatIframe = (payLoad) => {
           notificationHelper.setHistoryCount(room, 0);
           notificationHelper.setLastActiveHeader(room);
           $(`#${room}_notification`).empty();
+
+          const headerId = $(`#${room}_notification`).attr('data-headerid');
+          let $el = $bodyAceOuter().find('iframe')
+              .contents()
+              .find('#innerdocbody')
+              .find(`[headerid="${headerId}"]`)[0];
+          if ($el) {
+            $el = $el.shadowRoot;
+            if (!isMobile) {
+              $el.querySelector('.bubbleNotify').style.display = 'none';
+              $el.querySelector('.mobileIcon').style.display = 'block';
+              $el.querySelector('.mobileIcon').style.marginTop = '5px';
+            }
+
+            $el.querySelectorAll('.counter').forEach((el) => {
+              el.innerText = '';
+            });
+          }
         },
       });
     }, 500);
