@@ -29,6 +29,7 @@ exports.newMessageMethod = (data) => {
     unreadMentionedCount++;
     notificationHelper.setUserUnreadMentionedCount(headerId, userId, unreadMentionedCount);
     unreadNotificationTemplate = $('#ep_rocketchat_mentionNotification').tmpl({unread: unreadMentionedCount});
+    $('body > header .shortMenue .btnChat .messageCount').text(unreadMentionedCount);
     notificationElement.html(unreadNotificationTemplate);
     pushMethod({title: 'New message', body: 'You have new message.'});
     newMention(realHeaderId); // because of Rocketchat make to lower case need to access real header id via notificationElement.attr("data-headerid")

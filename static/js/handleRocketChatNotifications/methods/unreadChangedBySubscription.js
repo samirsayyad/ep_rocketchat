@@ -69,6 +69,7 @@ exports.unreadChangedBySubscription = (data) => {
     }
   } else {
     unreadNotificationTemplate = $('#ep_rocketchat_mentionNotification').tmpl({unread: unreadMentionedCount});
+    $('body > header .shortMenue .btnChat .messageCount').text(unreadMentionedCount);
     newMention(realHeaderId); // because of Rocketchat make to lower case need to access real header id via notificationElement.attr("data-headerid")
   }
   notificationElement.html(unreadNotificationTemplate);
