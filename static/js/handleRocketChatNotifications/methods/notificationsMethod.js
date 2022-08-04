@@ -14,9 +14,9 @@ exports.notificationsMethod = (data) => {
     const isMobile = clientVars.userAgent.isMobile;
 
     const headerId = (data.notification.payload.name === `${padId}-general-channel`) ? 'general' : data.notification.payload.name;
-    const lastActiveHeader = notificationHelper.getLastActiveHeader() || '';
+    const lastActiveHeader = notificationHelper.getLastActiveHeader() || false;
 
-    if (lastActiveHeader.toLowerCase() === headerId) return;
+    if (lastActiveHeader) if (lastActiveHeader.toLowerCase() === headerId) return;
 
     let notificationElement = $(`#${headerId}_notification`);
     if (!notificationElement.length) notificationElement = $(`#${data.notification.payload.fname}_notification`);

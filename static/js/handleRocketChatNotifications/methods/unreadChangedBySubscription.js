@@ -16,9 +16,9 @@ exports.unreadChangedBySubscription = (data) => {
   if (historyCount === 0 && data.alert === false && data.unread === 0) return;
 
   const userId = pad.getUserId();
-  const lastActiveHeader = notificationHelper.getLastActiveHeader() || '';
+  const lastActiveHeader = notificationHelper.getLastActiveHeader() || false;
 
-  if (lastActiveHeader.toLowerCase() === headerId) return;
+  if (lastActiveHeader) if (lastActiveHeader.toLowerCase() === headerId) return;
 
   let notificationElement = $(`#${headerId}_notification`);
   if (!notificationElement.length) notificationElement = $(`#${data.fname}_notification`);

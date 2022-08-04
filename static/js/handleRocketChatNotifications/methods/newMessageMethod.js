@@ -14,8 +14,9 @@ exports.newMessageMethod = (data) => {
   const headerId = (roomId === `${padId}-general-channel`) ? 'general' : roomId;
   const isMobile = clientVars.userAgent.isMobile;
 
-  const lastActiveHeader = notificationHelper.getLastActiveHeader() || '';
-  if (lastActiveHeader.toLowerCase() === headerId) return;
+  const lastActiveHeader = notificationHelper.getLastActiveHeader() || false;
+
+  if (lastActiveHeader) if (lastActiveHeader.toLowerCase() === headerId) return;
 
 
   // check mentioned this user
