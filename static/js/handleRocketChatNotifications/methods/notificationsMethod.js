@@ -20,9 +20,9 @@ export default (data) => {
 
 
     const headerId = (name === `${padId}-general-channel`) ? 'general' : name;
-    const lastActiveHeader = getLastActiveHeader() || '';
+    const lastActiveHeader = getLastActiveHeader() || false;
 
-    if (lastActiveHeader.toLowerCase() === headerId) return;
+    if (lastActiveHeader?.toLowerCase() === headerId) return;
 
     let notificationElement = $(`#${headerId}_notification`);
     if (!notificationElement.length) notificationElement = $(`#${fname}_notification`);

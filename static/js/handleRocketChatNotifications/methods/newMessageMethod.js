@@ -18,8 +18,9 @@ export default (data) => {
   const headerId = (roomId === `${padId}-general-channel`) ? 'general' : roomId;
   const isMobile = clientVars.userAgent.isMobile;
 
-  const lastActiveHeader = getLastActiveHeader() || '';
-  if (lastActiveHeader.toLowerCase() === headerId) return;
+  const lastActiveHeader = notificationHelper.getLastActiveHeader() || false;
+
+  if (lastActiveHeader?.toLowerCase() === headerId) return;
 
 
   // check mentioned this user

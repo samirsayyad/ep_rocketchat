@@ -19,9 +19,9 @@ export default ({name, alert, unread, fname}) => {
   if (historyCount === 0 && alert === false && unread === 0) return;
 
   const userId = pad.getUserId();
-  const lastActiveHeader = getLastActiveHeader() || '';
+  const lastActiveHeader = getLastActiveHeader() || false;
 
-  if (lastActiveHeader.toLowerCase() === headerId) return;
+  if (lastActiveHeader?.toLowerCase() === headerId) return;
 
   let notificationElement = $(`#${headerId}_notification`);
   if (!notificationElement.length) notificationElement = $(`#${fname}_notification`);
