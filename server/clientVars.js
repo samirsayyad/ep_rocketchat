@@ -1,5 +1,3 @@
-'use strict';
-
 const config = require('./helpers/configs');
 const rocketchatAuthenticator = require('./helpers/rocketchatAuthenticator');
 

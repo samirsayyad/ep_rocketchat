@@ -1,4 +1,3 @@
-'use strict';
 const __extraHeightOfContainer = 317; // 132px shadow bottom conatiner + 185 px padding bottom1
 
 const checkInView = (elem) => {
@@ -24,7 +23,7 @@ const checkLastElement = (containerId) => {
 };
 
 
-exports.newMentionHelper = (headerId) => {
+export const newMentionHelper = (headerId) => {
   const rowContainer = $(`#${headerId}_container`);
   rowContainer.attr('mentioned', 'true');
   if (rowContainer.length && headerId !== 'general') {
@@ -34,11 +33,13 @@ exports.newMentionHelper = (headerId) => {
     }
   }
 };
-exports.removeNewMentionHelper = (headerId) => {
+
+export const removeNewMentionHelper = (headerId) => {
   const rowContainer = $(`#${headerId}_container`);
   if (rowContainer.length && headerId !== 'general') rowContainer.attr('mentioned', 'false');
 };
-exports.handleNewMentionButton = () => {
+
+export const handleNewMentionButton = () => {
   const handleScroll = () => {
     const lastScrolledMention = $('#tocItems').find('[mentioned=true]').last();
     if (lastScrolledMention) {

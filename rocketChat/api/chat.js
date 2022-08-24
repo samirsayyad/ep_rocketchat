@@ -1,5 +1,3 @@
-'use strict';
-
 class Chat {
   constructor(client) {
     this.client = client;

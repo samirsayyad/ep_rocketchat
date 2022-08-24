@@ -1,5 +1,3 @@
-'use strict';
-
 const config = require('../helpers/configs');
 const loginApi = require('../../rocketChat/api/separated').login;
 const db = require('ep_etherpad-lite/node/db/DB');
@@ -15,8 +13,11 @@ const login = async (etherpadUserId, username, password) => {
     if (!username || !password) {
       const globalProfileInfo = await db.get(`ep_profile_modal:${etherpadUserId}`) || {};
       let tempUsername;
-      if (globalProfileInfo.username) tempUsername = globalProfileInfo.username.replace(/\s/g, '') || 'Anonymous';
-      else tempUsername = 'Anonymous';
+      if (globalProfileInfo.username) {
+        tempUsername = globalProfileInfo.username.replace(/\s/g, '') || 'Anonymous';
+      } else {
+        tempUsername = 'Anonymous';
+      }
 
       password = `${tempUsername}-${etherpadUserId}@docs.plus${config.passwordSalt}`;
       // var username = `${tempUsername}_${etherpadUserId.replace(/\s/g, '.')}`;
@@ -25,7 +26,6 @@ const login = async (etherpadUserId, username, password) => {
 
     const loginResult = await loginApi(config.protocol, config.host, config.port, username, password);
     if (loginResult) {
-      // await saveCredential(etherpadUserId ,loginResult.data.userId , loginResult.data.authToken ,  null );
       return {userId: loginResult.data.userId, authToken: loginResult.data.authToken} || false;
     } else {
       return false;

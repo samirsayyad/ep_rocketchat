@@ -1,5 +1,3 @@
-'use strict';
-
 const eejs = require('ep_etherpad-lite/node/eejs/');
 
 
@@ -12,8 +10,10 @@ exports.eejsBlock_scripts = (hookName, args) => {
 };
 
 exports.eejsBlock_styles = (hookName, args, cb) => {
+  const clsAddress = '../static/plugins/ep_rocketchat/static/css/rocketchat.css';
+
   args.content +=
-  '<link href=\'../static/plugins/ep_rocketchat/static/css/rocketchat.css\'  type=\'text/css\' rel=\'stylesheet\'>';
+  `<link href='${clsAddress}'  type='text/css' rel='stylesheet'>`;
 
   return cb();
 };

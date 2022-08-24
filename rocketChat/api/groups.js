@@ -1,6 +1,6 @@
 /* eslint-disable eslint-comments/disable-enable-pair */
 /* eslint-disable prefer-rest-params */
-'use strict';
+
 
 /* eslint-disable no-unused-vars */
 const pageQueryMapping = require('./lists/pageQueryMapper');

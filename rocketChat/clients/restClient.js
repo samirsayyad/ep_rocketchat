@@ -1,5 +1,3 @@
-'use strict';
-
 const url = require('url');
 const DDP = require('ddp');
 const WebSocket = require('ws');

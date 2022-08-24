@@ -1,5 +1,3 @@
-'use strict';
-
 const updateRocketChatUser = require('./handleMessageMethod/updateRocketChatUser').updateRocketChatUser;
 const updateImageRocketChatUser = require('./handleMessageMethod/updateImageRocketChatUser').updateImageRocketChatUser;
 const handleRooms = require('./handleMessageMethod/handleRooms').handleRooms;
@@ -12,23 +10,15 @@ const getHistoryNotification = require('./handleMessageMethod/getHistoryNotifica
 const handleAnonymousCondition = require('./handleMessageMethod/handleAnonymousCondition').handleAnonymousCondition;
 exports.handleMessage = (hookName, context) => {
   let isRocketChatMessage = false;
-  if (context) {
-    if (context.message && context.message) {
-      if (context.message.type === 'COLLABROOM') {
-        if (context.message.data) {
-          if (context.message.data.type) {
-            if (context.message.data.type === 'ep_rocketchat' || context.message.data.type === 'ep_profile_modal') {
-              isRocketChatMessage = true;
-            }
-          }
-        }
-      }
+
+  if (context?.message?.type === 'COLLABROOM') {
+    const type = context?.message?.data?.type;
+    if (type === 'ep_rocketchat' && type === 'ep_profile_modal') {
+      isRocketChatMessage = true;
     }
   }
-  if (!isRocketChatMessage) {
-    return false;
-  }
 
+  if (!isRocketChatMessage) return false;
 
   const message = context.message.data;
 

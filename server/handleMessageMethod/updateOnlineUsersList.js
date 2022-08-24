@@ -1,5 +1,3 @@
-'use strict';
-
 const db = require('ep_etherpad-lite/node/db/DB');
 const sharedTransmitter = require('../helpers/sharedTransmitter');
 const getOnlineUsersApi = require('../../rocketChat/api/separated').getChannelOnlineUsers;

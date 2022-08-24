@@ -1,5 +1,3 @@
-'use strict';
-
 const rocketChatClientInstance = require('../../rocketChat/clients/rocketChatClientInstance').rocketChatClientInstance;
 const db = require('ep_etherpad-lite/node/db/DB');
 const sharedTransmitter = require('../helpers/sharedTransmitter');

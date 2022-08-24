@@ -21,7 +21,9 @@
     "test-and-coverage": "istanbul cover node_modules/mocha/bin/_mocha --report lcovonly -- --colors test/",
     "start": "node server.js",
     "lint:fix": "eslint --fix .;",
-    "lint:dry": "eslint --fix-dry-run ."
+    "lint:dry": "eslint --fix-dry-run .",
+    "rollup:build": "rollup -c rollup.config.js",
+    "rollup:watch": "rollup -c rollup.config.js --watch"
   },
   "repository": {
     "type": "git",
@@ -43,8 +45,13 @@
   },
   "homepage": "https://github.com/samirsayyad/ep_rocketchat#readme",
   "devDependencies": {
-    "eslint": "^8.10.0",
-    "eslint-config-etherpad": "^3.0.4",
-    "typescript": "^4.6.2"
+    "@babel/preset-env": "^7.18.10",
+    "@rollup/plugin-babel": "^5.3.1",
+    "@rollup/plugin-commonjs": "^22.0.2",
+    "@rollup/plugin-node-resolve": "^13.3.0",
+    "eslint": "^8.22.0",
+    "eslint-config-etherpad": "^3.0.13",
+    "rollup-plugin-terser": "^7.0.2",
+    "typescript": "^4.7.4"
   }
 }

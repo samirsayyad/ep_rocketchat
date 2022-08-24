@@ -1,6 +1,6 @@
 // eslint-disable-next-line eslint-comments/disable-enable-pair
 /* eslint-disable prefer-rest-params */
-'use strict';
+
 
 const restClient = require('./restClient');
 
@@ -48,4 +48,5 @@ const rocketChatClientInstance = (protocol, host, port, userId, token, onConnect
   }
   return this;
 };
+
 exports.rocketChatClientInstance = rocketChatClientInstance;

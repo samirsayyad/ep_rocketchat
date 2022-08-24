@@ -1,5 +1,3 @@
-'use strict';
-
 function Authentication(client) {
   this.client = client;
 }

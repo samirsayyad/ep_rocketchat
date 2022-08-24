@@ -1,16 +1,17 @@
-'use strict';
-
 /*
 forwardTo : {
     ep_rocketchat_joinToAllChannels,
     ep_rocketchat_getHistoryNotification
 }
 **/
-exports.gatherUpHeaderIds = (payLoad) => {
+// TODO: need enhancement
+export default (payLoad) => {
   try {
     const headerIds = [];
     const delims = ['h1', 'h2', 'h3', 'h4'];
-    const hs = $('iframe[name="ace_outer"]').contents().find('iframe').contents().find('#innerdocbody').children('div').children(delims);
+    const hs = $('iframe[name="ace_outer"]').contents()
+        .find('iframe').contents().find('#innerdocbody').children('div').children(delims);
+
     $(hs).each(function () {
       const $parent = $(this).closest('.ace-line');
       const headerId = $(this).data('data-id') || $parent.attr('sectionid');

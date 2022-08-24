@@ -1,6 +1,3 @@
-'use strict';
-
-
 function Realtime(client) {
   this.client = client;
 }

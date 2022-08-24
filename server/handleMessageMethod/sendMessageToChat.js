@@ -1,5 +1,3 @@
-'use strict';
-
 const rocketChatClientInstance = require('../../rocketChat/clients/rocketChatClientInstance').rocketChatClientInstance;
 const config = require('../helpers/configs');
 

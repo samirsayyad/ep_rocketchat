@@ -1,9 +1,7 @@
-'use strict';
-
-const notificationsMethod = require('./methods/notificationsMethod').notificationsMethod;
-const unreadChangedBySubscription = require('./methods/unreadChangedBySubscription').unreadChangedBySubscription;
-const newMessageMethod = require('./methods/newMessageMethod').newMessageMethod;
-const chatLoading = require('./methods/chatLoading').chatLoading;
+import notificationsMethod from './methods/notificationsMethod';
+import unreadChangedBySubscription from './methods/unreadChangedBySubscription';
+import newMessageMethod from './methods/newMessageMethod';
+import chatLoading from './methods/chatLoading';
 
 const bindEvent = (element, eventName, eventHandler) => {
   if (element.addEventListener) {
@@ -13,7 +11,7 @@ const bindEvent = (element, eventName, eventHandler) => {
   }
 };
 
-exports.handleRocketChatNotifications = () => {
+export default () => {
   bindEvent(window, 'message', (e) => {
     const eventName = e.data.eventName;
     const data = e.data.data;

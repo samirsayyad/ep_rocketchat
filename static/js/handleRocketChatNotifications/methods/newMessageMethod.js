@@ -1,25 +1,31 @@
-'use strict';
-
-const newMention = require('./helper/newMentionHelper').newMentionHelper;
-const removeNewMentionHelper = require('./helper/newMentionHelper').removeNewMentionHelper;
-const notificationHelper = require('./helper/notificationHelper');
-const pushMethod = require('./pushMethod').pushMethod;
+import {newMentionHelper as newMention, removeNewMentionHelper} from './helper/newMentionHelper';
+import {
+  getLastActiveHeader,
+  getUserUnreadMentionedCount,
+  setUserUnreadMentionedCount,
+  getHistoryCount,
+  getNewMessageCount,
+  setNewMessageCount,
+} from './helper/notificationHelper';
+import pushMethod from './pushMethod';
 
 const $bodyAceOuter = () => $(document).find('iframe[name="ace_outer"]').contents();
 
-exports.newMessageMethod = (data) => {
+export default (data) => {
   const padId = pad.getPadId();
   const roomId = data.name;
   const userId = pad.getUserId();
   const headerId = (roomId === `${padId}-general-channel`) ? 'general' : roomId;
   const isMobile = clientVars.userAgent.isMobile;
 
-  const lastActiveHeader = notificationHelper.getLastActiveHeader() || '';
+  const lastActiveHeader = getLastActiveHeader() || '';
   if (lastActiveHeader.toLowerCase() === headerId) return;
 
 
   // check mentioned this user
-  let unreadMentionedCount = parseInt(notificationHelper.getUserUnreadMentionedCount(headerId, userId) || 0);
+  let unreadMentionedCount = getUserUnreadMentionedCount(headerId, userId) || 0;
+  unreadMentionedCount = parseInt(unreadMentionedCount);
+
   const notificationElement = $(`#${headerId}_notification`);
   const realHeaderId = notificationElement.attr('data-headerid');
   let unreadNotificationTemplate;
@@ -27,21 +33,26 @@ exports.newMessageMethod = (data) => {
   unreadMentionedCount = parseInt(unreadMentionedCount);
   if ([`@${userId}`, '@all'].includes(data.msg)) {
     unreadMentionedCount++;
-    notificationHelper.setUserUnreadMentionedCount(headerId, userId, unreadMentionedCount);
-    unreadNotificationTemplate = $('#ep_rocketchat_mentionNotification').tmpl({unread: unreadMentionedCount});
+    setUserUnreadMentionedCount(headerId, userId, unreadMentionedCount);
+    unreadNotificationTemplate = $('#ep_rocketchat_mentionNotification')
+        .tmpl({unread: unreadMentionedCount});
+
     $('body > header .shortMenue .btnChat .messageCount').text(unreadMentionedCount);
     notificationElement.html(unreadNotificationTemplate);
     pushMethod({title: 'New message', body: 'You have new message.'});
-    newMention(realHeaderId); // because of Rocketchat make to lower case need to access real header id via notificationElement.attr("data-headerid")
+
+    // because of Rocketchat make to lower case need to access real
+    // header id via notificationElement.attr("data-headerid")
+    newMention(realHeaderId);
   } else {
-    const historyCount = parseInt(notificationHelper.getHistoryCount(headerId)) || 0;
+    const historyCount = parseInt(getHistoryCount(headerId)) || 0;
     let unReadCount = 0;
     if (historyCount > 0) {
       unReadCount = historyCount;
     } else {
-      let lastNewMessageCount = parseInt(notificationHelper.getNewMessageCount(headerId)) || 0;
+      let lastNewMessageCount = parseInt(getNewMessageCount(headerId)) || 0;
       lastNewMessageCount++;
-      notificationHelper.setNewMessageCount(headerId, lastNewMessageCount);
+      setNewMessageCount(headerId, lastNewMessageCount);
       unReadCount = lastNewMessageCount;
     }
     unreadNotificationTemplate = $('#ep_rocketchat_unreadNotification').tmpl({unread: unReadCount});

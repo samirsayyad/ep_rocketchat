@@ -1,5 +1,3 @@
-'use strict';
-
 class Settings {
   constructor(client) {
     this.client = client;

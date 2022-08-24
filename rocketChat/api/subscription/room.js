@@ -1,5 +1,3 @@
-'use strict';
-
 class Room {
   constructor(client) {
     this.client = client;

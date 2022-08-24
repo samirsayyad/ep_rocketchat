@@ -1,5 +1,3 @@
-'use strict';
-
 const db = require('ep_etherpad-lite/node/db/DB');
 const config = require('../helpers/configs');
 const joinChannels = require('../../rocketChat/api/separated').joinChannels;

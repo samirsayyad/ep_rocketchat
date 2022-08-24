@@ -1,5 +1,3 @@
-'use strict';
-
 const sharedTransmitter = require('../helpers/sharedTransmitter');
 
 

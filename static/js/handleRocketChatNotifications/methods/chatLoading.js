@@ -1,6 +1,4 @@
-'use strict';
-
-exports.chatLoading = () => {
+export default () => {
   $('#ep_rocketchat_iframe').animate({
     opacity: 0,
   }, {

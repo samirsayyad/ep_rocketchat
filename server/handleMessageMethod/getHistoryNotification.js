@@ -1,5 +1,3 @@
-'use strict';
-
 const getChannelsMessageCount = require('../../rocketChat/api/separated').getChannelsMessageCount;
 const config = require('../helpers/configs');
 const sharedTransmitter = require('../helpers/sharedTransmitter');

@@ -5,10 +5,10 @@
 			"pre": ["ep_etherpad-lite/webaccess", "ep_page_view/page_view"],
 			"post": ["ep_etherpad-lite/static"],
 			"client_hooks": {
-				"aceInitialized":"ep_rocketchat/static/js/aceInitialized:aceInitialized",
-				"handleClientMessage_CUSTOM": "ep_rocketchat/static/js/handleClientMessage:handleClientMessage_CUSTOM",
-				"handleClientMessage_USER_NEWINFO": "ep_rocketchat/static/js/handleClientMessage:handleClientMessage_USER_NEWINFO",
-				"handleClientMessage_USER_LEAVE" :  "ep_rocketchat/static/js/handleClientMessage:handleClientMessage_USER_LEAVE"
+				"aceInitialized":"ep_rocketchat/static/dist/ep_rocketchat_bundle",
+				"handleClientMessage_CUSTOM": "ep_rocketchat/static/dist/ep_rocketchat_bundle",
+				"handleClientMessage_USER_NEWINFO": "ep_rocketchat/static/dist/ep_rocketchat_bundle",
+				"handleClientMessage_USER_LEAVE" :  "ep_rocketchat/static/dist/ep_rocketchat_bundle"
 
 			},
 			"hooks": {

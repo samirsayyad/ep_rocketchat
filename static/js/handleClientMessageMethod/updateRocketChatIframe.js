@@ -1,9 +1,14 @@
-'use strict';
+import {
+  setUnreadCount,
+  setNewMessageCount,
+  setUserUnreadMentionedCount,
+  setHistoryCount,
+  setLastActiveHeader,
+} from '../handleRocketChatNotifications/methods/helper/notificationHelper';
 
-const notificationHelper = require('../handleRocketChatNotifications/methods/helper/notificationHelper');
 const $bodyAceOuter = () => $(document).find('iframe[name="ace_outer"]').contents();
 
-exports.updateRocketChatIframe = (payLoad) => {
+export default (payLoad) => {
   try {
     document.getElementById('ep_rocketchat_iframe').contentWindow.postMessage(
         {externalCommand: 'go', path: `/channel/${payLoad.data.room}?layout=embedded`}, '*');
@@ -22,11 +27,11 @@ exports.updateRocketChatIframe = (payLoad) => {
           const userId = payLoad.userId;
           room = (room === `${padId}-general-channel`) ? 'general' : room;
 
-          notificationHelper.setUnreadCount(room, 0);
-          notificationHelper.setNewMessageCount(room, 0);
-          notificationHelper.setUserUnreadMentionedCount(room, userId, 0);
-          notificationHelper.setHistoryCount(room, 0);
-          notificationHelper.setLastActiveHeader(room);
+          setUnreadCount(room, 0);
+          setNewMessageCount(room, 0);
+          setUserUnreadMentionedCount(room, userId, 0);
+          setHistoryCount(room, 0);
+          setLastActiveHeader(room);
           $(`#${room}_notification`).empty();
 
           const headerId = $(`#${room}_notification`).attr('data-headerid');

@@ -1,44 +1,44 @@
-'use strict';
+import updateRocketChatIframe from './handleClientMessageMethod/updateRocketChatIframe';
+import updateRocketChatIframeOnlineUsers from './handleClientMessageMethod/updateRocketChatIframeOnlineUsers';
+import gatherUpHeaderIds from './handleClientMessageMethod/gatherUpHeaderIds';
+import updateChannelsMessageCount from './handleClientMessageMethod/updateChannelsMessageCount';
+import updateRocketChatAnonymousInterface from './handleClientMessageMethod/updateRocketChatAnonymousInterface';
 
-const updateRocketChatIframe = require('./handleClientMessageMethod/updateRocketChatIframe').updateRocketChatIframe;
-const updateRocketChatIframeOnlineUsers = require('./handleClientMessageMethod/updateRocketChatIframeOnlineUsers').updateRocketChatIframeOnlineUsers;
-const gatherUpHeaderIds = require('./handleClientMessageMethod/gatherUpHeaderIds').gatherUpHeaderIds;
-const updateChannelsMessageCount = require('./handleClientMessageMethod/updateChannelsMessageCount').updateChannelsMessageCount;
-const updateRocketChatAnonymousInterface = require('./handleClientMessageMethod/updateRocketChatAnonymousInterface').updateRocketChatAnonymousInterface;
-
-exports.handleClientMessage_CUSTOM = (_hook, context) => {
+export const handleClientMessage_CUSTOM = (_hook, context) => {
   const currentUserId = pad.getUserId();
+  const {action, userId, padId, messageChatText} = context.payload;
 
-  if (context.payload.action === 'updateRocketChatAnonymousInterface') {
-    if (currentUserId === context.payload.userId) updateRocketChatAnonymousInterface(context.payload);
+  if (action === 'updateRocketChatAnonymousInterface') {
+    if (currentUserId === userId) updateRocketChatAnonymousInterface(context.payload);
   }
-  if (context.payload.action === 'updateRocketChatIframe') {
-    if (currentUserId === context.payload.userId) updateRocketChatIframe(context.payload);
+
+  if (action === 'updateRocketChatIframe') {
+    if (currentUserId === userId) updateRocketChatIframe(context.payload);
     updateRocketChatIframeOnlineUsers(context.payload);
   }
-  if (context.payload.action === 'updateChannelsMessageCount') {
-    if (currentUserId === context.payload.userId) updateChannelsMessageCount(context.payload);
+  if (action === 'updateChannelsMessageCount') {
+    if (currentUserId === userId) updateChannelsMessageCount(context.payload);
   }
 
 
-  if (context.payload.action === 'updateOnlineUsersList') {
+  if (action === 'updateOnlineUsersList') {
     // const lastActiveHeader = localStorage.getItem("lastActiveHeader");
     // if (lastActiveHeader === context.payload.data.room )
     updateRocketChatIframeOnlineUsers(context.payload);
   }
 
-  if (context.payload.action === 'gatherUpHeaderIds') {
-    if (currentUserId === context.payload.userId) gatherUpHeaderIds(context.payload);
+  if (action === 'gatherUpHeaderIds') {
+    if (currentUserId === userId) gatherUpHeaderIds(context.payload);
   }
 
-
-  if (context.payload.action === 'EP_PROFILE_USER_LOGIN_UPDATE') { // raised by ep_profile_modal
-    if (currentUserId === context.payload.userId) {
+  // raised by ep_profile_modal
+  if (action === 'EP_PROFILE_USER_LOGIN_UPDATE') {
+    if (currentUserId === userId) {
       const message = {
         type: 'ep_rocketchat',
         action: 'ep_rocketchat_updateRocketChatUser',
         userId: currentUserId,
-        padId: context.payload.padId,
+        padId,
         data: context.payload,
       };
       pad.collabClient.sendMessage(message);
@@ -46,17 +46,18 @@ exports.handleClientMessage_CUSTOM = (_hook, context) => {
     }
   }
 
-  if (context.payload.action === 'EP_PROFILE_USER_LOGOUT_UPDATE') { // raised by ep_profile_modal
-    if (currentUserId === context.payload.userId) {
+  // raised by ep_profile_modal
+  if (action === 'EP_PROFILE_USER_LOGOUT_UPDATE') {
+    if (currentUserId === userId) {
       const message = {
         type: 'ep_rocketchat',
         action: 'ep_rocketchat_updateRocketChatUser',
         userId: currentUserId,
-        padId: context.payload.padId,
+        padId,
         data: {
           userName: 'Anonymous',
           avatarUrlReset: true,
-          messageChatText: context.payload.messageChatText,
+          messageChatText,
         },
       };
       pad.collabClient.sendMessage(message);
@@ -64,13 +65,14 @@ exports.handleClientMessage_CUSTOM = (_hook, context) => {
     }
   }
 
-  if (context.payload.action === 'EP_PROFILE_USER_IMAGE_CHANGE') { // raised by ep_profile_modal
-    if (currentUserId === context.payload.userId) {
+  // raised by ep_profile_modal
+  if (action === 'EP_PROFILE_USER_IMAGE_CHANGE') {
+    if (currentUserId === userId) {
       const message = {
         type: 'ep_rocketchat',
         action: 'ep_rocketchat_updateImageRocketChatUser',
         userId: currentUserId,
-        padId: context.payload.padId,
+        padId,
       };
       pad.collabClient.sendMessage(message);
     }
@@ -85,7 +87,7 @@ exports.handleClientMessage_CUSTOM = (_hook, context) => {
   return [];
 };
 
-exports.handleClientMessage_USER_NEWINFO = () => {
+export const handleClientMessage_USER_NEWINFO = () => {
   const currentUserId = pad.getUserId();
   const lastActiveHeader = localStorage.getItem('lastActiveHeader');
 
@@ -102,8 +104,7 @@ exports.handleClientMessage_USER_NEWINFO = () => {
   return [];
 };
 
-
-exports.handleClientMessage_USER_LEAVE = () => {
+export const handleClientMessage_USER_LEAVE = () => {
   const currentUserId = pad.getUserId();
   const lastActiveHeader = localStorage.getItem('lastActiveHeader');
 

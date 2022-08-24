@@ -1,40 +1,51 @@
-'use strict';
-
-const newMention = require('./helper/newMentionHelper').newMentionHelper;
-const removeNewMentionHelper = require('./helper/newMentionHelper').removeNewMentionHelper;
-const notificationHelper = require('./helper/notificationHelper');
+import {newMentionHelper as newMention, removeNewMentionHelper} from './helper/newMentionHelper';
+import {
+  getHistoryCount,
+  getLastActiveHeader,
+  getUnreadCount,
+  getNewMessageCount,
+  getUserUnreadMentionedCount,
+} from './helper/notificationHelper';
 
 const $bodyAceOuter = () => $(document).find('iframe[name="ace_outer"]').contents();
 
-exports.unreadChangedBySubscription = (data) => {
+export default ({name, alert, unread, fname}) => {
   // if there is unseen history count must click on that header first
   const padId = clientVars.padId;
-  const headerId = (data.name === `${padId}-general-channel`) ? 'general' : data.name;
-  const historyCount = parseInt(notificationHelper.getHistoryCount(headerId)) || 0;
+  const headerId = (name === `${padId}-general-channel`) ? 'general' : name;
+  const historyCount = parseInt(getHistoryCount(headerId)) || 0;
   const isMobile = clientVars.userAgent.isMobile;
 
-  if (historyCount === 0 && data.alert === false && data.unread === 0) return;
+  if (historyCount === 0 && alert === false && unread === 0) return;
 
   const userId = pad.getUserId();
-  const lastActiveHeader = notificationHelper.getLastActiveHeader() || '';
+  const lastActiveHeader = getLastActiveHeader() || '';
 
   if (lastActiveHeader.toLowerCase() === headerId) return;
 
   let notificationElement = $(`#${headerId}_notification`);
-  if (!notificationElement.length) notificationElement = $(`#${data.fname}_notification`);
-  if (!notificationElement.length) notificationElement = $(`#${(data.fname) ? data.fname.toLowerCase() : ''}_notification`);
+  if (!notificationElement.length) notificationElement = $(`#${fname}_notification`);
+  if (!notificationElement.length) {
+    notificationElement = $(`#${(fname) ? fname.toLowerCase() : ''}_notification`);
+  }
+
   if (!notificationElement.length) return;
 
   const realHeaderId = notificationElement.attr('data-headerid');
-  const lastUnreadCount = parseInt(notificationHelper.getUnreadCount(headerId)) ||
-                            parseInt(notificationHelper.getNewMessageCount(headerId)) || false;
-  const unreadMentionedCount = parseInt(notificationHelper.getUserUnreadMentionedCount(headerId, userId)) || 0;
+  const notifUnreadCount = getUnreadCount(headerId);
+  const notifNewMsgCount = getNewMessageCount(headerId);
+  const lastUnreadCount = parseInt(notifUnreadCount) || parseInt(notifNewMsgCount) || false;
+
+  let unreadMentionedCount = getUserUnreadMentionedCount(headerId, userId) || 0;
+  unreadMentionedCount = parseInt(unreadMentionedCount);
 
   let unreadNotificationTemplate;
   if (unreadMentionedCount === 0) {
-    unreadNotificationTemplate = $('#ep_rocketchat_unreadNotification').tmpl({unread: historyCount || lastUnreadCount || data.unread});
+    unreadNotificationTemplate = $('#ep_rocketchat_unreadNotification')
+        .tmpl({unread: historyCount || lastUnreadCount || unread});
+
     removeNewMentionHelper(realHeaderId);
-    let unreadCount = historyCount || lastUnreadCount || data.unread;
+    let unreadCount = historyCount || lastUnreadCount || unread;
     let $el = $bodyAceOuter().find('iframe')
         .contents()
         .find('#innerdocbody')
@@ -68,9 +79,14 @@ exports.unreadChangedBySubscription = (data) => {
       });
     }
   } else {
-    unreadNotificationTemplate = $('#ep_rocketchat_mentionNotification').tmpl({unread: unreadMentionedCount});
+    unreadNotificationTemplate = $('#ep_rocketchat_mentionNotification')
+        .tmpl({unread: unreadMentionedCount});
+
     $('body > header .shortMenue .btnChat .messageCount').text(unreadMentionedCount);
-    newMention(realHeaderId); // because of Rocketchat make to lower case need to access real header id via notificationElement.attr("data-headerid")
+
+    // because of Rocketchat make to lower case need to access
+    // real header id via notificationElement.attr("data-headerid")
+    newMention(realHeaderId);
   }
   notificationElement.html(unreadNotificationTemplate);
 };

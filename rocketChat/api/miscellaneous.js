@@ -1,6 +1,3 @@
-'use strict';
-
-
 function Miscellaneous(client) {
   this.client = client;
 }

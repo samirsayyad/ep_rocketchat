@@ -1,5 +1,3 @@
-'use strict';
-
 const Room = require('./room');
 
 class User {

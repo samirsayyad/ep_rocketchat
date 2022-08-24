@@ -1,5 +1,3 @@
-'use strict';
-
 const rocketChatClientInstance = require('../rocketChat/clients/rocketChatClientInstance').rocketChatClientInstance;
 const config = require('./helpers/configs');
 const rocketchatAuthenticator = require('./helpers/rocketchatAuthenticator');
@@ -27,7 +25,8 @@ exports.expressCreateServer = (hookName, context) => {
       return;
     }
     if (req.session.user && req.session.user.rocketchatAuthToken) {
-      // We are sending a script tag to the front-end with the RocketChat Auth Token that will be used to authenticate the user
+      // We are sending a script tag to the front-end with the RocketChat Auth
+      // Token that will be used to authenticate the user
       return res.send(`<script>
                 window.parent.postMessage({
                 event: 'login-with-token',
