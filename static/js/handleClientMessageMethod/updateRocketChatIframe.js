@@ -5,8 +5,8 @@ import {
   setHistoryCount,
   setLastActiveHeader,
 } from '../handleRocketChatNotifications/methods/helper/notificationHelper';
+import {$bodyAceOuter} from '../utiles';
 
-const $bodyAceOuter = () => $(document).find('iframe[name="ace_outer"]').contents();
 
 export default (payLoad) => {
   try {

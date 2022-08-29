@@ -8,8 +8,7 @@ import {
   setUnreadCount,
 } from './helper/notificationHelper';
 import pushMethod from './pushMethod';
-
-const $bodyAceOuter = () => $(document).find('iframe[name="ace_outer"]').contents();
+import {$bodyAceOuter} from '../../utiles';
 
 export default (data) => {
   if (!data.fromOpenedRoom) { // must be false in order to notify user

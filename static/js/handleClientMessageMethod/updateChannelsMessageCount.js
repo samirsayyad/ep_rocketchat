@@ -1,6 +1,6 @@
 import {removeNewMentionHelper} from '../handleRocketChatNotifications/methods/helper/newMentionHelper';
 import {setHistoryCount} from '../handleRocketChatNotifications/methods/helper/notificationHelper';
-const $bodyAceOuter = () => $(document).find('iframe[name="ace_outer"]').contents();
+import {$bodyAceOuter} from '../utiles';
 
 export default (payLoad) => {
   try {

@@ -8,8 +8,8 @@ import {
   setNewMessageCount,
 } from './helper/notificationHelper';
 import pushMethod from './pushMethod';
+import {$bodyAceOuter} from '../../utiles';
 
-const $bodyAceOuter = () => $(document).find('iframe[name="ace_outer"]').contents();
 
 export default (data) => {
   const padId = pad.getPadId();

@@ -6,8 +6,8 @@ import {
   getNewMessageCount,
   getUserUnreadMentionedCount,
 } from './helper/notificationHelper';
+import {$bodyAceOuter} from '../../utiles';
 
-const $bodyAceOuter = () => $(document).find('iframe[name="ace_outer"]').contents();
 
 export default ({name, alert, unread, fname}) => {
   // if there is unseen history count must click on that header first
