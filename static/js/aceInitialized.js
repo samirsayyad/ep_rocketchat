@@ -21,6 +21,6 @@ export const aceInitialized = () => {
   return [];
 };
 
-export const handleClientMessage_CUSTOM = clientMessage_CUSTOM
-export const handleClientMessage_USER_NEWINFO = clientMessage_USER_NEWINFO
-export const handleClientMessage_USER_LEAVE = clientMessage_USER_LEAVE
+export const handleClientMessage_CUSTOM = clientMessage_CUSTOM;
+export const handleClientMessage_USER_NEWINFO = clientMessage_USER_NEWINFO;
+export const handleClientMessage_USER_LEAVE = clientMessage_USER_LEAVE;
