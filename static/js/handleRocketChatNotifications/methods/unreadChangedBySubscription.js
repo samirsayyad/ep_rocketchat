@@ -8,7 +8,6 @@ import {
 } from './helper/notificationHelper';
 import {$bodyAceOuter} from '../../utiles';
 
-
 export default ({name, alert, unread, fname}) => {
   // if there is unseen history count must click on that header first
   const padId = clientVars.padId;

@@ -10,8 +10,14 @@ import {$bodyAceOuter} from '../utiles';
 
 export default (payLoad) => {
   try {
-    document.getElementById('ep_rocketchat_iframe').contentWindow.postMessage(
-        {externalCommand: 'go', path: `/channel/${payLoad.data.room}?layout=embedded`}, '*');
+    document
+        .getElementById('ep_rocketchat_iframe')
+        .contentWindow.postMessage({
+          externalCommand: 'go',
+          path: `/channel/${payLoad.data.room}?layout=embedded`,
+        }, '*');
+
+
     setTimeout(() => {
       $('#chat-loading').animate({
         opacity: 0,
@@ -25,6 +31,12 @@ export default (payLoad) => {
           let room = payLoad.data.room;
           const padId = payLoad.padId;
           const userId = payLoad.userId;
+          const headerId = $(`#${room}_notification`).attr('data-headerid');
+          let $el = $bodyAceOuter().find('iframe')
+              .contents()
+              .find('#innerdocbody')
+              .find(`[headerid="${headerId}"]`)[0];
+
           room = (room === `${padId}-general-channel`) ? 'general' : room;
 
           setUnreadCount(room, 0);
@@ -34,22 +46,14 @@ export default (payLoad) => {
           setLastActiveHeader(room);
           $(`#${room}_notification`).empty();
 
-          const headerId = $(`#${room}_notification`).attr('data-headerid');
-          let $el = $bodyAceOuter().find('iframe')
-              .contents()
-              .find('#innerdocbody')
-              .find(`[headerid="${headerId}"]`)[0];
           if ($el) {
             $el = $el.shadowRoot;
+            $el.querySelectorAll('.counter').forEach((el) => el.innerText = '');
             if (!isMobile) {
               $el.querySelector('.bubbleNotify').style.display = 'none';
               $el.querySelector('.mobileIcon').style.display = 'block';
               $el.querySelector('.mobileIcon').style.marginTop = '5px';
             }
-
-            $el.querySelectorAll('.counter').forEach((el) => {
-              el.innerText = '';
-            });
           }
         },
       });
