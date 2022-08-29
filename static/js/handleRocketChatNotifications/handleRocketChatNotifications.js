@@ -15,6 +15,7 @@ export default () => {
   bindEvent(window, 'message', (e) => {
     const eventName = e.data.eventName;
     const data = e.data.data;
+    console.log(e.data)
     if (eventName === 'notification') {
       notificationsMethod(data);
     }

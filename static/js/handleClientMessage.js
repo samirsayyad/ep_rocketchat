@@ -8,18 +8,20 @@ export const handleClientMessage_CUSTOM = (_hook, context) => {
   const currentUserId = pad.getUserId();
   const {action, userId, padId, messageChatText} = context.payload;
 
+  console.log(context.payload);
+
   if (action === 'updateRocketChatAnonymousInterface') {
-    if (currentUserId === userId) updateRocketChatAnonymousInterface(context.payload);
+    if (currentUserId === userId) updateRocketChatAnonymousInterface();
   }
 
   if (action === 'updateRocketChatIframe') {
     if (currentUserId === userId) updateRocketChatIframe(context.payload);
     updateRocketChatIframeOnlineUsers(context.payload);
   }
+
   if (action === 'updateChannelsMessageCount') {
     if (currentUserId === userId) updateChannelsMessageCount(context.payload);
   }
-
 
   if (action === 'updateOnlineUsersList') {
     // const lastActiveHeader = localStorage.getItem("lastActiveHeader");
@@ -42,7 +44,7 @@ export const handleClientMessage_CUSTOM = (_hook, context) => {
         data: context.payload,
       };
       pad.collabClient.sendMessage(message);
-      updateRocketChatAnonymousInterface(context.payload);
+      updateRocketChatAnonymousInterface();
     }
   }
 
@@ -61,7 +63,7 @@ export const handleClientMessage_CUSTOM = (_hook, context) => {
         },
       };
       pad.collabClient.sendMessage(message);
-      updateRocketChatAnonymousInterface(context.payload);
+      updateRocketChatAnonymousInterface();
     }
   }
 
